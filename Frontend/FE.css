@@ -1,3 +1,4 @@
+/* Set font for the body, apply background color, remove margins and padding */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -5,6 +6,7 @@ body {
     padding: 0;
 }
 
+/* Style the container with width, centering, background color, padding, and box shadow */
 .container {
     width: 60%;
     margin: 0 auto;
@@ -13,21 +15,25 @@ body {
     box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
 }
 
+/* Center align the text for h1 and h2 elements */
 h1, h2 {
     text-align: center;
 }
 
+/* Style the form section with centered text and margin at the bottom */
 .form {
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Style input fields with padding, margin, and a border */
 input {
     padding: 10px;
     margin: 5px;
     border: 1px solid #ddd;
 }
 
+/* Style buttons with padding, background color, text color, no border, and pointer cursor */
 button {
     padding: 10px 15px;
     background-color: #28a745;
@@ -36,15 +42,18 @@ button {
     cursor: pointer;
 }
 
+/* Change background color when button is hovered */
 button:hover {
     background-color: #218838;
 }
 
+/* Remove list-style and padding for unordered lists */
 ul {
     list-style: none;
     padding: 0;
 }
 
+/* Style list items with padding, margin at the bottom, background color, and a border */
 li {
     padding: 10px;
     margin-bottom: 5px;

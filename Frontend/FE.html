@@ -1,24 +1,38 @@
 <!DOCTYPE html>
+<!-- Define the document type as HTML -->
 <html>
     <head>
+        <!-- Specify the character encoding for the document -->
         <meta charset="UTF-8">
+        <!-- Define the title of the webpage -->
         <title>Invently</title>
+        <!-- Display the main title of the page -->
         <h1>Invently</h1>
+        <!-- Link to the external CSS file for styling -->
         <link rel="stylesheet" href="FE.css">
-</head>
+    </head>
 <body>
+    <!-- Main container for the content -->
     <div class="container">
+        <!-- Page header with the name of the system -->
         <h1>Inventory Management System</h1>
+        <!-- Form section for adding a new inventory item -->
         <div class="form">
+            <!-- Input field for the item name -->
             <input type="text" id="itemName" placeholder="Item Name">
+            <!-- Input field for the item quantity (number) -->
             <input type="number" id="itemQuantity" placeholder="Quantity">
+            <!-- Button to trigger the addItem function to add a new item -->
             <button onclick="addItem()">Add Item</button>
         </div>
 
+        <!-- Subheading for the inventory list section -->
         <h2>Inventory List</h2>
+        <!-- Unordered list to display the inventory items -->
         <ul id="inventoryList"></ul>
     </div>
 
+    <!-- Link to the external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>

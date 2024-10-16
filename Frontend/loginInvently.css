@@ -101,3 +101,16 @@ div.homepageContainer{
     max-width:900px;
     margin:0 auto;
 }
+
+div.bannerHeader h1{
+    font-size:100px;
+    color:#e0bb77;
+}
+
+div.bannerHeader p{
+    font-size:100px;
+    color:#e0bb77;
+}
+p.bannerTagline{
+    font-size:30px;
+}

@@ -1,0 +1,103 @@
+*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}
+
+body#loginBody{
+    background: url('../Frontend/Images/WarehouseLogin.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Helvetica;
+}
+
+div.loginHeader{
+    text-align: center;
+}
+div.loginHeader{
+    margin-bottom: 60px;
+}
+
+div.loginHeader h1{
+    font-size: 100px;
+    color:#e0bb77;
+    padding:0px;
+    margin:0px;
+
+}
+
+div.loginHeader p{
+    color:#e3cb9f;
+    font-size: 50px; 
+    margin:0px;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+div.loginHeader p:after{
+    content:'';
+    display: block;
+    height: 5px;
+    background: #e0bb77;
+    width:50%;
+    margin: 0 auto;
+}
+
+div.loginBody form{
+    margin:0 auto;
+    width: 450px;
+    background: rgba(0,0,0,0.5);
+    padding:50px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+}
+
+div.loginInputsContainer{
+    margin-top:30px;
+}
+
+div.loginInputsContainer label{
+    display:block;
+    text-transform: uppercase;
+    font-size: 20px;
+    font-weight:bold;
+    color:#fff;
+}
+
+div.loginInputsContainer input{
+    height: 30px;
+    width: 100%;
+    border: 2px solid #e0bb77;
+    font-size: 20px;
+    padding: 5px;
+    text-align: center; 
+    font-style: italic;
+}
+
+div.loginButtonContainer{
+    margin-top:40px;
+    text-align: center;
+}
+
+div.loginButtonContainer button{
+    font-size: 30px;
+    padding:10px 40px;
+    background: #e0bb77;
+    border:none;
+    color:#fff
+}
+
+/*This is the homepage css*/
+
+div.header{
+    width:100%;
+    height: 20px;
+    background: #e0bb77;
+}
+
+div.banner{
+    background: url('../Frontend/Images/WarehouseLogin.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Helvetica;
+}
+
+div.homepageContainer{
+    width:100%;
+    max-width:900px;
+    margin:0 auto;
+}

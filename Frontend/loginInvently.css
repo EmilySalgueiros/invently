@@ -105,12 +105,24 @@ div.homepageContainer{
 div.bannerHeader h1{
     font-size:100px;
     color:#e0bb77;
+    line-height: 100%;
 }
 
 div.bannerHeader p{
-    font-size:100px;
+    font-size:30px;
     color:#e0bb77;
+    text-transform: uppercase;
+    line-height: 100%;
 }
 p.bannerTagline{
-    font-size:30px;
+    margin-top:20px;
+    font-size:20px;
+    color:#e0bb77;
+    text-transform: uppercase;
+    line-height: 100%;
+}
+
+div.homepageFeatures{
+    display: flex;
+    flex-direction: row;
 }

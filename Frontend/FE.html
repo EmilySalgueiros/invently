@@ -1,57 +1,73 @@
 <!DOCTYPE html>
-<!-- Define the document type as HTML -->
 <html>
+
 <head>
-    <title> Invently Homepage</title>
-    <link rel="stylesheet" type="text/css" href="../Frontend/loginInvently.css">
-    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"></script>>
-    </head>
+    <title>Invently Homepage</title>
+    <link rel="stylesheet" type="text/css" href="loginInvently.css">
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js"></script>
+</head>
+
 <body>
-    <div class="header"></div>
+
+
+    <!--Navbar Section-->
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="FE.html">Invently</a>
+        </div>
+        <ul class="navbar-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="navbar-icons">
+            <a href="loginInvently.html"><i class="fas fa-user-circle"></i></a>
+            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+    </nav>
+
+    <!--End of Navbar Section-->
+
+
+
+
+    <div class="header">
+        <!-- Logo or Navigation could go here if desired -->
+    </div>
 
     <div class="banner">
-        <div class="homepageContainer">
-            <div class="bannerHeader">
-                <h1>Invently</h1>
-                <p>Inventory Management System</p>
-        </div>
-
-
-
-        <p class="bannerTagline">
-            Track your goods throughout your entire
-            supply chain, from purchasing
-            to production to end sales
-            </p>
+        <div class="bannerContent">
+            <h1 class="bannerHeader">Invently</h1>
+            <p class="bannerSubheader">Inventory Management System</p>
+            <p class="bannerTagline">Track your goods throughout your entire supply chain, from purchasing to production
+                to end sales</p>
             <div class="bannerIcons">
-                <!--Maybe putting icons overhere-->
-                </div>
-
-
-<!--These are the home feautures-->
-
-                <div class="homepageFeatures">
-                    <span><i class="fa fa-gear"></i></span>
-                    <h3>Inventory Management System</h3>
-                    <p>Stuff here added</p>
+                <i class="fas fa-warehouse"></i>
+                <i class="fas fa-chart-line"></i>
+                <i class="fas fa-truck-loading"></i>
             </div>
-        
-            <div class="homepageFeatures">
-                <span><i class="fa fa-star"></i></span>
-                <h3>Inventory Management System</h3>
-                <p>Stuff here added</p>
         </div>
-        
-        <div class="homepageFeatures">
+    </div>
+
+    <div class="homepageFeaturesContainer">
+        <div class="homepageFeature">
+            <span><i class="fa fa-gear"></i></span>
+            <h3>Efficient Inventory Management</h3>
+            <p>Optimize your stock and reduce waste with real-time insights.</p>
+        </div>
+        <div class="homepageFeature">
+            <span><i class="fa fa-star"></i></span>
+            <h3>Reliable Data Tracking</h3>
+            <p>Accurate tracking from raw materials to final sales.</p>
+        </div>
+        <div class="homepageFeature">
             <span><i class="fa fa-globe"></i></span>
-            <h3>Inventory Management System</h3>
-            <p>Stuff here added</p>
+            <h3>Global Scalability</h3>
+            <p>Manage inventory across multiple locations seamlessly.</p>
         </div>
-
-
-
-
-                </div>
-            </div>
+    </div>
 </body>
+
 </html>

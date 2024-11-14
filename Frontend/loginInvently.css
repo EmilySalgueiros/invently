@@ -84,45 +84,129 @@ div.loginButtonContainer button{
 
 /*This is the homepage css*/
 
-div.header{
-    width:100%;
-    height: 20px;
-    background: #e0bb77;
+.header {
+    background-color: #e6ca96;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
 }
 
-div.banner{
-    background: url('../Frontend/Images/WarehouseLogin.jpg') no-repeat center center fixed;
-    background-size: cover;
-    font-family: Helvetica;
+.banner {
+    background-color: #e0bb77;
+    color: white;
+    padding: 50px 20px;
+    text-align: center;
 }
 
-div.homepageContainer{
-    width:100%;
-    max-width:900px;
-    margin:0 auto;
+.bannerContent {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-div.bannerHeader h1{
-    font-size:100px;
-    color:#e0bb77;
-    line-height: 100%;
+.bannerHeader {
+    font-size: 3rem;
+    margin-bottom: 10px;
 }
 
-div.bannerHeader p{
-    font-size:30px;
-    color:#e0bb77;
-    text-transform: uppercase;
-    line-height: 100%;
-}
-p.bannerTagline{
-    margin-top:20px;
-    font-size:20px;
-    color:#e0bb77;
-    text-transform: uppercase;
-    line-height: 100%;
+.bannerSubheader {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 20px;
 }
 
-div.homepageFeatures{
+.bannerTagline {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.bannerIcons {
+    font-size: 1.5rem;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.homepageFeaturesContainer {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 50px 20px;
+    background-color: #ffffff;
+}
+
+.homepageFeature {
+    text-align: center;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 250px;
+}
+
+.homepageFeature span {
+    font-size: 2rem;
+    color: #e6ca96;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.homepageFeature h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.homepageFeature p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Navbar Styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #e6ca96;
+    color: white;
+}
+
+.navbar-brand a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+    color: #cfe3ff;
+}
+
+.navbar-icons a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-left: 15px;
+    transition: color 0.3s ease;
+}
+
+.navbar-icons a:hover {
+    color: #cfe3ff;
 }

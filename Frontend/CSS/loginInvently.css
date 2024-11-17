@@ -1,96 +1,172 @@
-*,*::before,*::after{box-sizing:border-box}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin:0}ul[role="list"],ol[role="list"]{list-style:none}html:focus-within{scroll-behavior:smooth}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5}a:not([class]){text-decoration-skip-ink:auto}img,picture{max-width:100%;display:block}input,button,textarea,select{font:inherit}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}}
+*,
+*::before,
+*::after {
+    box-sizing: border-box
+}
 
-body#loginBody{
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0
+}
+
+ul[role="list"],
+ol[role="list"] {
+    list-style: none
+}
+
+html:focus-within {
+    scroll-behavior: smooth
+}
+
+body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5
+}
+
+a:not([class]) {
+    text-decoration-skip-ink: auto
+}
+
+img,
+picture {
+    max-width: 100%;
+    display: block
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit
+}
+
+@media(prefers-reduced-motion:reduce) {
+    html:focus-within {
+        scroll-behavior: auto
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important
+    }
+}
+
+body#loginBody {
     background: url('../Frontend/Images/WarehouseLogin.jpg') no-repeat center center fixed;
     background-size: cover;
-    font-family: Helvetica;
+    font-family: 'Poppins', sans-serif;
 }
 
-div.loginHeader{
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Set Poppins as the default font */
+    line-height: 1.5;
+    /* Ensures better readability */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* Applies consistent box-sizing */
+}
+
+div.loginHeader {
     text-align: center;
 }
-div.loginHeader{
+
+div.loginHeader {
     margin-bottom: 60px;
 }
 
-div.loginHeader h1{
+div.loginHeader h1 {
+    font-family: 'Poppins', sans-serif;
     font-size: 100px;
-    color:#e0bb77;
-    padding:0px;
-    margin:0px;
+    color: #e0bb77;
+        padding: 0px;
+        margin: 0px;
+    }
 
-}
-
-div.loginHeader p{
-    color:#e3cb9f;
-    font-size: 50px; 
-    margin:0px;
+div.loginHeader p {
+    color: #e3cb9f;
+    font-size: 50px;
+    margin: 0px;
     text-transform: uppercase;
     display: inline-block;
 }
 
-div.loginHeader p:after{
-    content:'';
+div.loginHeader p:after {
+    content: '';
     display: block;
     height: 5px;
     background: #e0bb77;
-    width:50%;
+    width: 50%;
     margin: 0 auto;
 }
 
-div.loginBody form{
-    margin:0 auto;
+div.loginBody form {
+    margin: 0 auto;
     width: 450px;
-    background: rgba(0,0,0,0.5);
-    padding:50px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 50px;
     border: 2px solid #fff;
     border-radius: 8px;
 }
 
-div.loginInputsContainer{
-    margin-top:30px;
+div.loginInputsContainer {
+    margin-top: 30px;
 }
 
-div.loginInputsContainer label{
-    display:block;
+div.loginInputsContainer label {
+    display: block;
     text-transform: uppercase;
     font-size: 20px;
-    font-weight:bold;
-    color:#fff;
+    font-weight: bold;
+    color: #fff;
 }
 
-div.loginInputsContainer input{
+div.loginInputsContainer input {
     height: 30px;
     width: 100%;
     border: 2px solid #e0bb77;
     font-size: 20px;
     padding: 5px;
-    text-align: center; 
+    text-align: center;
     font-style: italic;
 }
 
-div.loginButtonContainer{
-    margin-top:40px;
+div.loginButtonContainer {
+    margin-top: 40px;
     text-align: center;
 }
 
-div.loginButtonContainer button{
+div.loginButtonContainer button {
     font-size: 30px;
-    padding:10px 40px;
+    padding: 10px 40px;
     background: #e0bb77;
-    border:none;
-    color:#fff
+    border: none;
+    color: #fff
 }
 
 /*This is the homepage css*/
 
 .header {
     background-color: #e6ca96;
-    padding: 20px;
-    text-align: center;
-    color: white;
-    font-size: 24px;
-}
+    padding: 0px;
+        text-align: center;
+        color: white;
+        font-size: 24px;
+    }
 
 .banner {
     background-color: #e0bb77;
@@ -100,9 +176,9 @@ div.loginButtonContainer button{
 }
 
 .bannerContent {
-    max-width: 600px;
-    margin: 0 auto;
-}
+        max-width: 700px;
+            margin: 0 auto;
+        }
 
 .bannerHeader {
     font-size: 3rem;
@@ -128,12 +204,12 @@ div.loginButtonContainer button{
     gap: 20px;
     margin-top: 20px;
 }
-
 .homepageFeaturesContainer {
     display: flex;
     justify-content: center;
     gap: 30px;
     padding: 50px 20px;
+    background: url('WarehouseLogin.jpg') no-repeat center center;
     background-color: #ffffff;
 }
 
@@ -170,105 +246,174 @@ div.loginButtonContainer button{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
-    background-color: #e6ca96;
-    color: white;
-}
-
-.navbar-brand a {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white;
-    text-decoration: none;
-}
-
-.navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-}
-
-.navbar-links li a {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-}
-
-.navbar-links li a:hover {
-    color: #cfe3ff;
-}
-
-.navbar-icons a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2rem;
-    margin-left: 15px;
-    transition: color 0.3s ease;
-}
-
-.navbar-icons a:hover {
-    color: #cfe3ff;
-}
-
-/* Centering the container */
-.homepageNotifiedContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* Aligns vertically */
-    height: 100vh;
-    /* Full height of the viewport */
-    background-color: #ffffff;
-}
-
-/* Styling the notification box */
-.homepageNotified {
-    text-align: center;
-    background-color: #f8f8f8;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 300px;
-    /* Slightly increased width for better aesthetics */
-}
-
-.homepageNotified h1 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.homepageNotified p {
-    font-size: 0.95rem;
-    color: #666;
-    line-height: 1.4;
-    margin-bottom: 20px;
-}
-
-.EmailContainer {
-    display: flex;
-    gap: 10px;
-}
-
-.EmailContainer input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.EmailContainer button {
     padding: 10px 20px;
-    background-color: #e6ca96;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-}
-
-.EmailContainer button:hover {
-    background-color: #d1b27c;
-}
+        /* Adjust padding for less space */
+        background-color: #e6ca96;
+        color: white;
+        height: 60px;
+        /* Define a consistent height for the navbar */
+        box-sizing: border-box;
+        /* Ensures padding is included in height calculations */
+    }
+    
+    .navbar-brand a {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .navbar-links {
+        list-style: none;
+        display: flex;
+        gap: 20px;
+    }
+    
+    .navbar-links li a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+    }
+    
+    .navbar-links li a:hover {
+        color: #cfe3ff;
+    }
+    
+    .navbar-icons a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+        margin-left: 15px;
+        transition: color 0.3s ease;
+    }
+    
+    .navbar-icons a:hover {
+        color: #cfe3ff;
+    }
+        .homepageNotifiedContainer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+                /* Align items to the top */
+                height: 30vh;
+                /* Full height of the viewport */
+                background-color: #ffffff;
+            
+                padding-top: 20px;
+                /* Add spacing from the top */
+            }
+            
+            /* Styling the notification box */
+            .homepageNotified {
+                text-align: center;
+                background-color: #f8f8f8;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                    padding-top: 50px;
+                    /* Slightly increased width for better aesthetics */
+                }
+                
+                .homepageNotified h1 {
+                    font-size: 1.5rem;
+                    color: #333;
+                    margin-bottom: 10px;
+                }
+                
+                .homepageNotified p {
+                    font-size: 0.95rem;
+                    color: #666;
+                    line-height: 1.4;
+                    margin-bottom: 20px;
+                }
+                
+                .EmailContainer {
+                    display: flex;
+                    gap: 10px;
+                }
+                
+                .EmailContainer input {
+                    flex: 1;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    font-size: 1rem;
+                }
+                
+                .EmailContainer button {
+                    padding: 10px 20px;
+                    background-color: #e6ca96;
+                    color: #fff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    font-size: 1rem;
+                }
+                
+                .EmailContainer button:hover {
+                    background-color: #d1b27c;
+                }
+                    /*The beginning of the get in touch*/
+                    
+                    /* SayHiPage Section Styling */
+                    .SayHiPage {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                        height: 35vh;
+                        /* Full viewport height */
+                        background-color: #eef2f5;
+                        /* Light background color for contrast */
+                        padding: 20px;
+                    }
+                    
+                    .SayHiTitle {
+                        text-align: center;
+                        max-width: 600px;
+                        /* Limit the width for readability */
+                    }
+                    
+                    .SayHiTitle h1 {
+                        font-size: 2rem;
+                        color: #333;
+                        margin-bottom: 10px;
+                    }
+                    
+                    .SayHiTitle p {
+                        font-size: 1rem;
+                        color: #666;
+                        line-height: 1.6;
+                        margin-bottom: 20px;
+                    }
+                    
+                    .AboutUsButton {
+                        padding: 10px 20px;
+                        background-color: #0078d7;
+                        /* Vibrant button color */
+                        color: #fff;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        transition: background-color 0.3s ease;
+                    }
+                    
+                    .AboutUsButton:hover {
+                        background-color: #005ea2;
+                        /* Darker shade on hover */
+                    }
+                    
+                    
+                    /*The end of the get in touch*/
+                    
+                    /* Footer styling */
+                    .homepageFooter {
+                        text-align: center;
+                        padding: 10px;
+                        background-color: #e6ca96;
+                        color: #fff;
+                    }
+                

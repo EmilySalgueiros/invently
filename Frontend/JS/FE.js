@@ -1,3 +1,4 @@
+//Can Erase not being used as of 11/17/24
 // Initialize an empty array to store the inventory data
 let inventory = [];
 

@@ -1,0 +1,518 @@
+/* ========= Google Fonts =========*/
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* ========= General Styling =========*/
+* {
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2a2185;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+}
+
+/* ========= Body and Container =========*/
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--gray);
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* ========= Navigation =========*/
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 0; /* Add padding for spacing */
+}
+
+.navigation ul li {
+    position: relative;
+    list-style: none;
+    margin-bottom: 20px; /* Add spacing between items */
+}
+
+/* Logo Styling */
+.navigation ul li:first-child {
+    margin-bottom: 40px; /* Larger gap below the logo */
+}
+
+.navigation ul li:first-child a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Align logo and text to the left */
+}
+
+.navigation ul li:first-child a .icon {
+    margin-right: 10px; /* Space between logo and text */
+}
+
+.navigation ul li:first-child a .ti {
+    font-size: 1.8rem; /* Larger font for the logo text */
+    font-weight: bold;
+    color: var(--white);
+}
+
+
+.navigation ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 6px 15px; /* Add padding for hover effect */
+    border-top-left-radius: 30px; /* Round top-left corner */
+    border-bottom-left-radius: 30px; /* Round bottom-left corner */
+    border-top-right-radius: 0; /* Ensure right corners are square */
+    border-bottom-right-radius: 0; /* Ensure right corners are square */
+    color: var(--white);
+}
+
+
+.navigation ul li a .icon {
+    margin-right: 15px; /* Space between icon and text */
+    font-size: 1.5rem; /* Icon size */
+    text-align: center;
+}
+
+/* Hover Effect */
+.navigation ul li:hover a, 
+.navigation ul li.hovered a{
+    background-color: var(--white);
+    color: var(--blue); /* Change text color */
+}
+
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.8rem; /* Icon size for menu items */
+}
+
+/* Main */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before
+ {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+
+}
+
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after
+ {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+/* ========= Main =========*/
+/* Main Content Area */
+/* Main Dashboard Area */
+.main {
+    position: relative;
+    width: calc(100% - 300px); /* Adjust for sidebar width */
+    left: 300px;
+    min-height: 100vh;
+    background: var(--gray);
+    display: flex;
+    flex-direction: column; /* Align content vertically */
+    justify-content: flex-start;
+    align-items: center; /* Center content horizontally */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Centered Search Bar */
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-container .search {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.search-container .search label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.search-container .search label input {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px; /* Rounded corners */
+    padding: 5px 20px;
+    outline: none;
+    border: 2px solid var(--black2);
+    font-size: 16px;
+}
+
+.search-container .search label ion-icon {
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    color: var(--black2);
+    pointer-events: none;
+}
+
+/* Grid Content Below Search */
+.dashboard-content {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* Recent Orders: 2 parts, Analytics: 1 part */
+    grid-template-rows: auto auto; /* Add rows for the inventory table */
+    gap: 20px; /* Space between grid items */
+    margin-top: 20px;
+}
+
+/* Recent Orders */
+.recent-orders, .analytics {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.recent-orders h2, .analytics h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--blue);
+}
+
+/* Recent Orders Table */
+.recent-orders table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.recent-orders table th, .recent-orders table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--gray);
+}
+
+.recent-orders table th {
+    color: var(--black2);
+}
+
+.recent-orders table td span {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    color: var(--white);
+}
+
+/* Analytics Section */
+.analytics canvas {
+    width: 100%;
+    height: 300px;
+}
+
+
+
+
+
+/* Add Product Button */
+/* Add Product Button */
+.add-product-btn {
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+    height: 50px; /* Match search bar height */
+    margin-left: 20px; /* Spacing between search bar and button */
+    align-self: center; /* Align with the search bar */
+}
+
+.add-product-btn:hover {
+    background: var(--black1);
+}
+
+/* Search and Add Product Alignment */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* Add Product Button */
+.add-product-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.add-product-btn:hover {
+    background: var(--black1);
+}
+
+/* Modal Styling */
+/* .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: flex-start; 
+    z-index: 1000;
+    padding-top: 50px; 
+}
+
+.modal.active {
+    display: flex; 
+}
+
+.modal-content {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    margin: auto; 
+}
+
+
+.modal-content h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--blue);
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--black2);
+    cursor: pointer;
+}
+ */
+
+
+
+
+.inventory-section {
+    grid-column: 1 / -1; /* Span across all columns */
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Ensure it spans the full grid width */
+}
+
+
+.inventory-section h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--blue);
+}
+
+.inventory-section table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.inventory-section table th,
+.inventory-section table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid var(--gray);
+}
+
+.inventory-section table th {
+    color: var(--black2);
+}
+
+.inventory-section table td button {
+    margin-right: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.inventory-section table td .edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.inventory-section table td .delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.inventory-section table td button:hover {
+    opacity: 0.8;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Ensure it's above all other elements */
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+    position: relative;
+    text-align: left;
+}
+
+
+.modal-content h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: var(--blue);
+    font-weight: bold;
+    text-align: left;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--black2);
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--black1);
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    resize: none;
+    height: 80px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover {
+    background: var(--black1);
+}
+
+/* Status Badge Styling */
+.status-cell {
+    border-radius: 12px; /* Rounded edges */
+    padding: 4px 8px; /* Add padding for better alignment */
+    text-align: center; /* Center the text */
+    color: white; /* Ensure contrast for all text */
+    font-weight: bold;
+    display: inline-block; /* Maintain inline-block for compact appearance */
+    min-width: 100px; /* Ensure a consistent width */
+}

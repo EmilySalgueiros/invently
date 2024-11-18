@@ -27,9 +27,21 @@ html:focus-within {
 }
 
 body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-image: url('/Images/BlueBack.jpg');
+    /* Replace with the actual path to your image */
+    background-size: cover;
+    /* Ensures the image covers the entire area */
+    background-repeat: no-repeat;
+    /* Prevents the image from repeating */
+    background-position: center;
+    /* Centers the image */
     min-height: 100vh;
-    text-rendering: optimizeSpeed;
-    line-height: 1.5
+    /* Ensures it covers the full viewport height */
 }
 
 a:not([class]) {
@@ -64,22 +76,6 @@ select {
     }
 }
 
-body#loginBody {
-    background-size: cover;
-    font-family: 'Poppins', sans-serif;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    /* Set Poppins as the default font */
-    line-height: 1.5;
-    /* Ensures better readability */
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    /* Applies consistent box-sizing */
-    background-color: #ffffff;
-}
 
 .container {
     display: grid;
@@ -90,20 +86,22 @@ body {
     /* Horizontal centering */
     height: 100vh;
     /* Full viewport height */
-    gap: 40px;
+    gap: 0px;
     /* Space between columns */
     background-color: #ffffff;
     /* Optional: Ensure background is consistent */
     box-sizing: border-box;
+
 }
 
 .loginHeader {
     flex: 1;
-    /* Allow the header to take some space */
     text-align: left;
     /* Align text to the left */
-    max-width: 300px;
-    /* Limit the width of the header */
+    max-width: 650px;
+    /* Allow unlimited width */
+    width: 100%;
+    /* Use full available width */
 }
 
 .loginHeader h1 {
@@ -113,6 +111,11 @@ body {
     margin-bottom: 10px;
     /* Space between heading and paragraph */
     color: #333;
+    white-space: nowrap;
+        /* Prevent wrapping to a new line */
+        overflow: hidden;
+        /* Prevent overflow if the container is smaller */
+
 }
 
 .loginHeader p {
@@ -133,12 +136,15 @@ body {
     justify-content: center;
     align-items: center;
     height: 400px;
-    margin-left: -50px;
+    margin-top: 200px;
+    margin-left: -100px;
 }
 
 .loginsmile img {
-    height: 300px;
-    width: 200px;
+    width: 125px;
+    /* Set a smaller width */
+    height: 125px;
+    /* Automatically adjust height to keep the ratio */
     animation: fade-in 2s ease-in-out infinite alternate;
 }
 
@@ -163,7 +169,7 @@ body {
     background-color: #f8f8f8;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 250px;
+    margin-left: 150px;
 }
 
 .loginInputsContainer {
@@ -211,56 +217,56 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-        /* Adjust padding for less space */
-        background-color: #2a2185;
-        color: white;
-        height: 60px;
-        /* Define a consistent height for the navbar */
-        box-sizing: border-box;
-        /* Ensures padding is included in height calculations */
-    }
-    
-    .navbar-brand a {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: white;
-        text-decoration: none;
-    }
-    
-    .navbar-links {
-        list-style: none;
-        display: flex;
-        gap: 20px;
-    }
-    
-    .navbar-links li a {
-        color: white;
-        text-decoration: none;
-        font-size: 1rem;
-        transition: color 0.3s ease;
-    }
-    
-    .navbar-links li a:hover {
-        color: #cfe3ff;
-    }
-    
-    .navbar-icons a {
-        color: white;
-        text-decoration: none;
-        font-size: 1.2rem;
-        margin-left: 15px;
-        transition: color 0.3s ease;
-    }
-    
-    .navbar-icons a:hover {
-        color: #cfe3ff;
-    }
-    
-                    
-                    
-                    /*The end of the get in touch*/
-                    
-                    /* Footer styling */
+    /* Adjust padding for less space */
+    background-color: #2a2185;
+    color: white;
+    height: 60px;
+    /* Define a consistent height for the navbar */
+    box-sizing: border-box;
+    /* Ensures padding is included in height calculations */
+}
+
+.navbar-brand a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.navbar-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar-links li a:hover {
+    color: #cfe3ff;
+}
+
+.navbar-icons a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    margin-left: 15px;
+    transition: color 0.3s ease;
+}
+
+.navbar-icons a:hover {
+    color: #cfe3ff;
+}
+
+
+
+/*The end of the get in touch*/
+
+/* Footer styling */
 .homepageFooter {
     background-color: #2a2185;
     /* Background color */
@@ -276,7 +282,7 @@ body {
     /* Prevent footer from shrinking */
 }
 
-/* Log in banner*/
+/* Sign in banner*/
 
 .banner {
     background-color: #2a2185;
@@ -307,4 +313,4 @@ body {
     margin-left: 10px;
     /* Optional: Add space to the left of the icon */
 }
-                
+

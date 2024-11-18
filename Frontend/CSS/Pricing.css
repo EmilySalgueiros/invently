@@ -1,0 +1,11 @@
+/* cube icon */
+
+.large-cube-icon {
+    font-size: 1.2rem;
+    /* Increase the size of the icon */
+    color: inherit;
+    /* Inherit color from parent, or set a specific color */
+
+    margin-left: 10px;
+    /* Optional: Add space to the left of the icon */
+}

@@ -1,3 +1,5 @@
+//This script will work to manage the user's authentication state and dynamically update the navbar.
+
 // Import Firebase functions
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
@@ -7,7 +9,7 @@ const auth = getAuth();
 // Select the navbar icons container
 const navbarIcons = document.querySelector(".navbar-icons");
 
-// Listen for authentication state changes
+// Check Auth State and Update Navbar
 onAuthStateChanged(auth, (user) => {
     if (user) {
         // User is logged in
@@ -16,7 +18,7 @@ onAuthStateChanged(auth, (user) => {
             <a href="#" id="logout" class="navbar-link">Log Out</a>
         `;
 
-        // Add logout functionality
+        // Logout functionality
         document.getElementById("logout").addEventListener("click", () => {
             signOut(auth)
                 .then(() => {

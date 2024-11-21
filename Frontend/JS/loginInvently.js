@@ -1,6 +1,6 @@
 // Import the Firebase functions needed
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -26,12 +26,12 @@ submit.addEventListener("click", function (event) {
     const password = document.getElementById('password').value;
 
     // Create user
-    createUserWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Success: User created
             const user = userCredential.user;
             alert("Account created successfully!");
-            window.location.href = "../HTML/loginInvently.html";
+            window.location.href = "../HTML/dashboard.html";
             console.log("User details:", user); // Optional debug info
         })
         .catch((error) => {

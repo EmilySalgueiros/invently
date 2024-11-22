@@ -519,29 +519,29 @@ body {
 
 /* ====== User Info Section ====== */
 #user-info {
-    width: 100%;
-    /* Span across the full width */
-    background: var(--blue);
-    /* Match the theme of the navigation */
-    color: var(--white);
-    /* Text color for contrast */
-    text-align: center;
-    /* Center-align the text */
-    padding: 20px 0;
-    /* Add some padding for spacing */
-    font-size: 1.5rem;
-    /* Adjust font size for visibility */
-    font-weight: bold;
-    /* Highlight the username */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    /* Add a slight shadow for separation */
-    margin-bottom: 20px;
-    /* Space below the user-info section */
+    position: absolute;
+    /* Position the section relative to the screen */
+    top: 10px;
+    /* Adjust top spacing */
+    right: 20px;
+    /* Adjust right spacing */
+    color: var(--blue);
+    /* Blue color for text */
+    text-align: right;
+    /* Align the text to the right */
+    font-size: 1rem;
+    /* Smaller font size */
+    font-weight: normal;
+    /* Normal font weight */
+    margin: 0;
+    /* Remove extra margins */
+    padding: 0;
+    /* Remove padding */
 }
 
 #user-info span {
-    color: var(--gray);
-    /* Different shade for the username */
-    font-weight: normal;
-    /* Regular weight for the username text */
+    color: var(--blue);
+    /* Ensure the username is also blue */
+    font-weight: bold;
+    /* Bold the username to distinguish it */
 }

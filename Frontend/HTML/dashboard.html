@@ -10,7 +10,7 @@
         <div class = "navigation">
             <ul>
                 <li>
-                    <a href="FE.html">
+                    <a href="InventlyHomepage.html">
                         <span class = "icon">
                             <ion-icon name="cube-outline"></ion-icon>
                         </span>
@@ -29,7 +29,7 @@
                 </li>
 
             <li>
-                <a href="#">
+                <a href="dashboard.html">
                     <span class = "icon">
                         <ion-icon name="home-outline"></ion-icon>
                     </span>
@@ -52,16 +52,6 @@
                             <ion-icon name="help-outline"></ion-icon>
                         </span>
                         <span class="ti">Help</span>
-                    </a>
-                </li>
-
-           
-                <li>
-                    <a href="#">
-                        <span class = "icon">
-                            <ion-icon name="settings-outline"></ion-icon>
-                        </span>
-                        <span class="ti">Settings</span>
                     </a>
                 </li>
 
@@ -102,6 +92,15 @@
                 <div class = "analytics"></div>
         </div>
     </div> -->
+
+    <!-- Username Display Section -->
+    <div id="user-info">
+        <h2>Welcome, <span id="username-display">Loading...</span>!</h2>
+    </div>
+
+
+
+
     <div class="main">
         <!-- Add Product Button -->
         <!-- <button class="add-product-btn" id="addProductBtn">Add Product</button> -->
@@ -213,9 +212,10 @@
     
     
  <!--=========Scripts======== -->
-<script type="module" src="../JS/FE.js"></script>
+<script type="module" src="../JS/InventlyHomepage.js"></script>
 
- <script src="../JS/homepage.js"></script>
+ <script src="../JS/dashboardHome.js"></script>
+<script src="../JS/dashboardFirestore.js"></script>
 
  <!--=========ionicons======== -->
  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>

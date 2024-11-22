@@ -50,7 +50,6 @@ onAuthStateChanged(auth, (user) => {
             bannerContent.innerHTML = `
                 <h1 class="bannerHeader">Welcome Back!</h1>
                 <p class="bannerSubheader">Your inventory dashboard awaits.</p>
-                <a href="dashboard.html" class="bannerButton">Go to Dashboard</a>
             `;
         }
     } else {

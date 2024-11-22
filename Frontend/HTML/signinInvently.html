@@ -15,7 +15,7 @@
     <nav class="navbar">
         <div class="navbar-brand">
             <ion-icon name="cube-outline" class="large-cube-icon"></ion-icon>
-            <a href="FE.html">Invently</a>
+            <a href="InventlyHomepage.html">Invently</a>
         </div>
         <ul class="navbar-links">
             <li><a href="Features.html">Features</a></li>
@@ -45,8 +45,14 @@
         <div class="loginBody">
             <form action="">
                 <div class="loginInputsContainer">
+                    <label for="">Email</label>
+                    <input placeholder="email" id="email" required type="text" />
+                    <small id="emailError" style="color: red; display: none;">This email is already registered.</small>
+
+                </div>
+                <div class="loginInputsContainer">
                     <label for="">Username</label>
-                    <input placeholder="username" id="email" required type="text" />
+                    <input placeholder="username" id="username" required type="text" />
                 </div>
                 <div class="loginInputsContainer">
                     <label for="">Password</label>

@@ -516,3 +516,32 @@ body {
     display: inline-block; /* Maintain inline-block for compact appearance */
     min-width: 100px; /* Ensure a consistent width */
 }
+
+/* ====== User Info Section ====== */
+#user-info {
+    width: 100%;
+    /* Span across the full width */
+    background: var(--blue);
+    /* Match the theme of the navigation */
+    color: var(--white);
+    /* Text color for contrast */
+    text-align: center;
+    /* Center-align the text */
+    padding: 20px 0;
+    /* Add some padding for spacing */
+    font-size: 1.5rem;
+    /* Adjust font size for visibility */
+    font-weight: bold;
+    /* Highlight the username */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Add a slight shadow for separation */
+    margin-bottom: 20px;
+    /* Space below the user-info section */
+}
+
+#user-info span {
+    color: var(--gray);
+    /* Different shade for the username */
+    font-weight: normal;
+    /* Regular weight for the username text */
+}

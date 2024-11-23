@@ -6,13 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const editInventoryForm = document.getElementById("editInventoryForm");
     const addLocationBtn = document.getElementById("addLocationBtn");
     const editLocation = document.getElementById("editLocation");
-
     // Add Product Button
     addProductBtn.addEventListener("click", () => {
+        let newSKU = generateUniqueSKU();
         const newRow = document.createElement("tr");
         newRow.innerHTML = `
-            <td>001</td>
-            <td>SKU001</td>
+            <td>${Math.floor(Math.random() * 1000).toString().padStart(3, "0")}</td>
+            <td>${newSKU}</td>
             <td><a href="#" class="edit-link">New Item</a></td>
             <td>10</td>
             <td>5</td>
@@ -26,6 +26,33 @@ document.addEventListener("DOMContentLoaded", () => {
         inventoryTable.appendChild(newRow);
         updateRowStatus(newRow);
     });
+
+    // Delete Button Functionality
+    inventoryTable.addEventListener("click", (e) => {
+        if (e.target.classList.contains("delete-btn")) {
+            // Find the parent row and remove it
+            const rowToDelete = e.target.closest("tr");
+            if (rowToDelete) {
+                rowToDelete.remove();
+            }
+        }
+    });
+
+
+    // Generate a unique SKU
+    function generateUniqueSKU() {
+        let existingSKUs = Array.from(inventoryTable.querySelectorAll("td:nth-child(2)")).map(
+            (cell) => cell.textContent
+        );
+        let newSKU;
+        do {
+            newSKU = `SKU${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`;
+        } while (existingSKUs.includes(newSKU));
+        return newSKU;
+    }
+
+
+
  // Edit Button
  inventoryTable.addEventListener("click", (e) => {
     if (e.target.classList.contains("edit-btn") || e.target.classList.contains("edit-link")) {

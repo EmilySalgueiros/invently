@@ -25,9 +25,12 @@ const usernameDisplay = document.getElementById("username-display");
 onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
-            // Fetch the user's document from Firestore
-            const userDoc = await getDoc(doc(db, "users", user.uid));
+            // Fetch user data from Firestore
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+            
             if (userDoc.exists()) {
+                console.log("User document data:", userDoc.data()); // Debugging Firestore data
                 // Extract the username
                 const username = userDoc.data().username;
                 usernameDisplay.textContent = username; // Display the username
@@ -40,6 +43,7 @@ onAuthStateChanged(auth, async (user) => {
             usernameDisplay.textContent = "Error";
         }
     } else {
+        console.error("User not authenticated. Redirecting to login...");
         // Redirect to login page if not logged in
         window.location.href = "../HTML/loginInvently.html";
     }

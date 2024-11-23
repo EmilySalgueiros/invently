@@ -520,28 +520,22 @@ body {
 /* ====== User Info Section ====== */
 #user-info {
     position: absolute;
-    /* Position the section relative to the screen */
     top: 10px;
-    /* Adjust top spacing */
     right: 20px;
-    /* Adjust right spacing */
-    color: var(--blue);
-    /* Blue color for text */
-    text-align: right;
-    /* Align the text to the right */
-    font-size: 1rem;
-    /* Smaller font size */
-    font-weight: normal;
-    /* Normal font weight */
-    margin: 0;
-    /* Remove extra margins */
-    padding: 0;
-    /* Remove padding */
+    color: red;
+    /* Change text color to red for testing */
+    background-color: yellow;
+    /* Add a background color for visibility */
+    padding: 10px;
+    border: 2px solid black;
+    /* Add a border for debugging */
+    z-index: 1000;
+    /* Ensure it's above other elements */
 }
 
 #user-info span {
     color: var(--blue);
-    /* Ensure the username is also blue */
+    /* Ensure username is also blue */
     font-weight: bold;
-    /* Bold the username to distinguish it */
+    /* Bold username text */
 }

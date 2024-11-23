@@ -517,12 +517,14 @@ body {
     min-width: 100px; /* Ensure a consistent width */
 }
 
-/* Button and User Info Alignment */
+/* Add Product Button */
 .AddProductbutton {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 1050px;
-    /* Adjust positioning as needed */
+    position: absolute;
+    /* Pin the button position */
+    top: 20px;
+    /* Adjust as needed */
+    left: 20px;
+    /* Adjust as needed */
 }
 
 /* Styling for Add Product Button */
@@ -555,20 +557,17 @@ body {
     /* Slight zoom effect on hover */
 }
 
-
+/* User Info Section */
 .user-info {
-    margin-left: 910px;
-    margin-top: -700px;
-    /* Remove any extra margins */
-    order: 2;
-    /* Ensure the welcome text is on the right */
+    position: absolute;
+    /* Pin the user info position */
+    top: 20px;
+    /* Adjust as needed */
+    right: 20px;
+    /* Adjust as needed */
     text-align: right;
     /* Align text to the right */
-    flex-grow: 1;
-    /* Allow it to grow to fill the space */
-    /* Add spacing between button and text */
 }
-
 
 .user-info h2 {
     color: var(--blue);
@@ -576,6 +575,7 @@ body {
     font-size: 20px;
     /* Adjust size if needed */
 }
+
 .user-info h2 span {
     color: var(--black1);
     /* Keep the username black */

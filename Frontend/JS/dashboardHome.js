@@ -1,3 +1,6 @@
+import { setDoc, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { db } from "../JS/dashboardFirestore.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const addProductBtn = document.getElementById("addProductBtn");
     const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");

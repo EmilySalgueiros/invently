@@ -5,6 +5,8 @@ import { doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.2/fireba
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
 let currentCustomerId = null; // Track whether you're editing an existing customer
+const modalTitle = document.getElementById("modalTitle"); // Get the modal title element
+
 
 
 
@@ -34,6 +36,8 @@ const nextToAddress = document.getElementById("nextToAddress");
 const customerDetailsForm = document.getElementById("customerDetailsForm");
 const addressDetailsForm = document.getElementById("addressDetailsForm");
 const backToCustomerInfo = document.getElementById("backToCustomerInfo");
+const addCustomerModal = document.getElementById("addCustomerModal");
+
 
 
 // Function to generate a random customer ID
@@ -64,8 +68,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelCustomer = document.getElementById("cancelCustomer");
     if (addCustomerBtn) {
         addCustomerBtn.addEventListener("click", () => {
-            modal.style.display = "flex";
-            customerIdField.value = generateCustomerId();
+            clearForm();
+            modalTitle.textContent = "New Customer"; // Set the title for adding a new customer
+            customerIdField.value = generateCustomerId(); // Generate a new customer ID
+            document.getElementById("customerId").value = generateCustomerId(); // Generate new ID
+
             console.log("Add Customer button clicked!");
         });
     } else {
@@ -77,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Close the modal
         closeModal.addEventListener("click", () => {
             modal.style.display = "none";
+            modalTitle.textContent = "New Customer"; // Reset the title
             console.log("Close Modal button clicked!");
         });
     } else {
@@ -86,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cancelCustomer) {
         cancelCustomer.addEventListener("click", () => {
             modal.style.display = "none";
+            modalTitle.textContent = "New Customer"; // Reset the title
             console.log("Cancel button clicked!");
         });
     } else {
@@ -317,6 +326,10 @@ async function editCustomer(docId) {
             document.getElementById("shippingZip").value = customer.shippingAddress?.zip || "";
             document.getElementById("shippingPhone").value = customer.shippingAddress?.phone || "";
             document.getElementById("shippingFax").value = customer.shippingAddress?.fax || "";
+
+            
+            // Update the modal title for editing
+            modalTitle.textContent = "Customer";
 
             // Show the modal
             modal.style.display = "flex";

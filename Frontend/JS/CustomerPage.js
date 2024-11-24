@@ -108,6 +108,24 @@ saveCustomerBtn.addEventListener("click", async () => {
     const phone = document.getElementById("phone").value.trim();
     const paymentTerms = document.getElementById("paymentTerms").value;
 
+    // Billing Address
+    const billingCountry = document.getElementById("billingCountry").value.trim();
+    const billingAddress = document.getElementById("billingAddress").value.trim();
+    const billingCity = document.getElementById("billingCity").value.trim();
+    const billingState = document.getElementById("billingState").value.trim();
+    const billingZip = document.getElementById("billingZip").value.trim();
+    const billingPhone = document.getElementById("billingPhone").value.trim();
+    const billingFax = document.getElementById("billingFax").value.trim();
+
+    // Shipping Address
+    const shippingCountry = document.getElementById("shippingCountry").value.trim();
+    const shippingAddress = document.getElementById("shippingAddress").value.trim();
+    const shippingCity = document.getElementById("shippingCity").value.trim();
+    const shippingState = document.getElementById("shippingState").value.trim();
+    const shippingZip = document.getElementById("shippingZip").value.trim();
+    const shippingPhone = document.getElementById("shippingPhone").value.trim();
+    const shippingFax = document.getElementById("shippingFax").value.trim();
+
     if (!validateInputs()) return;
 
     try {
@@ -120,6 +138,24 @@ saveCustomerBtn.addEventListener("click", async () => {
             workPhone: phone || "",
             receivables: "$0.00",
             paymentTerms,
+            billingAddress: {
+                country: billingCountry,
+                address: billingAddress,
+                city: billingCity,
+                state: billingState,
+                zip: billingZip,
+                phone: billingPhone,
+                fax: billingFax,
+            },
+            shippingAddress: {
+                country: shippingCountry,
+                address: shippingAddress,
+                city: shippingCity,
+                state: shippingState,
+                zip: shippingZip,
+                phone: shippingPhone,
+                fax: shippingFax,
+            },
         };
 
         const docRef = await addDoc(collection(db, "customers"), newCustomer);

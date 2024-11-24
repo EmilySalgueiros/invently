@@ -185,7 +185,7 @@
                     <h2 class="modal-title">Edit Product</h2>
                     <div class="tabs-container">
                         <button class="tab active" data-tab="detailTab">Detail</button>
-                        <button class="tab" data-tab="Stock">Stock Info</button>
+                        <button class="tab" data-tab="stockTab">Stock</button>
                         <button class="tab" data-tab="purchaseOrderTab">Purchase Order</button>
                     </div>
             
@@ -259,37 +259,16 @@
                                     </label>
                                     <input type="file" id="editPhoto" accept="image/*" />
                                 </div>
-                                <div class="form-group">
-                                    <label for="editCost">
-                                        <ion-icon name="cash-outline"></ion-icon> Cost
-                                    </label>
-                                    <input type="number" id="editCost" placeholder="Enter cost" />
-                                </div>
+                                
                             </div>
             
                             <!-- Row 5 -->
                             <div class="form-row">
-                                <!-- <div class="form-group">
-                                    <label for="editVendor">Vendor</label>
-                                    <div class="input-with-plus">
-                                        <select id="editVendor">
-                                            <option value="Vendor1">Vendor 1</option>
-                                        </select>
-                                        <button class="add-icon" id="addVendorBtn">
-                                            <ion-icon name="add-outline"></ion-icon>
-                                        </button>
-                                        <button class="delete-icon" id="deleteVendorBtn">
-                                            <ion-icon name="trash-outline"></ion-icon>
-                                        </button>
-                                    </div>
-                                </div> -->
                                 <div class="form-group">
-                                    <label for="editLocation">
-                                        <ion-icon name="location-outline"></ion-icon> Location
-                                    </label>
+                                    <label for="editVendor">location</label>
                                     <div class="input-with-plus">
                                         <select id="editLocation">
-                                            <option value="A01">A01</option>
+                                            <option value="Lacation1">Location1</option>
                                         </select>
                                         <button class="add-icon" id="addLocationBtn">
                                             <ion-icon name="add-outline"></ion-icon>
@@ -299,7 +278,21 @@
                                         </button>
                                     </div>
                                 </div>
+                                
                             </div>
+                            <!-- <label for="editLocation">
+                                <ion-icon name="location-outline"></ion-icon> Location
+                            </label>
+                            <div class="input-with-plus">
+                                <select id="editLocation">
+                                    <option value="A01">A01</option>
+                                </select>
+                                <button class="add-icon" id="addLocationBtn">
+                                    <ion-icon name="add-outline"></ion-icon>
+                                </button>
+                                <button class="delete-icon" id="deleteLocationBtn">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button> -->
             
                             <!-- Save Button -->
                             <div class="modal-footer">
@@ -307,32 +300,40 @@
                             </div>
                         </form>
                     </div>
-            
-                    <!-- Other Tabs -->
-                    <div class="tab-content" id="stockTab">
-                        <h3>Stock Details</h3>
-                        <form id="stockForm">
+                                
+                        <!-- Stock Details -->
+                        <div class="tab-content" id="stockTab">
+                            <!-- Location Selection -->
                             <div class="form-row">
-                                <div class="form-group">
-                                    <label for="editLocation">Location</label>
-                                    <div class="input-with-plus">
-                                        <select id="editLocation">
-                                            <option value="A01">A01</option>
-                                        </select>
-                                        <button class="add-icon" id="addLocationBtn">+</button>
-                                        <button class="delete-icon" id="deleteLocationBtn">-</button>
-                                    </div>
-                                </div>
+                                <label for="editLocation">Location</label>
+                                <select id="editLocation">
+                                    <option value="A01">A01</option>
+                                    <option value="A02">A02</option>
+                                </select>
                             </div>
-                            <!-- Add Stock Section -->
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="stockQuantity">Add Stock</label>
-                                    <input type="number" id="stockQuantity" placeholder="Enter quantity" />
-                                </div>
+                        
+                            <!-- Aisle Container -->
+                            <div class="aisle-container" id="aisleContainer">
+                                <!-- Dynamically Added Aisles Go Here -->
                             </div>
-                        </form>
-                    </div>
+                        
+                            <!-- Add Aisle Button -->
+                            <button class="btn-add" id="addAisleBtn">+ Add Aisle</button>
+                        
+                            <!-- Bin Details -->
+                            <div class="bin-details">
+                                <h4>Selected Bin Details</h4>
+                                <textarea id="binDetails" readonly></textarea>
+                                <label for="binStockQuantity">Add Stock:</label>
+                                <input type="number" id="binStockQuantity" placeholder="Enter quantity" />
+                                <button class="btn-add-stock" id="addStockToBinBtn">Add Stock</button>
+                                <button class="btn-save-stock" id="saveStockChangesBtn">Save Changes</button>
+                            </div>
+                        </div>
+                    <div>
+                        
+                    
+                    
             
                     <div class="tab-content" id="purchaseOrderTab">
                         <!-- Header with Add Button -->
@@ -388,7 +389,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="form-group half-width">
+                                    <div class="form-group full-width">
                                         <label for="editCost">Cost</label>
                                         <input type="number" id="editCost" placeholder="Enter cost" />
                                     </div>
@@ -447,9 +448,10 @@
 
                                 <!-- Save and Cancel Buttons -->
                                 <div class="form-actions">
-                                    <button type="submit" class="save-btn">Save</button>
                                     <button type="button" class="cancel-btn" id="cancelPurchaseOrder">Cancel</button>
+                                    <button type="submit" class="save-btn">Save</button>
                                 </div>
+                                
 
 
                             </form>

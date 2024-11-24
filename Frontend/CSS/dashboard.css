@@ -492,7 +492,7 @@ body {
     position: absolute; /* Position relative to the modal */
     top: 15px; /* Align closer to the top inside the modal */
     right: 15px; /* Align closer to the right inside the modal */
-    background: red;
+    background: #dc3545;
     color: white;
     font-size: 20px; /* Slightly larger font for better visibility */
     width: 25px; /* Larger square for better clickability */
@@ -856,7 +856,7 @@ button {
 .blue-btn {
     background-color: #007bff; /* Matches the blue in tabs */
     color: white;
-    border-radius: 20px;
+    border-radius: 8px;
     font-weight: bold;
     transition: background-color 0.3s;
 }
@@ -886,7 +886,7 @@ button {
     background-color: #007bff;
     color: white;
     font-size: 14px;
-    border-radius: 20px;
+    border-radius: 2px;
     padding: 10px 20px;
     font-weight: bold;
     transition: background-color 0.3s;
@@ -945,42 +945,11 @@ button {
 }
 
 
-
+/* Save button - right aligned */
 .save-btn {
-    background-color: #004085; /* Dark Blue */
+    background-color: #007bff; /* Dark Blue */
     color: white;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-}
-
-.save-btn:hover {
-    background-color: #002752; /* Darker blue on hover */
-}
-.cancel-btn {
-    background-color: #b20000; /* Bright Red */
-    color: white;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-weight: bold;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-}
-
-.cancel-btn:hover {
-    background-color: #7d0000; /* Darker red on hover */
-}
-/* Save button - dark blue */
-.save-btn {
-    background-color: #004085; /* Dark Blue */
-    color: white;
-    border-radius: 25px;
+    border-radius: 8px;
     padding: 10px 20px;
     font-weight: bold;
     cursor: pointer;
@@ -993,11 +962,11 @@ button {
     background-color: #002752; /* Darker blue on hover */
 }
 
-/* Cancel button - vibrant red */
+/* Cancel button - left aligned with darker red background */
 .cancel-btn {
-    background-color: #b20000; /* Bright Red */
+    background-color: #dc3545; /* Darker Red */
     color: white;
-    border-radius: 25px;
+    border-radius: px;
     padding: 10px 20px;
     font-weight: bold;
     cursor: pointer;
@@ -1007,5 +976,198 @@ button {
 }
 
 .cancel-btn:hover {
-    background-color: #7d0000; /* Darker red on hover */
+    background-color: #600000; /* Even darker red on hover */
+}
+
+/* Form actions: split buttons */
+.form-actions {
+    display: flex;
+    justify-content: space-between; /* Places buttons at opposite ends */
+    margin-top: 20px;
+    align-items: center;
+}
+
+/* Disabled Shipping Address styling */
+#shippingAddress:disabled {
+    background-color: #e9ecef; /* Light grey background to indicate disabled */
+    color: #6c757d; /* Greyed-out text */
+    cursor: not-allowed;
+}
+
+
+/* Stock Tab */
+/* General Layout */
+.tab-content {
+    overflow-y: auto; /* Enable scrollable content */
+    max-height: 600px;
+    padding: 20px;
+}
+
+/* Aisle Container Styling */
+.aisle-container {
+    display: flex;
+    flex-wrap: wrap; /* Wrap aisles horizontally */
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+/* Aisle Styling */
+.aisle {
+    border: 2px solid #ccc;
+    padding: 15px;
+    border-radius: 10px;
+    width: 280px; /* Fixed aisle width for uniformity */
+    background-color: #f8faff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aisle h4 {
+    margin-bottom: 15px;
+    color: #0056b3;
+    font-weight: bold;
+}
+
+/* Rack Styling */
+.rack {
+    border: 1px solid #bbb;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.rack h5 {
+    margin-bottom: 10px;
+    color: #343a40;
+    font-weight: bold;
+}
+
+/* Shelf Styling */
+.shelf {
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background-color: #eef2f7;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.shelf h6 {
+    margin-bottom: 8px;
+    color: #6c757d;
+    font-weight: bold;
+}
+
+/* Bin Styling */
+.bin {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    background-color: #ffd700;
+    color: black;
+    text-align: center;
+    margin: 5px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #e0a800;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.bin:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.bin.selected {
+    border: 2px solid #ff0000;
+    background-color: #ffe6e6;
+}
+
+/* Button Styles */
+button {
+    cursor: pointer;
+    padding: 8px 14px;
+    margin: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.3s, box-shadow 0.2s;
+}
+
+/* Add Buttons */
+.btn-add {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Delete Buttons */
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-delete:hover {
+    background-color: #a71d2a;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Add Stock and Save Stock Buttons */
+.btn-add-stock,
+.btn-save-stock {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-add-stock:hover,
+.btn-save-stock:hover {
+    background-color: #218838;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Bin Details Section */
+.bin-details {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bin-details h4 {
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #343a40;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    font-size: 14px;
+}
+
+/* Scrollable Content */
+.scrollable {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 10px;
 }

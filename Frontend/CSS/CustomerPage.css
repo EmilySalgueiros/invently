@@ -540,3 +540,41 @@ body {
     background-color: #e60000;
     /* Darker red on hover */
 }
+
+
+
+/* ========= Edit button style =========*/
+
+.edit-btn {
+    background-color: #4caf50;
+    /* Green */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+.save-btn {
+    background-color: #007bff;
+    /* Blue */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}

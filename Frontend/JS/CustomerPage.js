@@ -1,7 +1,9 @@
 // Import Firebase Firestore
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -190,7 +192,10 @@ function addCustomerToTable(customer, docId) {
         <td>${customer.email || ""}</td>
         <td>${customer.workPhone || ""}</td>
         <td>${customer.receivables || "$0.00"}</td>
-        <td><button class="delete-btn" data-id="${docId}">Delete</button></td>
+                <td>
+            <button class="edit-btn" data-id="${docId}">Edit</button>
+            <button class="delete-btn" data-id="${docId}">Delete</button>
+        </td>
     `;
     customerTableBody.appendChild(row);
 
@@ -204,6 +209,71 @@ function addCustomerToTable(customer, docId) {
             row.remove(); // Remove the row from the table
         }
     });
+
+    // Attach event listener to the edit button
+    row.querySelector(".edit-btn").addEventListener("click", async (e) => {
+        const id = e.target.getAttribute("data-id");
+        editCustomer(id);
+    });
+}
+
+async function editCustomer(docId) {
+    try {
+        const customerRef = doc(db, "customers", docId);
+        const customerDoc = await getDoc(customerRef);
+
+        if (customerDoc.exists()) {
+            const customer = customerDoc.data();
+
+            // Pre-fill the modal fields with customer data
+            document.getElementById("customerType").value = customer.customerType || "Business";
+            document.getElementById("firstName").value = customer.name.split(" ")[0] || "";
+            document.getElementById("lastName").value = customer.name.split(" ")[1] || "";
+            document.getElementById("companyName").value = customer.companyName || "";
+            document.getElementById("email").value = customer.email || "";
+            document.getElementById("customerId").value = customer.customerId || "";
+            document.getElementById("phone").value = customer.workPhone || "";
+            document.getElementById("paymentTerms").value = customer.paymentTerms || "";
+
+            // Pre-fill billing address
+            document.getElementById("billingCountry").value = customer.billingAddress?.country || "";
+            document.getElementById("billingAddress").value = customer.billingAddress?.address || "";
+            document.getElementById("billingCity").value = customer.billingAddress?.city || "";
+            document.getElementById("billingState").value = customer.billingAddress?.state || "";
+            document.getElementById("billingZip").value = customer.billingAddress?.zip || "";
+            document.getElementById("billingPhone").value = customer.billingAddress?.phone || "";
+            document.getElementById("billingFax").value = customer.billingAddress?.fax || "";
+
+            // Pre-fill shipping address
+            document.getElementById("shippingCountry").value = customer.shippingAddress?.country || "";
+            document.getElementById("shippingAddress").value = customer.shippingAddress?.address || "";
+            document.getElementById("shippingCity").value = customer.shippingAddress?.city || "";
+            document.getElementById("shippingState").value = customer.shippingAddress?.state || "";
+            document.getElementById("shippingZip").value = customer.shippingAddress?.zip || "";
+            document.getElementById("shippingPhone").value = customer.shippingAddress?.phone || "";
+            document.getElementById("shippingFax").value = customer.shippingAddress?.fax || "";
+
+            // Show the modal and enable save button for editing
+            modal.style.display = "flex";
+            saveCustomerBtn.style.display = "none"; // Hide the regular save button
+            const saveChangesBtn = document.createElement("button");
+            saveChangesBtn.id = "saveChanges";
+            saveChangesBtn.textContent = "Save Changes";
+            saveChangesBtn.style.marginLeft = "10px";
+            saveChangesBtn.classList.add("save-btn");
+
+            document.querySelector(".form-buttons").appendChild(saveChangesBtn);
+
+            // Attach save changes event listener
+            saveChangesBtn.addEventListener("click", async () => {
+                await saveCustomerChanges(docId);
+                modal.style.display = "none";
+                saveChangesBtn.remove(); // Clean up the temporary button
+            });
+        }
+    } catch (error) {
+        console.error("Error editing customer: ", error);
+    }
 }
 
 // Function to delete a customer from Firestore
@@ -295,3 +365,68 @@ addProductButton.addEventListener("click", () => {
     // Save the new item to Firestore
     saveNewItemToFirestore(newItem);
 });
+
+async function saveCustomerChanges(docId) {
+    const customerType = document.getElementById("customerType").value;
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const companyName = document.getElementById("companyName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const paymentTerms = document.getElementById("paymentTerms").value;
+
+    // Billing Address
+    const billingCountry = document.getElementById("billingCountry").value.trim();
+    const billingAddress = document.getElementById("billingAddress").value.trim();
+    const billingCity = document.getElementById("billingCity").value.trim();
+    const billingState = document.getElementById("billingState").value.trim();
+    const billingZip = document.getElementById("billingZip").value.trim();
+    const billingPhone = document.getElementById("billingPhone").value.trim();
+    const billingFax = document.getElementById("billingFax").value.trim();
+
+    // Shipping Address
+    const shippingCountry = document.getElementById("shippingCountry").value.trim();
+    const shippingAddress = document.getElementById("shippingAddress").value.trim();
+    const shippingCity = document.getElementById("shippingCity").value.trim();
+    const shippingState = document.getElementById("shippingState").value.trim();
+    const shippingZip = document.getElementById("shippingZip").value.trim();
+    const shippingPhone = document.getElementById("shippingPhone").value.trim();
+    const shippingFax = document.getElementById("shippingFax").value.trim();
+
+    try {
+        const updatedCustomer = {
+            customerType,
+            name: `${firstName} ${lastName}`,
+            companyName,
+            email,
+            workPhone: phone,
+            paymentTerms,
+            billingAddress: {
+                country: billingCountry,
+                address: billingAddress,
+                city: billingCity,
+                state: billingState,
+                zip: billingZip,
+                phone: billingPhone,
+                fax: billingFax,
+            },
+            shippingAddress: {
+                country: shippingCountry,
+                address: shippingAddress,
+                city: shippingCity,
+                state: shippingState,
+                zip: shippingZip,
+                phone: shippingPhone,
+                fax: shippingFax,
+            },
+        };
+
+        const customerRef = doc(db, "customers", docId);
+        await setDoc(customerRef, updatedCustomer, { merge: true });
+
+        // Reload customers to reflect changes
+        loadCustomers();
+    } catch (error) {
+        console.error("Error saving changes: ", error);
+    }
+}

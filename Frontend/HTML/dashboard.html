@@ -177,46 +177,288 @@
                 </table>
             </div>
             
-            <!-- Edit Product Modal -->
             <div class="modal" id="editInventoryModal">
-                <div class="modal-content">
-                    <button class="modal-close" id="closeEditModal">&times;</button>
-                    <h2>Edit Product</h2>
-                    <form id="editInventoryForm">
-                        <div class="form-group">
-                            <label for="editItemCode">Item Code</label>
-                            <input type="text" id="editItemCode" readonly />
-                        </div>
-                        <div class="form-group">
-                            <label for="editSKU">SKU</label>
-                            <input type="text" id="editSKU" />
-                        </div>
-                        <div class="form-group">
-                            <label for="editDescription">Description</label>
-                            <input type="text" id="editDescription" />
-                        </div>
-                        <div class="form-group">
-                            <label for="editQuantity">Quantity</label>
-                            <input type="number" id="editQuantity" />
-                        </div>
-                        <div class="form-group">
-                            <label for="editThreshold">Threshold</label>
-                            <input type="number" id="editThreshold" />
-                        </div>
-                        <div class="form-group">
-                            <label for="editLocation">Location</label>
-                            <select id="editLocation">
-                                <option value="A01">A01</option>
-                                <option value="A02">A02</option>
-                            </select>
-                            <button type="button" id="addLocationBtn">Add Location</button>
-                        </div>
-                        <button type="submit" class="submit-btn">Save Changes</button>
-                    </form>
-                </div>
-            </div>
+                <!-- Exit Button Positioned Correctly -->
             
-    
+                <div class="modal-content">
+                    <button class="exit-btn" id="exitModal">&times;</button>
+                    <h2 class="modal-title">Edit Product</h2>
+                    <div class="tabs-container">
+                        <button class="tab active" data-tab="detailTab">Detail</button>
+                        <button class="tab" data-tab="Stock">Stock Info</button>
+                        <button class="tab" data-tab="purchaseOrderTab">Purchase Order</button>
+                    </div>
+            
+                    <!-- Tab Content: Detail -->
+                    <div class="tab-content active" id="detailTab">
+                        <form id="editInventoryForm">
+                            <!-- Row 1 -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editItemCode">
+                                        <ion-icon name="barcode-outline"></ion-icon> Item Code
+                                    </label>
+                                    <input type="text" id="editItemCode" readonly />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editSKU">SKU</label>
+                                    <input type="text" id="editSKU" />
+                                </div>
+                            </div>
+            
+                            <!-- Row 2 -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editDescription">Description</label>
+                                    <input type="text" id="editDescription" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editQuantity">Quantity</label>
+                                    <input type="number" id="editQuantity" />
+                                </div>
+                            </div>
+            
+                            <!-- Row 3 -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editThreshold">Threshold</label>
+                                    <input type="number" id="editThreshold" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editCategory">
+                                        <ion-icon name="pricetag-outline"></ion-icon> Category
+                                    </label>
+                                    <div class="input-with-plus">
+                                        <select id="editCategory">
+                                            <option value="Electronics">Electronics</option>
+                                            <option value="Clothing">Clothing</option>
+                                            <option value="Furniture">Furniture</option>
+                                        </select>
+                                        <button class="add-icon" id="addCategoryBtn">
+                                            <ion-icon name="add-outline"></ion-icon>
+                                        </button>
+                                        <button class="delete-icon" id="deleteCategoryBtn">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </button>
+                                        <div class="color-options">
+                                            <button class="color-btn" data-color="#006699" style="background-color: #006699;"></button>
+                                            <button class="color-btn" data-color="#5AAA46" style="background-color: #5AAA46;"></button>
+                                            <button class="color-btn" data-color="#EEDD55" style="background-color: #EEDD55;"></button>
+                                            <button class="color-btn" data-color="#DDAA77" style="background-color: #DDAA77;"></button>
+                                            <button class="color-btn" data-color="#7799BB" style="background-color: #7799BB;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Row 4 -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editPhoto">
+                                        <ion-icon name="images-outline"></ion-icon> Photo
+                                    </label>
+                                    <input type="file" id="editPhoto" accept="image/*" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="editCost">
+                                        <ion-icon name="cash-outline"></ion-icon> Cost
+                                    </label>
+                                    <input type="number" id="editCost" placeholder="Enter cost" />
+                                </div>
+                            </div>
+            
+                            <!-- Row 5 -->
+                            <div class="form-row">
+                                <!-- <div class="form-group">
+                                    <label for="editVendor">Vendor</label>
+                                    <div class="input-with-plus">
+                                        <select id="editVendor">
+                                            <option value="Vendor1">Vendor 1</option>
+                                        </select>
+                                        <button class="add-icon" id="addVendorBtn">
+                                            <ion-icon name="add-outline"></ion-icon>
+                                        </button>
+                                        <button class="delete-icon" id="deleteVendorBtn">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div> -->
+                                <div class="form-group">
+                                    <label for="editLocation">
+                                        <ion-icon name="location-outline"></ion-icon> Location
+                                    </label>
+                                    <div class="input-with-plus">
+                                        <select id="editLocation">
+                                            <option value="A01">A01</option>
+                                        </select>
+                                        <button class="add-icon" id="addLocationBtn">
+                                            <ion-icon name="add-outline"></ion-icon>
+                                        </button>
+                                        <button class="delete-icon" id="deleteLocationBtn">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <!-- Save Button -->
+                            <div class="modal-footer">
+                                <button type="submit" class="submit-btn">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+            
+                    <!-- Other Tabs -->
+                    <div class="tab-content" id="stockTab">
+                        <h3>Stock Details</h3>
+                        <form id="stockForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="editLocation">Location</label>
+                                    <div class="input-with-plus">
+                                        <select id="editLocation">
+                                            <option value="A01">A01</option>
+                                        </select>
+                                        <button class="add-icon" id="addLocationBtn">+</button>
+                                        <button class="delete-icon" id="deleteLocationBtn">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Add Stock Section -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="stockQuantity">Add Stock</label>
+                                    <input type="number" id="stockQuantity" placeholder="Enter quantity" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            
+                    <div class="tab-content" id="purchaseOrderTab">
+                        <!-- Header with Add Button -->
+                        <div class="purchase-order-header">
+                            <h3>Purchase Orders</h3>
+                            <button id="addPOBtn" class="blue-btn">+ Add Purchase Order</button>
+                        </div>
+                    
+                        <!-- Purchase Order Cards -->
+                        <div id="purchaseOrderList" class="po-list-vertical">
+                            <!-- PO cards will be added dynamically here -->
+                        </div>
+                        
+                    
+                        <!-- Purchase Order Form -->
+                        <div id="purchaseOrderFormContainer" class="hidden">
+                            <form id="purchaseOrderForm">
+                                <!-- PO Number, Label, Date, and Currency -->
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="poNumber">PO Number <span class="required">*</span></label>
+                                        <input type="text" id="poNumber" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="poLabel">Label</label>
+                                        <input type="text" id="poLabel" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="currency">Currency</label>
+                                        <select id="currency">
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="poDate">Date <span class="required">*</span></label>
+                                        <input type="date" id="poDate" required />
+                                    </div>
+                                </div>
+                    
+                                <div class="form-row">
+                                    <div class="form-group half-width">
+                                        <label for="editVendor">Vendor</label>
+                                        <div class="input-with-plus">
+                                            <select id="editVendor">
+                                                <option value="Vendor1">Vendor 1</option>
+                                            </select>
+                                            <button class="add-icon" id="addVendorBtn">
+                                                <ion-icon name="add-outline"></ion-icon>
+                                            </button>
+                                            <button class="delete-icon" id="deleteVendorBtn">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group half-width">
+                                        <label for="editCost">Cost</label>
+                                        <input type="number" id="editCost" placeholder="Enter cost" />
+                                    </div>
+                                </div>
+                                
+                                
+                                <!-- Billing and Shipping Section -->
+                                <div class="form-row" style="margin-top: 20px;">
+                                    <div class="form-group">
+                                        <label for="billingAddress">Billing Address</label>
+                                        <textarea id="billingAddress" class="rounded-input" placeholder="Enter billing address"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="shippingAddress">Shipping Address</label>
+                                        <textarea id="shippingAddress" class="rounded-input" placeholder="Enter shipping address"></textarea>
+                                        <label>
+                                            <input type="checkbox" id="sameAsBilling" /> Same as Billing
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                    
+                                <!-- Item Table -->
+                                <div class="form-row">
+                                    <table id="itemsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Item <span class="required">*</span></th>
+                                                <th>Quantity <span class="required">*</span></th>
+                                                <th>Rate <span class="required">*</span></th>
+                                                <th>Tax <span class="required">*</span></th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="text" placeholder="Item description" required /></td>
+                                                <td><input type="number" min="1" placeholder="Quantity" required /></td>
+                                                <td><input type="number" min="0.01" step="0.01" placeholder="Rate" required /></td>
+                                                <td><input type="number" min="0" placeholder="Tax" required /></td>
+                                                <td class="total-cell">$0.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" id="addItem" class="blue-btn">Add Item</button>
+                                </div>
+                    
+                                <!-- Attachments Section -->
+                                <div class="form-row">
+                                    <div class="attachment-container">
+                                        <input type="file" id="attachments" multiple />
+                                        <div id="attachmentList"></div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Save and Cancel Buttons -->
+                                <div class="form-actions">
+                                    <button type="submit" class="save-btn">Save</button>
+                                    <button type="button" class="cancel-btn" id="cancelPurchaseOrder">Cancel</button>
+                                </div>
+
+
+                            </form>
+                        </div>
+                    </div>
+                    
+
+                                    
+            
     
  <!--=========Scripts======== -->
 <script type="module" src="../JS/InventlyHomepage.js"></script>

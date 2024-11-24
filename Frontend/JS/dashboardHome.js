@@ -128,3 +128,339 @@ function updateRowStatus(row) {
     }
 }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Tab Switching
+    const setupTabSwitching = () => {
+        const tabs = document.querySelectorAll(".tab");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach((t) => t.classList.remove("active"));
+                tabContents.forEach((content) => content.classList.remove("active"));
+
+                // Add active class to the clicked tab and corresponding content
+                tab.classList.add("active");
+                document.getElementById(tab.getAttribute("data-tab")).classList.add("active");
+            });
+        });
+    };
+
+    // Add/Remove Options for Vendor, Category, and Location
+    const setupAddRemoveOptions = () => {
+        const addButtons = document.querySelectorAll(".add-icon");
+        const deleteButtons = document.querySelectorAll(".delete-icon");
+
+        addButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const inputType = btn.previousElementSibling.id;
+                const newValue = prompt(`Enter a new ${inputType.replace("edit", "")}:`);
+                if (newValue) {
+                    const select = document.getElementById(inputType);
+                    const option = document.createElement("option");
+                    option.value = newValue;
+                    option.textContent = newValue;
+                    select.appendChild(option);
+                }
+            });
+        });
+
+        deleteButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const select = btn.previousElementSibling.previousElementSibling;
+                const selectedOption = select.selectedOptions[0];
+                if (selectedOption) {
+                    const confirmed = confirm(`Are you sure you want to delete "${selectedOption.text}"?`);
+                    if (confirmed) {
+                        selectedOption.remove();
+                    }
+                }
+            });
+        });
+    };
+
+    // Preset Color Selection
+    const setupColorSelection = () => {
+        const colorButtons = document.querySelectorAll(".color-btn");
+
+        colorButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault(); // Prevent any default behavior
+                e.stopPropagation(); // Stop the event from bubbling up
+
+                const selectedColor = btn.getAttribute("data-color");
+
+                // Highlight the selected button
+                colorButtons.forEach((b) => b.classList.remove("selected")); // Remove selection from others
+                btn.classList.add("selected"); // Add selection to clicked button
+
+                // Update any visual element within the modal
+                const selectedColorDisplay = document.getElementById("selectedColorDisplay");
+                if (selectedColorDisplay) {
+                    selectedColorDisplay.style.backgroundColor = selectedColor;
+                    selectedColorDisplay.textContent = selectedColor; // Optional: Show the color value
+                }
+            });
+        });
+    };
+
+
+    // Exit Modal Functionality
+    const setupExitModal = () => {
+        const exitModalButton = document.getElementById("exitModal");
+        const editInventoryModal = document.getElementById("editInventoryModal");
+
+        exitModalButton.addEventListener("click", () => {
+            editInventoryModal.classList.remove("active"); // Hide modal when clicked
+        });
+    };
+
+    // Initialize All Features
+    setupTabSwitching();
+    setupAddRemoveOptions();
+    setupColorSelection();
+    setupExitModal();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const addPOBtn = document.getElementById("addPOBtn");
+    const purchaseOrderList = document.getElementById("purchaseOrderList");
+    const purchaseOrderForm = document.getElementById("purchaseOrderForm");
+    const purchaseOrderFormContainer = document.getElementById("purchaseOrderFormContainer");
+    const itemsTable = document.getElementById("itemsTable").querySelector("tbody");
+    const addItem = document.getElementById("addItem");
+    const attachmentsInput = document.getElementById("attachments");
+    const attachmentList = document.getElementById("attachmentList");
+    const cancelPurchaseOrder = document.getElementById("cancelPurchaseOrder");
+    const addVendorBtn = document.querySelector(".add-icon");
+    const deleteVendorBtn = document.querySelector(".delete-icon");
+    const vendorSelect = document.getElementById("editVendor");
+
+    let purchaseOrders = []; // Store all POs and their data
+    let editingPOIndex = null; // Track the currently edited PO
+
+    // Initialize the form with one row
+    const initializeItemsTable = () => {
+        itemsTable.innerHTML = ""; // Clear the table
+        addItemRow(); // Add a default row
+    };
+
+    // Add Item Row
+    const addItemRow = (item = { description: "", quantity: 1, rate: 0, tax: 0 }) => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td><input type="text" placeholder="Item description" value="${item.description}" required /></td>
+            <td><input type="number" min="1" placeholder="Quantity" class="item-quantity" value="${item.quantity}" required /></td>
+            <td><input type="number" min="0.01" step="0.01" placeholder="Rate" class="item-rate" value="${item.rate}" required /></td>
+            <td><input type="number" min="0" step="0.01" placeholder="Tax (%)" class="item-tax" value="${item.tax}" required /></td>
+            <td class="total-cell">$0.00</td>
+            <td><button type="button" class="delete-item-btn" style="color: red;">X</button></td>
+        `;
+        itemsTable.appendChild(newRow);
+
+        const quantityInput = newRow.querySelector(".item-quantity");
+        const rateInput = newRow.querySelector(".item-rate");
+        const taxInput = newRow.querySelector(".item-tax");
+        const totalCell = newRow.querySelector(".total-cell");
+        const deleteBtn = newRow.querySelector(".delete-item-btn");
+
+        const calculateRowTotal = () => {
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+            const taxPercent = parseFloat(taxInput.value) || 0;
+            const subtotal = quantity * rate;
+            const total = subtotal + (subtotal * taxPercent) / 100;
+            totalCell.textContent = `$${total.toFixed(2)}`;
+        };
+
+        quantityInput.addEventListener("input", calculateRowTotal);
+        rateInput.addEventListener("input", calculateRowTotal);
+        taxInput.addEventListener("input", calculateRowTotal);
+
+        deleteBtn.addEventListener("click", () => {
+            newRow.remove();
+        });
+
+        calculateRowTotal(); // Initial calculation
+    };
+
+    // Ensure Add Item Button Works
+    addItem.addEventListener("click", () => {
+        addItemRow(); // Add a new row
+    });
+
+    // Handle Attachments
+    attachmentsInput.addEventListener("change", () => {
+        Array.from(attachmentsInput.files).forEach((file) => {
+            const listItem = document.createElement("div");
+            listItem.classList.add("attachment-item");
+
+            const fileLink = document.createElement("a");
+            fileLink.href = URL.createObjectURL(file);
+            fileLink.target = "_blank";
+            fileLink.textContent = file.name;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "X";
+            deleteBtn.style.color = "red";
+            deleteBtn.classList.add("delete-attachment-btn");
+
+            deleteBtn.addEventListener("click", () => {
+                listItem.remove();
+            });
+
+            listItem.appendChild(fileLink);
+            listItem.appendChild(deleteBtn);
+            attachmentList.appendChild(listItem);
+        });
+
+        // Clear input to allow adding the same file again
+        attachmentsInput.value = "";
+    });
+
+    // Show form and temporarily hide PO cards
+    addPOBtn.addEventListener("click", () => {
+        purchaseOrderFormContainer.classList.remove("hidden"); // Show the form
+        purchaseOrderList.classList.add("hidden"); // Hide the list
+        addPOBtn.style.display = "none"; // Hide the "Add Purchase Order" button
+        purchaseOrderForm.reset(); // Reset the form
+        initializeItemsTable(); // Initialize the items table
+        attachmentList.innerHTML = ""; // Clear attachments
+        editingPOIndex = null; // Reset editing state
+    });
+
+    // Cancel button functionality
+    cancelPurchaseOrder.addEventListener("click", () => {
+        purchaseOrderForm.reset();
+        purchaseOrderFormContainer.classList.add("hidden");
+        purchaseOrderList.classList.remove("hidden");
+        addPOBtn.style.display = "block"; // Show the "Add Purchase Order" button
+    });
+
+    // Save Purchase Order
+    purchaseOrderForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const poNumber = document.getElementById("poNumber").value.trim();
+        const poDate = document.getElementById("poDate").value;
+        if (!poNumber || !poDate) {
+            alert("PO Number and Date are required.");
+            return;
+        }
+
+        const vendor = vendorSelect.value || "N/A";
+        const items = Array.from(itemsTable.children).map((row) => {
+            return {
+                description: row.querySelector("td:first-child input").value,
+                quantity: parseFloat(row.querySelector(".item-quantity").value) || 0,
+                rate: parseFloat(row.querySelector(".item-rate").value) || 0,
+                tax: parseFloat(row.querySelector(".item-tax").value) || 0,
+                total: row.querySelector(".total-cell").textContent,
+            };
+        });
+
+        const attachments = Array.from(attachmentList.children).map((child) => {
+            return child.querySelector("a").textContent;
+        });
+
+        const poData = {
+            poNumber,
+            poDate,
+            vendor,
+            items,
+            attachments,
+        };
+
+        if (editingPOIndex !== null) {
+            purchaseOrders[editingPOIndex] = poData;
+        } else {
+            purchaseOrders.push(poData);
+        }
+
+        renderPOCards();
+
+        purchaseOrderForm.reset();
+        purchaseOrderFormContainer.classList.add("hidden");
+        purchaseOrderList.classList.remove("hidden");
+        addPOBtn.style.display = "block";
+    });
+
+    // Render PO Cards
+    const renderPOCards = () => {
+        purchaseOrderList.innerHTML = "";
+        purchaseOrders.forEach((po, index) => {
+            const card = document.createElement("div");
+            card.classList.add("po-card");
+            card.innerHTML = `
+                <div><strong>PO #${po.poNumber}</strong></div>
+                <div>Date: ${po.poDate}</div>
+                <div>Vendor: ${po.vendor}</div>
+            `;
+            card.addEventListener("click", () => {
+                loadPOData(index);
+            });
+            purchaseOrderList.appendChild(card);
+        });
+    };
+
+    // Load PO Data into Form
+    const loadPOData = (index) => {
+        const poData = purchaseOrders[index];
+        editingPOIndex = index;
+
+        document.getElementById("poNumber").value = poData.poNumber;
+        document.getElementById("poDate").value = poData.poDate;
+        vendorSelect.value = poData.vendor;
+
+        itemsTable.innerHTML = "";
+        poData.items.forEach(addItemRow);
+
+        attachmentList.innerHTML = "";
+        poData.attachments.forEach((fileName) => {
+            const listItem = document.createElement("div");
+            const fileLink = document.createElement("a");
+            fileLink.href = "#";
+            fileLink.textContent = fileName;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "X";
+            deleteBtn.style.color = "red";
+
+            deleteBtn.addEventListener("click", () => {
+                listItem.remove();
+            });
+
+            listItem.appendChild(fileLink);
+            listItem.appendChild(deleteBtn);
+            attachmentList.appendChild(listItem);
+        });
+
+        purchaseOrderFormContainer.classList.remove("hidden");
+        purchaseOrderList.classList.add("hidden");
+        addPOBtn.style.display = "none";
+    };
+
+    // Add Vendor
+    addVendorBtn.addEventListener("click", () => {
+        const newVendor = prompt("Enter new vendor name:");
+        if (newVendor) {
+            const option = document.createElement("option");
+            option.value = newVendor;
+            option.textContent = newVendor;
+            vendorSelect.appendChild(option);
+        }
+    });
+
+    // Delete Vendor
+    deleteVendorBtn.addEventListener("click", () => {
+        if (vendorSelect.selectedIndex > 0) {
+            vendorSelect.remove(vendorSelect.selectedIndex);
+        }
+    });
+
+    initializeItemsTable(); // Add default item row on load
+});

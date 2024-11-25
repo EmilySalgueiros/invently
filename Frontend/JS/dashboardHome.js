@@ -133,6 +133,24 @@ function updateRowStatus(row) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    const addPOBtn = document.getElementById("addPOBtn");
+    const purchaseOrderFormContainer = document.getElementById("purchaseOrderFormContainer");
+
+    if (addPOBtn) {
+        addPOBtn.addEventListener("click", () => {
+            if (purchaseOrderFormContainer) {
+                purchaseOrderFormContainer.classList.toggle("hidden"); // Toggle visibility
+            } else {
+                console.error("Purchase Order form container not found.");
+            }
+        });
+    } else {
+        console.error("Add Purchase Order button not found.");
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
     // Tab Switching
     const setupTabSwitching = () => {
         const tabs = document.querySelectorAll(".tab");
@@ -151,6 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     };
+
+    
 
     // Add/Remove Options for Vendor, Category, and Location
     const setupAddRemoveOptions = () => {

@@ -9,6 +9,39 @@ const modalTitle = document.getElementById("modalTitle"); // Get the modal title
 
 
 
+// THIS FOR THE DROPDOWN MENU FOR THE ADD ORDERS AND MANAGE ORDERS
+
+document.addEventListener("DOMContentLoaded", () => {
+    const ordersDropdown = document.querySelector(".Add-Manage-OrdersDropdown");
+    const dropdownMenu = document.querySelector(".Add-Manage-OrdersDropdownMenu");
+    const ordersToggle = document.getElementById("ordersDropdownToggle"); // Correct reference
+    const navigation = document.querySelector(".navigation");
+
+    // Toggle the dropdown on click
+    ordersToggle.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent default anchor behavior
+        ordersDropdown.classList.toggle("active");
+
+        // Adjust navigation bar height if dropdown is active
+        if (ordersDropdown.classList.contains("active")) {
+            navigation.classList.add("expanded");
+        } else {
+            navigation.classList.remove("expanded");
+        }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+        // Close only if the click is outside both the dropdown and toggle
+        if (!ordersDropdown.contains(e.target) && !ordersToggle.contains(e.target)) {
+            ordersDropdown.classList.remove("active");
+            navigation.classList.remove("expanded");
+        }
+    });
+});
+
+
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -483,3 +516,6 @@ updatedRow.innerHTML = `
         <button class="delete-btn" data-id="${docId}">Delete</button>
     </td>
 `;
+
+
+

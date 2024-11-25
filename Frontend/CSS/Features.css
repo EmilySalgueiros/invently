@@ -1,11 +1,162 @@
-/* cube icon */
 
+/* cube icon */
 .large-cube-icon {
     font-size: 1.2rem;
     /* Increase the size of the icon */
-    color: inherit;
+    background-color: inherit;
     /* Inherit color from parent, or set a specific color */
 
     margin-left: 10px;
     /* Optional: Add space to the left of the icon */
+}
+
+.header {
+    background-color: #2a2185;
+    padding: 0px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+
+.banner {
+    background-color: #2a2185;
+    color: white;
+    padding: 0px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.bannerContent {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.bannerHeader {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.aboutIntro {
+    text-align: center;
+    padding: 10px 10px;
+    margin: 110px 0px;
+    background-color: #ffffff;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+.aboutIntro h2 {
+    font-size: 3rem;
+    color: #2a2185;
+    font-weight: bold;
+    transition: transform 0.3s ease, letter-spacing 0.3s ease, color 0.3s ease;
+}
+
+/* Features Section */
+.features-container {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.features-header h4 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #d1c4e9;
+}
+
+.features-header h1 {
+    font-size: 2.5rem;
+    margin: 10px 0 30px;
+    color: #fff;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.feature-card {
+    background-color: #fff;
+    color: #333;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    background-color: #f0eee4;
+
+}
+
+.feature-card img {
+    width: 60%; 
+    height: auto; 
+    border-radius: 8px;
+    margin: 0 auto 15px; 
+    object-fit: contain; 
+    max-height: 200px; 
+    display: block; 
+}
+
+.feature-card h3 {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    color: #2a2185; 
+}
+
+.feature-card p {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.feature-card button {
+    background-color: #7e57c2;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.feature-card button:hover {
+    background-color: #5e35b1; /* Darker purple */
+}
+
+/* Footer */
+.features-footer {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #d1c4e9; /* Lighter purple */
+}
+
+.features-footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.features-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Footer styling */
+.homepageFooter {
+    background-color: #2a2185;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    flex-shrink: 0;
 }

@@ -308,12 +308,28 @@
                     <div class="tab-content" id="stockTab">
                         <!-- Location Selection -->
                         <div class="form-row">
-                            <label for="editLocation">Location</label>
-                            <select id="editLocation">
-                                <option value="A01">A01</option>
-                                <option value="A02">A02</option>
-                            </select>
+                            <div class="form-group">
+                                <label for="editVendor">Location</label>
+                                <div class="input-with-plus">
+                                    <select id="editLocation">
+                                        <option value="Location1">Location1</option>
+                                    </select>
+                                    <button class="add-icon" id="addLocationBtn">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </button>
+                                    <button class="delete-icon" id="deleteLocationBtn">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                        
+                        <!-- Add Ionicons library -->
+                        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+                        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+                        
+                        
+                        
                     
                         <!-- Aisle Container -->
                         <div class="aisle-container" id="aisleContainer">

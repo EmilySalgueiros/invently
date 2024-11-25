@@ -56,14 +56,15 @@
                         <span class="ti">Messages</span>
                     </a>
                 </li>
-                <li>
-                    <a href="#">
-                        <span class="icon">
-                            <ion-icon name="help-outline"></ion-icon>
-                        </span>
-                        <span class="ti">Help</span>
-                    </a>
-                </li>
+                                <li>
+                                    <a href="OrdersTab.html">
+                                        <span class="icon">
+                                            <ion-icon name="bag-outline"></ion-icon>
+                                        </span>
+                                        <span class="ti">Orders</span>
+                                    </a>
+                                </li>
+
                 <li>
                     <a href="#">
                         <span class="icon">
@@ -116,7 +117,7 @@
             <div id="newCustomerModal" class="modal">
                 <div class="modal-content">
                     <span class="close-btn" id="closeModal">&times;</span>
-                    <h2>New Customer</h2>
+                    <h2 id="modalTitle">New Customer</h2>
 
                     <!-- First Part of the Form -->
                     <form id="customerDetailsForm">
@@ -212,6 +213,8 @@
                             <button type="button" id="backToCustomerInfo">Back</button>
                             <button type="button" id="cancelCustomer">Cancel</button>
                             <button type="button" id="saveCustomer">Save</button>
+                            <!-- Placeholder for Save Changes button -->
+                            <button type="button" id="saveChanges" style="display: none;" class="save-btn">Save Changes</button>
 
 
                         </div>

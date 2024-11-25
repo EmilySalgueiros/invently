@@ -1,8 +1,13 @@
 // Import Firebase Firestore
-import { getFirestore, collection, getDocs, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, addDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+let currentCustomerId = null; // Track whether you're editing an existing customer
+const modalTitle = document.getElementById("modalTitle"); // Get the modal title element
+
+
 
 
 // Firebase configuration
@@ -31,6 +36,8 @@ const nextToAddress = document.getElementById("nextToAddress");
 const customerDetailsForm = document.getElementById("customerDetailsForm");
 const addressDetailsForm = document.getElementById("addressDetailsForm");
 const backToCustomerInfo = document.getElementById("backToCustomerInfo");
+const addCustomerModal = document.getElementById("addCustomerModal");
+
 
 
 // Function to generate a random customer ID
@@ -39,37 +46,89 @@ function generateCustomerId() {
 }
 
 // Open the modal and set a random Customer ID
-addCustomerBtn.addEventListener("click", () => {
-    modal.style.display = "flex";
-    customerIdField.value = generateCustomerId();
-});
-
-// Close the modal
-closeModal.addEventListener("click", () => {
-    modal.style.display = "none";
-});
-
-cancelCustomer.addEventListener("click", () => {
-    modal.style.display = "none";
-});
-
-// Close modal if user clicks outside of it
-window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.style.display = "none";
+document.addEventListener("DOMContentLoaded", () => {
+    const addCustomerBtn = document.getElementById("addCustomerBtn");
+    if (addCustomerBtn) {
+        addCustomerBtn.addEventListener("click", () => {
+            modal.style.display = "flex";
+            customerIdField.value = generateCustomerId();
+            console.log("Add Customer button clicked!");
+        });
+    } else {
+        console.error("addCustomerBtn element not found.");
     }
 });
 
-// Show the Address Form
-nextToAddress.addEventListener("click", () => {
-    customerDetailsForm.style.display = "none";
-    addressDetailsForm.style.display = "block";
+
+
+// Open the modal and set a random Customer ID
+document.addEventListener("DOMContentLoaded", () => {
+    const addCustomerBtn = document.getElementById("addCustomerBtn");
+    const closeModal = document.getElementById("closeModal");
+    const cancelCustomer = document.getElementById("cancelCustomer");
+    if (addCustomerBtn) {
+        addCustomerBtn.addEventListener("click", () => {
+            clearForm();
+            modalTitle.textContent = "New Customer"; // Set the title for adding a new customer
+            customerIdField.value = generateCustomerId(); // Generate a new customer ID
+            document.getElementById("customerId").value = generateCustomerId(); // Generate new ID
+
+            console.log("Add Customer button clicked!");
+        });
+    } else {
+        console.error("addCustomerBtn element not found.");
+    }
+
+
+    if (closeModal) {
+        // Close the modal
+        closeModal.addEventListener("click", () => {
+            modal.style.display = "none";
+            modalTitle.textContent = "New Customer"; // Reset the title
+            console.log("Close Modal button clicked!");
+        });
+    } else {
+        console.error("closeModal element not found.");
+    }
+
+    if (cancelCustomer) {
+        cancelCustomer.addEventListener("click", () => {
+            modal.style.display = "none";
+            modalTitle.textContent = "New Customer"; // Reset the title
+            console.log("Cancel button clicked!");
+        });
+    } else {
+        console.error("cancelCustomer element not found.");
+    }
+
+    // This the address 
+
+    if (nextToAddress) {
+        nextToAddress.addEventListener("click", () => {
+            customerDetailsForm.style.display = "none";
+            addressDetailsForm.style.display = "block";
+        });
+    } else {
+        console.error("nextToAddress button not found.");
+    }
+
+
+    //This to show the customers
+
+    if (backToCustomerInfo) {
+        backToCustomerInfo.addEventListener("click", () => {
+            addressDetailsForm.style.display = "none";
+            customerDetailsForm.style.display = "block";
+        });
+    } else {
+        console.error("backToCustomerInfo button not found.");
+    }
+
 });
 
-// Show the Customer Info Form (Back Button)
-backToCustomerInfo.addEventListener("click", () => {
-    addressDetailsForm.style.display = "none";
-    customerDetailsForm.style.display = "block";
+
+cancelCustomer.addEventListener("click", () => {
+    modal.style.display = "none";
 });
 
 // Clear the form
@@ -131,7 +190,7 @@ saveCustomerBtn.addEventListener("click", async () => {
     if (!validateInputs()) return;
 
     try {
-        const newCustomer = {
+        const customerData = {
             customerType,
             name: `${firstName} ${lastName}`.trim(),
             companyName: companyName || "",
@@ -160,12 +219,27 @@ saveCustomerBtn.addEventListener("click", async () => {
             },
         };
 
-        const docRef = await addDoc(collection(db, "customers"), newCustomer);
-        addCustomerToTable(newCustomer, docRef.id); // Pass the document ID
+        if (currentCustomerId) {
+            // Update existing customer
+            const customerRef = doc(db, "customers", currentCustomerId);
+            await setDoc(customerRef, customerData, { merge: true });
+            console.log("Customer updated:", customerData);
+        } else {
+            // Add new customer
+            const docRef = await addDoc(collection(db, "customers"), customerData);
+            console.log("New customer added:", customerData);
+            currentCustomerId = docRef.id; // Update the global state with the new customer's ID
+        }
+
+        // Refresh the customer list
+        await loadCustomers();
+
+        // Reset form and close modal
         modal.style.display = "none";
         clearForm();
+        currentCustomerId = null; // Reset the global state
     } catch (error) {
-        console.error("Error adding document: ", error);
+        console.error("Error saving customer:", error);
     }
 });
 
@@ -253,26 +327,18 @@ async function editCustomer(docId) {
             document.getElementById("shippingPhone").value = customer.shippingAddress?.phone || "";
             document.getElementById("shippingFax").value = customer.shippingAddress?.fax || "";
 
-            // Show the modal and enable save button for editing
+            
+            // Update the modal title for editing
+            modalTitle.textContent = "Customer";
+
+            // Show the modal
             modal.style.display = "flex";
-            saveCustomerBtn.style.display = "none"; // Hide the regular save button
-            const saveChangesBtn = document.createElement("button");
-            saveChangesBtn.id = "saveChanges";
-            saveChangesBtn.textContent = "Save Changes";
-            saveChangesBtn.style.marginLeft = "10px";
-            saveChangesBtn.classList.add("save-btn");
 
-            document.querySelector(".form-buttons").appendChild(saveChangesBtn);
-
-            // Attach save changes event listener
-            saveChangesBtn.addEventListener("click", async () => {
-                await saveCustomerChanges(docId);
-                modal.style.display = "none";
-                saveChangesBtn.remove(); // Clean up the temporary button
-            });
+            // Set global state for editing
+            currentCustomerId = docId;
         }
     } catch (error) {
-        console.error("Error editing customer: ", error);
+        console.error("Error editing customer:", error);
     }
 }
 
@@ -291,37 +357,7 @@ document.addEventListener("DOMContentLoaded", loadCustomers);
 
 export const auth = getAuth(app); // Export the Auth instance
 
-// DOM elements
-const usernameDisplay = document.getElementById("username-display");
 
-// Check authentication state
-onAuthStateChanged(auth, async (user) => {
-    if (user) {
-        try {
-            // Fetch user data from Firestore
-            console.log("User is authenticated:", user.uid);
-            const userDocRef = doc(db, "users", user.uid);
-            const userDoc = await getDoc(userDocRef);
-
-            if (userDoc.exists()) {
-                console.log("User document data:", userDoc.data()); // Debugging Firestore data
-                // Extract the username
-                const username = userDoc.data().username;
-                usernameDisplay.textContent = username; // Display the username
-            } else {
-                console.error("User document not found in Firestore");
-                usernameDisplay.textContent = "User"; // Fallback if username is not found
-            }
-        } catch (error) {
-            console.error("Error fetching username:", error);
-            usernameDisplay.textContent = "Error";
-        }
-    } else {
-        console.error("User not authenticated. Redirecting to login...");
-        // Redirect to login page if not logged in
-        window.location.href = "../HTML/loginInvently.html";
-    }
-});
 
 // Function to save a new inventory item to Firestore
 async function saveNewItemToFirestore(newItem) {
@@ -424,9 +460,26 @@ async function saveCustomerChanges(docId) {
         const customerRef = doc(db, "customers", docId);
         await setDoc(customerRef, updatedCustomer, { merge: true });
 
-        // Reload customers to reflect changes
-        loadCustomers();
+        console.log("Customer updated:", updatedCustomer); // Debugging log
+        await loadCustomers(); // Refresh table data
+        console.log("Customer list reloaded");
+
+        // Show a success alert after saving changes
+        alert("Customer details updated successfully!");
     } catch (error) {
         console.error("Error saving changes: ", error);
     }
 }
+
+const updatedRow = document.querySelector(`[data-id="${docId}"]`);
+updatedRow.innerHTML = `
+    <td>${updatedCustomer.name}</td>
+    <td>${updatedCustomer.companyName}</td>
+    <td>${updatedCustomer.email}</td>
+    <td>${updatedCustomer.workPhone}</td>
+    <td>${updatedCustomer.receivables || "$0.00"}</td>
+    <td>
+        <button class="edit-btn" data-id="${docId}">Edit</button>
+        <button class="delete-btn" data-id="${docId}">Delete</button>
+    </td>
+`;

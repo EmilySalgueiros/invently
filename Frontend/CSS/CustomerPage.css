@@ -1,0 +1,581 @@
+/* Use the same styles defined in dashboard.css */
+/* ========= Google Fonts =========*/
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* ========= General Styling =========*/
+* {
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2a2185;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+}
+
+/* ========= Body and Container =========*/
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--gray);
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* ========= Navigation =========*/
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 0;
+    /* Add padding for spacing */
+}
+
+.navigation ul li {
+    position: relative;
+    list-style: none;
+    margin-bottom: 20px;
+    /* Add spacing between items */
+}
+
+/* Logo Styling */
+.navigation ul li:first-child {
+    margin-bottom: 40px;
+    /* Larger gap below the logo */
+}
+
+.navigation ul li:first-child a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align logo and text to the left */
+}
+
+.navigation ul li:first-child a .icon {
+    margin-right: 10px;
+    /* Space between logo and text */
+}
+
+.navigation ul li:first-child a .ti {
+    font-size: 1.8rem;
+    /* Larger font for the logo text */
+    font-weight: bold;
+    color: var(--white);
+}
+
+.navigation ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 6px 15px;
+    /* Add padding for hover effect */
+    border-top-left-radius: 30px;
+    /* Round top-left corner */
+    border-bottom-left-radius: 30px;
+    /* Round bottom-left corner */
+    border-top-right-radius: 0;
+    /* Ensure right corners are square */
+    border-bottom-right-radius: 0;
+    /* Ensure right corners are square */
+    color: var(--white);
+}
+
+.navigation ul li a .icon {
+    margin-right: 15px;
+    /* Space between icon and text */
+    font-size: 1.5rem;
+    /* Icon size */
+    text-align: center;
+}
+
+/* Hover Effect */
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+    background-color: var(--white);
+    color: var(--blue);
+    /* Change text color */
+}
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.8rem;
+    /* Icon size for menu items */
+}
+
+/* Main */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+
+}
+
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+/* Customer Page Specific Styling */
+.main h1 {
+    font-size: 24px;
+    color: var(--blue);
+    margin-bottom: 20px;
+}
+
+.customer-table {
+    margin: 30px auto;
+    margin-left: 90px;
+    /* Add left margin slightly larger than the navigation bar width */
+    width: calc(100% - 175px);
+    /* Adjust the width to account for the left margin */
+    max-width: 1500px;
+    /* Limit the maximum width */
+    border-radius: 10px;
+    overflow: hidden;
+    /* Ensures rounded borders are respected */
+    background: var(--white);
+    /* White background for the table */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Soft shadow for aesthetics */
+}
+
+.customer-table table {
+    width: 100%;
+    /* Make sure the table takes the full width of its container */
+    border-collapse: collapse;
+    font-size: 11px;
+    text-align: left;
+    table-layout: fixed;
+    /* Ensure all columns are evenly distributed */
+}
+
+.customer-table table th,
+.customer-table table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--gray);
+    /* Subtle bottom border */
+    overflow: hidden;
+    /* Prevent overflow if content is too long */
+    text-overflow: ellipsis;
+    /* Add ellipsis for long text */
+    white-space: nowrap;
+    /* Prevent text wrapping */
+}
+
+.customer-table table th {
+    background-color: #ededed;
+    color: #a3a3a3;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.customer-table table td {
+    color: var(--black1);
+}
+
+.customer-table table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.customer-table table td:first-child {
+    font-weight: bold;
+    /* Highlight the first column (e.g., Name) */
+    color: var(--blue);
+    /* Blue text for emphasis */
+}
+
+.customer-table table td:last-child {
+    text-align: right;
+    /* Align credits or monetary values to the right */
+}
+
+/* Add Customer Button */
+.add-customer {
+    display: flex;
+    justify-content: flex-end;
+    /* Align the button to the right */
+    margin-bottom: 6px;
+    /* Reduce space below the button */
+    margin-top: -40px;
+    /* Move the button upwards */
+    margin-right: 20px;
+    /* Adjust the button's position to the left */
+}
+
+#addCustomerBtn {
+    background-color: var(--blue);
+    /* Blue button */
+    color: var(--white);
+    /* White text */
+    border: none;
+    padding: 10px 15px;
+    /* Adjust padding for size */
+    font-size: 11px;
+    /* Smaller text size */
+    font-weight: bold;
+    /* Bold text for emphasis */
+    border-radius: 10px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor for hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Smooth hover effects */
+}
+
+#addCustomerBtn:hover {
+    background-color: var(--black1);
+    /* Darker color on hover */
+    transform: scale(1.05);
+    /* Slight zoom effect on hover */
+}
+
+/* ========= This is for the header "Active Customers" =========*/
+
+/* Header Styling */
+.header {
+    position: absolute;
+    top: 20px;
+    /* Adjust based on desired vertical spacing */
+    left: 320px;
+    /* Push to the right to align with content outside the navigation bar */
+    width: calc(100% - 320px);
+    /* Adjust the width dynamically based on the sidebar width */
+    padding: 10px 20px;
+    /* Optional padding for spacing */
+    background: var(--gray);
+    /* Match the background color for consistency */
+    z-index: 1;
+    /* Ensure it appears above other content */
+    text-align: left;
+    /* Align the text to the left */
+}
+
+.header h1 {
+    font-size: 28px;
+    /* Slightly larger font size for emphasis */
+    color: var(--blue);
+    /* Blue color to match the theme */
+    margin: 0;
+    /* Remove default margin */
+    font-weight: bold;
+    /* Make the title bold */
+}
+
+/* ========= This is for the modal which is the window that will pop up when I hit the new customer button =========*/
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    /* Add a blur effect to the background */
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    /* More rounded corners */
+    width: 1000px;
+    /* Adjust width as needed */
+    max-width: 90%;
+    height: auto;
+    max-height: 90%;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Smooth and larger shadow for a floating effect */
+    position: relative;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    /* Add smooth transition for appearing/disappearing */
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    /* Slightly larger for emphasis */
+    color: var(--blue);
+}
+
+/* Add animation when opening */
+.modal-content.show {
+    transform: scale(1.05);
+    /* Slight pop effect */
+    opacity: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--black1);
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Subtle background for better visibility */
+    padding: 5px 8px;
+    border-radius: 50%;
+    /* Circular button */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Darken on hover */
+    transform: scale(1.1);
+    /* Slight zoom effect */
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--blue);
+    font-size: 14px;
+}
+
+/* Align labels and inputs side by side */
+.form-group.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.form-group.row label {
+    flex: 1;
+    /* Label takes up equal space */
+    max-width: 200px;
+    /* Optional: Set max width for labels */
+    margin-right: 20px;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.form-group.row input,
+.form-group.row select {
+    flex: 2;
+    /* Input takes up more space */
+    padding: 10px;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-buttons button {
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    /* Rounded buttons */
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for a floating button effect */
+}
+
+.form-buttons button:hover {
+    background-color: var(--black1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    /* Stronger shadow on hover */
+    transform: translateY(-2px);
+    /* Slight movement up */
+}
+
+/* This if for the style of the shipping and address */
+
+/* Address Section Styling */
+/* Address Section Styling */
+.address-container {
+    display: flex;
+    gap: 20px;
+    /* Space between Billing and Shipping sections */
+    margin-top: 20px;
+    /* Add space above the address section */
+}
+
+.address-container .form-group {
+    flex: 1;
+    /* Allow both Billing and Shipping sections to take equal space */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Space between inputs in each section */
+}
+
+.address-container .form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--blue);
+    margin-bottom: 5px;
+    /* Align labels consistently with other containers */
+}
+
+.address-container .form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* Ensure padding and borders are included in width */
+    background-color: var(--white);
+    /* Match the container's background */
+}
+
+/* ========= Payment terms =========*/
+
+#paymentTerms {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: var(--white);
+    color: var(--black1);
+    margin-bottom: 20px;
+}
+
+/* Primary Contact Input Styling */
+.primary-contact-inputs {
+    display: flex;
+    gap: 20px;
+    /* Space between First Name and Last Name */
+    width: 76.5%;
+    /* Take up the full width of the container */
+}
+
+.primary-contact-inputs input {
+    flex: 1;
+    /* Allow both fields to take equal space */
+    padding: 12px;
+    /* Add padding for a better look */
+    font-size: 14px;
+    /* Font size for readability */
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* Ensure padding and borders are included in width */
+}
+
+/* ========= delete =========*/
+
+.delete-btn {
+    background-color: #ff4d4d;
+    /* Red color */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
+    /* Darker red on hover */
+}
+
+
+
+/* ========= Edit button style =========*/
+
+.edit-btn {
+    background-color: #4caf50;
+    /* Green */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+.save-btn {
+    background-color: #007bff;
+    /* Blue */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+}
+

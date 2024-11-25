@@ -308,15 +308,29 @@ div.loginButtonContainer button {
     color: #cfe3ff;
 }
 
+/*Motion Animation */
+/* Initial hidden state */
+.revealable {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+/* Revealed state */
+.revealable.active {
+    opacity: 1;
+    transform: translateY(0);
+}
 
 /*The end of the get in touch*/
 
 /* Footer styling */
 .homepageFooter {
+    background-color: #2a2185;
+    color: white;
     text-align: center;
     padding: 10px;
-    background-color: #2a2185;
-    color: #fff;
+    position: relative;
+    flex-shrink: 0;
 }
 
 section {
@@ -328,7 +342,7 @@ section {
 .aboutIntro {
     text-align: center;
     padding: 70px 50px;
-    margin: 50px 0px;
+    margin: 110px 0px;
     background-color: #ffffff;
     /* Optional background for contrast */
 }
@@ -362,7 +376,7 @@ section {
     background-color: #ffffff;
     /* Shared background color */
     position: relative;
-    margin: 50px 0;
+    margin: 100px 0;
     /* Increased margin to add more space between sections */
 }
 
@@ -538,26 +552,18 @@ section {
 
 /* Values Section */
 .values {
-    display: flex;
-    /* Enable flexbox */
-    flex-direction: column;
-    /* Stack items vertically */
-    justify-content: center;
-    /* Center content vertically */
-    align-items: center;
-    /* Center content horizontally */
-    background-color: #ffffff;
-    /* Light background for contrast */
-    padding: 80px 40px;
-    /* Generous padding for spacing */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    background-color: #ffffff; 
+    padding: 20px 40px; 
+    margin: 20px 0; 
     text-align: center;
     border-radius: 12px;
-    /* Rounded corners for a soft look */
-    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
-    /* Subtle shadow for depth */
-    min-height: 100vh;
-    /* Ensure the section takes up full viewport height */
+    min-height: auto; 
 }
+
 
 /* Section Heading */
 .values h2 {

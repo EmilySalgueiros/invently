@@ -38,7 +38,7 @@ onAuthStateChanged(auth, (user) => {
             signOut(auth)
                 .then(() => {
                     // Redirect to homepage after logout
-                    window.location.href = "FE.html";
+                    window.location.href = "InventlyHomepage.html";
                 })
                 .catch((error) => {
                     console.error("Error signing out:", error.message);

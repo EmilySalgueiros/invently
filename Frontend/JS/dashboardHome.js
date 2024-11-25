@@ -1,3 +1,6 @@
+import { setDoc, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { db } from "../JS/dashboardFirestore.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const addProductBtn = document.getElementById("addProductBtn");
     const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
@@ -127,4 +130,248 @@ function updateRowStatus(row) {
         statusCell.style.color = "white";
     }
 }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const addPOBtn = document.getElementById("addPOBtn");
+    const purchaseOrderFormContainer = document.getElementById("purchaseOrderFormContainer");
+
+    if (addPOBtn) {
+        addPOBtn.addEventListener("click", () => {
+            if (purchaseOrderFormContainer) {
+                purchaseOrderFormContainer.classList.toggle("hidden"); // Toggle visibility
+            } else {
+                console.error("Purchase Order form container not found.");
+            }
+        });
+    } else {
+        console.error("Add Purchase Order button not found.");
+    }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Tab Switching
+    const setupTabSwitching = () => {
+        const tabs = document.querySelectorAll(".tab");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabs.forEach((tab) => {
+            tab.addEventListener("click", () => {
+                // Remove active class from all tabs and contents
+                tabs.forEach((t) => t.classList.remove("active"));
+                tabContents.forEach((content) => content.classList.remove("active"));
+
+                // Add active class to the clicked tab and corresponding content
+                tab.classList.add("active");
+                const target = tab.getAttribute("data-tab");
+                document.getElementById(tab.getAttribute("data-tab")).classList.add("active");
+            });
+        });
+    };
+
+    
+
+    // Add/Remove Options for Vendor, Category, and Location
+    const setupAddRemoveOptions = () => {
+        const addButtons = document.querySelectorAll(".add-icon");
+        const deleteButtons = document.querySelectorAll(".delete-icon");
+
+        addButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const inputType = btn.previousElementSibling.id;
+                const newValue = prompt(`Enter a new ${inputType.replace("edit", "")}:`);
+                if (newValue) {
+                    const select = document.getElementById(inputType);
+                    const option = document.createElement("option");
+                    option.value = newValue;
+                    option.textContent = newValue;
+                    select.appendChild(option);
+                }
+            });
+        });
+
+        deleteButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                const select = btn.previousElementSibling.previousElementSibling;
+                const selectedOption = select.selectedOptions[0];
+                if (selectedOption) {
+                    const confirmed = confirm(`Are you sure you want to delete "${selectedOption.text}"?`);
+                    if (confirmed) {
+                        selectedOption.remove();
+                    }
+                }
+            });
+        });
+    };
+
+    // Preset Color Selection
+    const setupColorSelection = () => {
+        const colorButtons = document.querySelectorAll(".color-btn");
+
+        colorButtons.forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault(); // Prevent any default behavior
+                e.stopPropagation(); // Stop the event from bubbling up
+
+                const selectedColor = btn.getAttribute("data-color");
+
+                // Highlight the selected button
+                colorButtons.forEach((b) => b.classList.remove("selected")); // Remove selection from others
+                btn.classList.add("selected"); // Add selection to clicked button
+
+                // Update any visual element within the modal
+                const selectedColorDisplay = document.getElementById("selectedColorDisplay");
+                if (selectedColorDisplay) {
+                    selectedColorDisplay.style.backgroundColor = selectedColor;
+                    selectedColorDisplay.textContent = selectedColor; // Optional: Show the color value
+                }
+            });
+        });
+    };
+
+
+    // Exit Modal Functionality
+    const setupExitModal = () => {
+        const exitModalButton = document.getElementById("exitModal");
+        const editInventoryModal = document.getElementById("editInventoryModal");
+
+        exitModalButton.addEventListener("click", () => {
+            editInventoryModal.classList.remove("active"); // Hide modal when clicked
+        });
+    };
+
+    // Initialize All Features
+    setupTabSwitching();
+    setupAddRemoveOptions();
+    setupColorSelection();
+    setupExitModal();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const aisleContainer = document.getElementById("aisleContainer");
+    const addAisleBtn = document.getElementById("addAisleBtn");
+    const binDetails = document.getElementById("binDetails");
+    const addStockToBinBtn = document.getElementById("addStockToBinBtn");
+    const binStockQuantity = document.getElementById("binStockQuantity");
+    const saveStockChangesBtn = document.getElementById("saveStockChangesBtn");
+    const locationSelect = document.getElementById("editLocation");
+
+    let selectedBin = null;
+    let binStocks = {}; // Store stock data for bins
+
+    // Function to reset stock structure when location changes
+    const resetStockStructure = () => {
+        if (confirm("Do you want to save changes before switching location?")) {
+            alert("Changes saved successfully!");
+        }
+        aisleContainer.innerHTML = ""; // Clear aisles
+    };
+
+    // Add Aisle
+    addAisleBtn.addEventListener("click", () => {
+        const aisleCount = aisleContainer.querySelectorAll(".aisle").length + 1;
+        const aisle = document.createElement("div");
+        aisle.className = "aisle";
+        aisle.innerHTML = `
+            <h4>Aisle ${aisleCount}</h4>
+            <button class="btn-add" onclick="addRack(this)">+ Rack</button>
+            <button class="btn-delete" onclick="deleteElement(this, 'aisle')">- Aisle</button>
+        `;
+        aisleContainer.appendChild(aisle);
+    });
+
+    // Add Rack
+    window.addRack = (aisleElement) => {
+        const aisle = aisleElement.parentNode;
+        const rackCount = aisle.querySelectorAll(".rack").length + 1;
+        const rack = document.createElement("div");
+        rack.className = "rack";
+        rack.innerHTML = `
+            <h5>Rack ${rackCount}</h5>
+            <button class="btn-add" onclick="addShelf(this)">+ Shelf</button>
+            <button class="btn-delete" onclick="deleteElement(this, 'rack')">- Rack</button>
+        `;
+        aisle.appendChild(rack);
+    };
+
+    // Add Shelf
+    window.addShelf = (rackElement) => {
+        const rack = rackElement.parentNode;
+        const shelfCount = rack.querySelectorAll(".shelf").length + 1;
+        const shelf = document.createElement("div");
+        shelf.className = "shelf";
+        shelf.innerHTML = `
+            <h6>Shelf ${shelfCount}</h6>
+            <button class="btn-add" onclick="addBin(this)">+ Bin</button>
+            <button class="btn-delete" onclick="deleteElement(this, 'shelf')">- Shelf</button>
+        `;
+        rack.appendChild(shelf);
+    };
+
+    // Add Bin
+    window.addBin = (shelfElement) => {
+        const shelf = shelfElement.parentNode;
+        const binCount = shelf.querySelectorAll(".bin").length + 1;
+        const bin = document.createElement("div");
+        bin.className = "bin";
+        bin.dataset.bin = `BIN ${binCount}`;
+        bin.textContent = `BIN ${binCount}`;
+        shelf.appendChild(bin);
+
+        // Add click event to select bin
+        bin.addEventListener("click", () => selectBin(bin));
+    };
+
+    // Select Bin
+    const selectBin = (bin) => {
+        if (selectedBin) {
+            selectedBin.classList.remove("selected");
+        }
+        selectedBin = bin;
+        selectedBin.classList.add("selected");
+
+        const binLabel = bin.dataset.bin;
+        const stock = binStocks[binLabel] || 0;
+
+        binDetails.value = `Bin: ${binLabel}\nStock: ${stock}`;
+    };
+
+    // Add Stock to Selected Bin
+    addStockToBinBtn.addEventListener("click", () => {
+        if (!selectedBin) {
+            alert("Please select a bin.");
+            return;
+        }
+
+        const quantity = parseInt(binStockQuantity.value, 10);
+        if (!quantity || quantity <= 0) {
+            alert("Please enter a valid quantity.");
+            return;
+        }
+
+        const binLabel = selectedBin.dataset.bin;
+        binStocks[binLabel] = (binStocks[binLabel] || 0) + quantity;
+
+        binDetails.value = `Bin: ${binLabel}\nStock: ${binStocks[binLabel]}`;
+        binStockQuantity.value = ""; // Clear input
+    });
+
+    // Save Stock Changes
+    saveStockChangesBtn.addEventListener("click", () => {
+        alert("Stock changes saved successfully!");
+    });
+
+    // Change Location
+    locationSelect.addEventListener("change", resetStockStructure);
+
+    // Delete Element
+    window.deleteElement = (button, type) => {
+        const element = button.parentNode;
+        if (confirm(`Are you sure you want to delete this ${type}?`)) {
+            element.remove();
+        }
+    };
 });

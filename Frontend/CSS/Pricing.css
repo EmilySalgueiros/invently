@@ -9,3 +9,178 @@
     margin-left: 10px;
     /* Optional: Add space to the left of the icon */
 }
+
+.header {
+    background-color: #2a2185;
+    padding: 0px;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+}
+
+.banner {
+    background-color: #2a2185;
+    color: white;
+    padding: 0px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.bannerContent {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.bannerHeader {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.aboutIntro {
+    text-align: center;
+    padding: 10px 10px;
+    margin: 110px 0px;
+    background-color: #ffffff;
+    /* Optional background for contrast */
+}
+
+.aboutIntro h2 {
+    font-size: 3rem;
+    /* Bigger letters */
+    color: #2a2185;
+    /* Yellow color */
+    font-weight: bold;
+
+    /* Optional: Makes all letters uppercase */
+    transition: transform 0.3s ease, letter-spacing 0.3s ease, color 0.3s ease;
+}
+
+/* Center Wrapper */
+.center-wrapper {
+    display: flex;
+    justify-content: center; 
+    align-items: center;    
+    height: 90vh;          
+    background-color: #2a2185; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 0px;
+}
+
+/* Pricing Table */
+.pricing-table {
+    display: inline-block; 
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* Pricing Cards */
+.pricing-card {
+    display: inline-block; 
+    vertical-align: top;  
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 250px;
+    border: 2px solid transparent;
+    transition: transform 0.3s, border 0.3s;
+}
+
+/* Hover Effect */
+.pricing-card:hover {
+    transform: translateY(-10px);
+    border-color: #f41414;
+}
+
+/* Most Popular Tag */
+.most-popular {
+    
+    position: relative;
+}
+
+.most-popular .tag {
+    position: absolute;
+    top: -18px;
+    right: 10px;
+    background-color: #00c853;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 15px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Headings and Text */
+.pricing-card h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.price {
+    font-size: 36px;
+    margin: 10px 0;
+    color: #000;
+}
+
+.currency {
+    font-size: 18px;
+    vertical-align: top;
+}
+
+.billing {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Trial Button */
+.trial-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+.trial-button:hover {
+    background-color: #2a2185;
+}
+
+/* Features List */
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+}
+
+.features li {
+    margin-bottom: 10px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.features li::before {
+    content: '✔';
+    color: #007bff;
+    position: absolute;
+    left: 0;
+}
+
+/* Footer styling */
+.homepageFooter {
+    background-color: #2a2185;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    flex-shrink: 0;
+}

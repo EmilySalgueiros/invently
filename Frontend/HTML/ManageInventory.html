@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Styles -->
+    <link rel="stylesheet" href="..\CSS\dashboard.css">
+</head>
+
+<body>
+    <!-- Navigation Bar-->
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="InventlyHomepage.html">
+                        <span class="icon">
+                            <ion-icon name="cube-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Invently</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="CustomerPage.html" class="active">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Customers</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="dashboard.html">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="ManageInventory.html">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Manage Inventory</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="chatbubble-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Messages</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="help-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Help</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Password</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="icon">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Username and Add Product Section -->
+        <div class="main">
+            <div class="AddProductbutton">
+                <button id="addProductBtn">Add Product</button>
+            </div>
+            <div class="user-info">
+                <h2>Welcome, <span id="username-display">Loading...</span>!</h2>
+            </div>
+
+            <!-- Centered Search Bar -->
+            <div class="search-container">
+                <div class="search">
+                    <label>
+                        <input type="text" placeholder="Search Inventory">
+                        <ion-icon name="search-outline"></ion-icon>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Manage Inventory Section -->
+            <div class="manage-inventory-content">
+                <div class="recent-orders">
+                    <h2>Manage Inventory</h2>
+                    <table id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Item Code</th>
+                                <th>SKU</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Threshold</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamically added rows go here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Camera Scan Button Section -->
+            <div class="scanner-container">
+                <!-- Link to trigger camera scan -->
+                <button id="scanButton" class="scan-button">Scan SKU</button>
+                <!-- Scanner Display -->
+                <div id="scanner" style="display: none;">
+                    <video id="video" width="300" height="200" style="border: 1px solid black;"></video>
+                    <button id="stopScanBtn">Stop Scanning</button>
+                </div>
+                <div id="result" style="margin-top: 20px; font-size: 18px; font-weight: bold;">
+                    <!-- Scanned SKU will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--========= Scripts======== -->
+    <script type="module" src="../JS/InventlyHomepage.js"></script>
+    <script src="../JS/dashboardHome.js"></script>
+    <script type="module" src="../JS/dashboardFirestore.js"></script>
+
+    <!--========= ionicons======== -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Barcode Scanner Integration -->
+    <script src="https://unpkg.com/@zxing/library@0.18.3/umd/index.min.js"></script>
+    <script src="../JS/barcodeScanner.js"></script> <!-- External JS file -->
+</body>
+
+</html>

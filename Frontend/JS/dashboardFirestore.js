@@ -1,7 +1,9 @@
 // Import Firebase functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+
 
 // Firebase configuration
 const firebaseConfig = {
@@ -15,8 +17,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app); // Firestore instance
+export const db = getFirestore(app); // Export the Firestore instance
+export const auth = getAuth(app); // Export the Auth instance
+
 
 // DOM elements
 const usernameDisplay = document.getElementById("username-display");
@@ -26,6 +29,7 @@ onAuthStateChanged(auth, async (user) => {
     if (user) {
         try {
             // Fetch user data from Firestore
+            console.log("User is authenticated:", user.uid);
             const userDocRef = doc(db, "users", user.uid);
             const userDoc = await getDoc(userDocRef);
             
@@ -47,4 +51,47 @@ onAuthStateChanged(auth, async (user) => {
         // Redirect to login page if not logged in
         window.location.href = "../HTML/loginInvently.html";
     }
+});
+
+// Function to save a new inventory item to Firestore
+async function saveNewItemToFirestore(newItem) {
+    const inventoryRef = doc(db, "inventory", "mhi1OrJnP6xSZAvgpZ64");
+
+    try {
+        // Check if the document exists
+        const docSnapshot = await getDoc(inventoryRef);
+
+        if (docSnapshot.exists()) {
+            // Document exists, update the array field
+            await setDoc(
+                inventoryRef,
+                { items: arrayUnion(newItem) },
+                { merge: true } // Merge with existing data
+            );
+            console.log("New item successfully added to Firestore:", newItem);
+        } else {
+            // Document doesn't exist, create it with the first item
+            await setDoc(inventoryRef, { items: [newItem] });
+            console.log("Document created and new item added to Firestore:", newItem);
+        }
+    } catch (error) {
+        console.error("Error adding new item to Firestore:", error);
+    }
+}
+
+// Example usage of `saveNewItemToFirestore`
+const addProductButton = document.getElementById("addProductBtn");
+addProductButton.addEventListener("click", () => {
+    const newItem = {
+        itemCode: Math.floor(Math.random() * 1000).toString().padStart(3, "0"),
+        sku: `SKU${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`,
+        description: "New Product",
+        quantity: 10,
+        threshold: 5,
+        status: "In Stock",
+        location: "A01"
+    };
+
+    // Save the new item to Firestore
+    saveNewItemToFirestore(newItem);
 });

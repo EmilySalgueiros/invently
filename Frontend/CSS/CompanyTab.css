@@ -1,0 +1,245 @@
+/* Use the same styles defined in dashboard.css */
+/* ========= Google Fonts =========*/
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* ========= General Styling =========*/
+* {
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2a2185;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+}
+
+/* ========= Body and Container =========*/
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--gray);
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* ========= Navigation =========*/
+/* Navigation Styling */
+/* Navigation Styling */
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+    top: 0;
+    /* Fix the navigation at the top */
+    left: 0;
+    /* Ensure it stays on the left */
+    z-index: 100;
+    /* Ensure the navigation is on top */
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 0;
+    /* Add padding for spacing */
+}
+
+.navigation ul li {
+    position: relative;
+    list-style: none;
+    margin-bottom: 20px;
+    /* Add spacing between items */
+}
+
+/* Logo Styling */
+.navigation ul li:first-child {
+    margin-bottom: 40px;
+    /* Larger gap below the logo */
+}
+
+.navigation ul li:first-child a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align logo and text to the left */
+}
+
+.navigation ul li:first-child a .icon {
+    margin-right: 10px;
+    /* Space between logo and text */
+}
+
+.navigation ul li:first-child a .ti {
+    font-size: 1.8rem;
+    /* Larger font for the logo text */
+    font-weight: bold;
+    color: var(--white);
+}
+
+.navigation ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 6px 15px;
+    /* Add padding for hover effect */
+    border-top-left-radius: 30px;
+    /* Round top-left corner */
+    border-bottom-left-radius: 30px;
+    /* Round bottom-left corner */
+    border-top-right-radius: 0;
+    /* Ensure right corners are square */
+    border-bottom-right-radius: 0;
+    /* Ensure right corners are square */
+    color: var(--white);
+}
+
+.navigation ul li a .icon {
+    margin-right: 15px;
+    /* Space between icon and text */
+    font-size: 1.5rem;
+    /* Icon size */
+    text-align: center;
+}
+
+/* Hover Effect */
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+    background-color: var(--white);
+    color: var(--blue);
+    /* Change text color */
+}
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.8rem;
+    /* Icon size for menu items */
+}
+
+/* Main */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+
+}
+
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+.header {
+    position: relative;
+    /* Change from absolute to relative */
+    margin-left: 320px;
+    /* Ensure it starts after the navigation bar */
+    margin-top: 20px;
+    /* Space below the navigation bar */
+    width: calc(100% - 320px);
+    /* Adjust the width dynamically based on the sidebar width */
+    padding: 10px 20px;
+    background: var(--gray);
+    z-index: 1;
+    /* Lower z-index than the navigation */
+    text-align: left;
+}
+
+.header h1 {
+    font-size: 28px;
+    /* Slightly larger font size for emphasis */
+    color: var(--blue);
+    /* Blue color to match the theme */
+    margin: 0;
+    /* Remove default margin */
+    font-weight: bold;
+    /* Make the title bold */
+}
+
+/* ========= This is for the company tab =========*/
+
+.company-info-form {
+    margin-left: 320px;
+    /* Adjust according to the navigation bar width */
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1500px;
+}
+
+.company-info-form .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.company-info-form .form-row label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--blue);
+}
+
+.company-info-form .form-row input,
+.company-info-form .form-row textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.company-info-form .form-row textarea {
+    resize: vertical;
+    height: 80px;
+}
+
+.company-info-form .form-actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.company-info-form .form-actions button {
+    padding: 10px 20px;
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.company-info-form .form-actions button:hover {
+    background-color: #1d185c;
+    /* Darker shade of blue */
+}

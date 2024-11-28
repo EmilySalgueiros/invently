@@ -1,190 +1,200 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const addOrderBtn = document.getElementById("addOrderBtn");
+    const vendorIdField = document.getElementById("vendorId");
+    const vendorTableSection = document.getElementById("vendorTableSection");
+    const vendorItemsBody = document.getElementById("vendorItemsBody");
+    const vendorsTableBody = document.getElementById("vendorsTableBody"); // Correct table for outside modal
+
     const addOrderModal = document.getElementById("addOrderModal");
-    const closeModal = document.getElementById("closeModal");
-    const cancelOrder = document.getElementById("cancelOrder");
-    const createOrder = document.getElementById("createOrder");
-    const ordersTableBody = document.getElementById("ordersTableBody");
-    let editingRow = null; // To keep track of the row being edited
+    const addVendorModal = document.getElementById("addVendorModal");
+    const saveOrderBtn = document.getElementById("saveOrderBtn");
+    const saveVendorBtn = document.getElementById("saveVendorBtn");
+    const cancelVendorBtn = document.getElementById("cancelVendorBtn");
+    const cancelOrderBtn = document.getElementById("cancelOrderBtn");
+    const addRowBtn = document.getElementById("addRowBtn");
+    const orderItemsBody = document.getElementById("orderItemsBody");
+    const totalAmount = document.getElementById("totalAmount");
+    const balanceDue = document.getElementById("balanceDue");
 
-    // Function to reset modal fields
-    function resetModalFields() {
-        document.getElementById("orderDate").value = "";
-        document.getElementById("orderTime").value = "";
-        document.getElementById("customerName").value = "";
-        document.getElementById("customerAddress").value = "";
-        document.getElementById("customerPhone").value = "";
-        document.getElementById("product").value = "";
-        document.getElementById("quantity").value = "";
-        document.getElementById("rate").value = "";
-        document.getElementById("amount").value = "";
-        document.getElementById("grossAmount").value = "";
-        document.getElementById("sCharge").value = "";
-        document.getElementById("vat").value = "";
-        document.getElementById("discount").value = "";
-        document.getElementById("netAmount").value = "";
-        // Retrieve company info from local storage
-        const savedInfo = JSON.parse(localStorage.getItem("companyInfo"));
-
-        if (savedInfo) {
-            // Update modal fields based on saved values
-            const vatCharge = savedInfo.vatCharge || 10; // Default VAT to 10%
-            const sCharge = savedInfo.chargeAmount || 13; // Default S-Charge to 13%
-
-            document.querySelector("label[for='vat']").textContent = `VAT ${vatCharge}%:`;
-            document.querySelector("label[for='sCharge']").textContent = `S-Charge ${sCharge}%:`;
-
-            // Optionally, update the readonly inputs if needed
-            document.getElementById("vat").value = vatCharge;
-            document.getElementById("sCharge").value = sCharge;
-        }
+    // Function to generate a random Vendor ID
+    function generateVendorId() {
+        const randomNum = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit number
+        const timestamp = Date.now().toString().slice(-4); // Use the last 4 digits of the timestamp
+        return `VID-${randomNum}-${timestamp}`; // Combine them into a unique ID
     }
 
-    // Show modal for adding a new order
-    addOrderBtn.addEventListener("click", () => {
-        editingRow = null; // Reset editingRow to indicate a new order
-        resetModalFields(); // Reset all modal fields to empty
-        const now = new Date();
-        document.getElementById("orderDate").value = now.toISOString().split("T")[0];
-        document.getElementById("orderTime").value = now.toLocaleTimeString();
-        createOrder.textContent = "Create Order"; // Set button text to "Create Order"
+    // Show Add Vendor Modal and Set Random Vendor ID
+    document.getElementById("addVendorBtn").addEventListener("click", () => {
+        vendorIdField.value = generateVendorId(); // Assign the generated ID to the field
+        addVendorModal.style.display = "flex"; // Show the modal
+    });
+
+    // Save Vendor Logic
+    saveVendorBtn.addEventListener("click", () => {
+        // Collect form data
+        const vendorId = vendorIdField.value;
+        const firstName = document.getElementById("vendorFirstNameInput").value;
+        const lastName = document.getElementById("vendorLastNameInput").value;
+        const companyName = document.getElementById("vendorCompanyNameInput").value;
+        const phone = document.getElementById("vendorPhoneInput").value;
+        const address = document.getElementById("vendorAddressInput").value;
+        const email = document.getElementById("vendorEmailInput").value;
+        const notes = document.getElementById("vendorNotesInput").value;
+
+        // Validate inputs (optional)
+        if (!firstName || !lastName || !companyName || !phone) {
+            alert("Please fill in the required fields.");
+            return;
+        }
+
+        // Add new row to the table
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${vendorId}</td>
+            <td>${firstName}</td>
+            <td>${lastName}</td>
+            <td>${companyName}</td>
+            <td>${phone}</td>
+            <td>${address}</td>
+            <td>${email}</td>
+            <td>${notes}</td>
+        `;
+        vendorItemsBody.appendChild(row);
+
+        // Update relevant fields outside the modal (e.g., in Orders Table)
+        const vendorstable = document.getElementById("vendors-table");
+        const vendorInfoRow = document.createElement("tr");
+
+        vendorInfoRow.innerHTML = `
+        <td>${vendorId}</td>
+        <td>${firstName} ${lastName}</td>
+        <td>${phone}</td>
+        <td><input type="text" placeholder="Date"></td>
+        <td><input type="number" placeholder="Total Products"></td>
+        <td><input type="number" placeholder="Total Amount"></td>
+        <td><select>
+                <option value="Paid">Paid</option>
+                <option value="Unpaid">Unpaid</option>
+            </select></td>
+        <td><button class="delete-row-btn">Delete</button></td>
+    `;
+
+        vendorstable.appendChild(vendorInfoRow);
+
+        // Show the vendor table section in the modal
+        vendorstable.style.display = "block";
+
+        // Reset form fields
+        document.getElementById("vendorForm").reset();
+        vendorIdField.value = generateVendorId(); // Generate a new ID for the next vendor
+
+        // Close the modal
+        addVendorModal.style.display = "none";
+    });
+
+
+
+
+
+
+
+    
+
+    // Show modal for manage orders 
+    document.getElementById("addOrderBtn").addEventListener("click", () => {
+        resetOrderModal();
         addOrderModal.style.display = "flex";
     });
 
-    // Close modal
-    closeModal.addEventListener("click", () => {
+
+    // Show modal for manage vendors 
+    document.getElementById("addVendorBtn").addEventListener("click", () => {
+        resetOrderModal2();
+        addVendorModal.style.display = "flex";
+    });
+
+
+    // Hide modal for manage vendors  
+    cancelVendorBtn.addEventListener("click", () => {
+        addVendorModal.style.display = "none";
+    });
+
+    // Hide modal for manage orders 
+    cancelOrderBtn.addEventListener("click", () => {
         addOrderModal.style.display = "none";
     });
 
-    cancelOrder.addEventListener("click", () => {
-        addOrderModal.style.display = "none";
+
+
+    // Add new row for items
+    addRowBtn.addEventListener("click", () => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td><input type="text" placeholder="Item Name"></td>
+            <td><input type="number" placeholder="Qty"></td>
+            <td><input type="text" placeholder="Description"></td>
+            <td><input type="number" placeholder="Rate"></td>
+            <td><input type="number" placeholder="Amount" readonly></td>
+            <td><button class="delete-row-btn">Delete</button></td>
+        `;
+        orderItemsBody.appendChild(row);
     });
 
-    // Save Order (Create or Update)
-    createOrder.addEventListener("click", () => {
-        const customerName = document.getElementById("customerName").value;
-        const customerPhone = document.getElementById("customerPhone").value;
-        const orderDate = document.getElementById("orderDate").value;
-        const orderTime = document.getElementById("orderTime").value;
+    // Calculate totals when inputs change
+    orderItemsBody.addEventListener("input", (e) => {
+        if (e.target.closest("tr")) {
+            const row = e.target.closest("tr");
+            const qty = row.querySelector('input[placeholder="Qty"]').value || 0;
+            const rate = row.querySelector('input[placeholder="Rate"]').value || 0;
+            const amountField = row.querySelector('input[placeholder="Amount"]');
+            amountField.value = (qty * rate).toFixed(2);
 
-        if (editingRow) {
-            // Update the existing row
-            editingRow.cells[1].textContent = customerName;
-            editingRow.cells[2].textContent = customerPhone;
-            editingRow.cells[3].textContent = `${orderDate} ${orderTime}`;
-        } else {
-            // Add new row to table
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${Math.floor(1000 + Math.random() * 9000)}</td>
-                <td>${customerName}</td>
-                <td>${customerPhone}</td>
-                <td>${orderDate} ${orderTime}</td>
-                <td>1</td>
-                <td>$100</td>
-                <td><span style="color:green;">Paid</span></td>
-                <td>
-                    <button class="action-btn edit-btn">
-                        <ion-icon name="create-outline"></ion-icon>
-                        Edit
-                    </button>
-                    <button class="action-btn delete-btn">
-                        <ion-icon name="trash-outline"></ion-icon>
-                        Delete
-                    </button>
-                    <button class="action-btn print-btn">
-                        <ion-icon name="print-outline"></ion-icon>
-                        Print
-                    </button>
-                </td>
-            `;
-            ordersTableBody.appendChild(row);
+            calculateTotals();
         }
-
-        addOrderModal.style.display = "none";
-        editingRow = null; // Reset editingRow after saving
     });
 
-    // Event delegation for Edit, Delete, and Print buttons
-    document.addEventListener("click", (e) => {
-        // Edit button
-        if (e.target.closest(".edit-btn")) {
-            console.log("Edit button clicked");
-
+    // Handle delete row
+    orderItemsBody.addEventListener("click", (e) => {
+        if (e.target.classList.contains("delete-row-btn")) {
             const row = e.target.closest("tr");
-            editingRow = row; // Set the row being edited
-            const customerName = row.cells[1].textContent;
-            const customerPhone = row.cells[2].textContent;
-            const dateTime = row.cells[3].textContent;
-
-            addOrderModal.style.display = "flex";
-
-            // Populate modal fields with row data
-            document.getElementById("orderDate").value = dateTime.split(" ")[0];
-            document.getElementById("orderTime").value = dateTime.split(" ")[1];
-            document.getElementById("customerName").value = customerName;
-            document.getElementById("customerPhone").value = customerPhone;
-
-            // Change button text to "Save Changes"
-            createOrder.textContent = "Save Changes";
-        }
-
-        // Delete button
-        if (e.target.closest(".delete-btn")) {
-            console.log("Delete button clicked");
-
-            const row = e.target.closest("tr");
-            const confirmation = confirm(`Are you sure you want to delete this order?`);
-            if (confirmation) {
-                row.remove();
-            }
-        }
-
-        // Print button logic
-        if (e.target.closest(".print-btn")) {
-            console.log("Print button clicked");
-
-            const row = e.target.closest("tr");
-            const billNo = row.cells[0].textContent;
-            const customerName = row.cells[1].textContent;
-            const customerPhone = row.cells[2].textContent;
-            const dateTime = row.cells[3].textContent;
-
-            // Collect modal information
-            const customerAddress = document.getElementById("customerAddress").value || "N/A";
-            const product = document.getElementById("product").value || "N/A";
-            const quantity = document.getElementById("quantity").value || "0";
-            const rate = document.getElementById("rate").value || "0";
-            const amount = document.getElementById("amount").value || "0";
-            const grossAmount = document.getElementById("grossAmount").value || "0";
-            const sCharge = document.getElementById("sCharge").value || "0";
-            const vat = document.getElementById("vat").value || "0";
-            const discount = document.getElementById("discount").value || "0";
-            const netAmount = document.getElementById("netAmount").value || "0";
-
-            // Format the data for printing
-            const printContent = `
-        Bill No: ${billNo}
-        Customer Name: ${customerName}
-        Customer Phone: ${customerPhone}
-        Customer Address: ${customerAddress}
-        Date & Time: ${dateTime}
-        Product: ${product}
-        Quantity: ${quantity}
-        Rate: $${rate}
-        Amount: $${amount}
-        Gross Amount: $${grossAmount}
-        S-Charge (13%): $${sCharge}
-        VAT (10%): $${vat}
-        Discount: $${discount}
-        Net Amount: $${netAmount}
-    `;
-
-            // Open a new window or print dialog
-            const printWindow = window.open("", "_blank");
-            printWindow.document.write(`<pre>${printContent}</pre>`);
-            printWindow.document.close();
-            printWindow.print();
+            row.remove();
+            calculateTotals(); // Recalculate totals after deletion
         }
     });
+
+    // Reset modal for the manage vendors fields
+    function resetOrderModal2() {
+        document.querySelectorAll('input[placeholder="VendorID"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="First Name"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Last Name"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Company Name"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Phone"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Address"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Email"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Notes"]').forEach(input => input.value = "");
+    }
+
+
+    // Reset modal for the manage orders fields
+    function resetOrderModal() {
+        document.getElementById("companySelect").value = "";
+        document.getElementById("orderToCompany").value = "";
+        document.querySelectorAll('input[placeholder="Item Name"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Qty"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Description"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Rate"]').forEach(input => input.value = "");
+        document.querySelectorAll('input[placeholder="Amount"]').forEach(input => input.value = "");
+        totalAmount.value = "0.00";
+        balanceDue.value = "0.00";
+    }
+
+    // Calculate totals
+    function calculateTotals() {
+        let total = 0;
+        document.querySelectorAll('input[placeholder="Amount"]').forEach(input => {
+            total += parseFloat(input.value || 0);
+        });
+
+        totalAmount.value = total.toFixed(2);
+        balanceDue.value = total.toFixed(2);
+    }
 });

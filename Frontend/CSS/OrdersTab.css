@@ -506,3 +506,160 @@ body {
 .modal-footer2 button:hover {
     background-color: #1d174b;
 }
+
+
+/*
+.vendors-table button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    margin: 0 5px;
+}
+
+.vendors-table .edit-vendor-btn {
+    background-color: #007bff;
+    
+}
+
+.vendors-table .edit-vendor-btn:hover {
+    background-color: #0056b3;
+}
+
+.vendors-table .delete-vendor-btn {
+    background-color: #dc3545;
+    
+}
+
+.vendors-table .delete-vendor-btn:hover {
+    background-color: #a71d2a;
+}
+
+*/
+
+
+/* edit and delete button for the orders */
+
+/* General Button Styles */
+button.edit-order-btn,
+button.delete-order-btn, button.toggle-status-btn {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    border: none;
+    margin: 0 5px;
+}
+
+/* Edit Button Styles */
+button.edit-order-btn {
+    background-color: #4c6aaf;
+    /* Green background */
+    color: white;
+    /* White text */
+}
+
+button.edit-order-btn:hover {
+    background-color: #405994;
+    /* Slightly darker blue on hover */
+    box-shadow: 0px 4px 8px rgba(0, 34, 128, 0.3);
+    /* Add shadow */
+    transform: scale(1.05);
+    /* Slightly larger on hover */
+}
+
+/* Delete Button Styles */
+button.delete-order-btn {
+    background-color: #f44336;
+    /* Red background */
+    color: white;
+    /* White text */
+}
+
+button.delete-order-btn:hover {
+    background-color: #e53935;
+    /* Slightly darker red on hover */
+    box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.3);
+    /* Add shadow */
+    transform: scale(1.05);
+    /* Slightly larger on hover */
+}
+
+/* Mark Paid or Pending Orders */
+
+/* paid or pending Button Styles */
+button.toggle-status-btn {
+    background-color: #f49e36;
+    /* Red background */
+    color: white;
+    /* White text */
+}
+
+button.toggle-status-btn:hover {
+    background-color: #c7812c;
+    /* Slightly darker orange on hover */
+    box-shadow: 0px 4px 8px rgba(255, 145, 0, 0.3);
+    /* Add shadow */
+    transform: scale(1.05);
+    /* Slightly larger on hover */
+}
+
+
+/* edit and delete button for the vendors */
+
+/* General Button Styles */
+button.edit-vendor-btn,
+button.delete-vendor-btn {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    border: none;
+    margin: 0 5px;
+}
+
+/* Edit Button Styles */
+button.edit-vendor-btn {
+    background-color: #4c6aaf;
+    /* Green background */
+    color: white;
+    /* White text */
+}
+
+button.edit-vendor-btn:hover {
+    background-color: #405994;
+    /* Slightly darker blue on hover */
+    box-shadow: 0px 4px 8px rgba(0, 34, 128, 0.3);
+    /* Add shadow */
+    transform: scale(1.05);
+    /* Slightly larger on hover */
+}
+
+/* Delete Button Styles */
+button.delete-vendor-btn {
+    background-color: #f44336;
+    /* Red background */
+    color: white;
+    /* White text */
+}
+
+button.delete-vendor-btn:hover {
+    background-color: #e53935;
+    /* Slightly darker red on hover */
+    box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.3);
+    /* Add shadow */
+    transform: scale(1.05);
+    /* Slightly larger on hover */
+}
+
+

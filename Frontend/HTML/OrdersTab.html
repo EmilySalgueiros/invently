@@ -2,6 +2,20 @@
 <title>Orders</title>
 <!--Styles-->
 <link rel="stylesheet" href="..\CSS\OrdersTab.css">
+
+
+<!--Firebase Implementation-->
+
+
+<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js"></script>
+
+
+
+<!--Firebase Implementation Ended-->
+
+
 </head>
 
 <body>
@@ -104,9 +118,8 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Bill No</th>
+                            <th>Order #</th>
                             <th>Vendor Name</th>
-                            <th>Vendor Phone</th>
                             <th>Date</th>
                             <th>Total Products</th>
                             <th>Total Amount</th>
@@ -117,16 +130,6 @@
                     </thead>
                     <tbody id="ordersTableBody">
                         <!-- Example Row -->
-                        <tr>
-                            <td><input type="text" placeholder="Bill No"></td>
-                            <td><input type="number" placeholder="Vendor Name"></td>
-                            <td><input type="text" placeholder="Vendor Phone"></td>
-                            <td><input type="number" placeholder="Date"></td>
-                            <td><input type="number" placeholder="Qty" readonly></td>
-                            <td><input type="number" placeholder="Amount" readonly></td>
-                            <td><input type="number" placeholder="Amount" readonly></td>
-                            <td><button class="delete-row-btn">Delete</button></td>
-                        </tr>
 
                         
                     </tbody>
@@ -144,8 +147,6 @@
                         <label for="companySelect">Company</label>
                         <select id="companySelect">
                             <option value="" disabled selected>Select Company</option>
-                            <option value="company1">Company 1</option>
-                            <option value="company2">Company 2</option>
                         </select>
                     </div>
                     <div class="form-row">
@@ -202,6 +203,8 @@
                     <div class="actions">
                         <button id="saveOrderBtn">Save</button>
                         <button id="cancelOrderBtn">Cancel</button>
+
+
                     </div>
                 </div>
                 </div>
@@ -229,7 +232,7 @@
                     </tr>
                 </thead>
                 <tbody id="vendorsTableBody">
-                    <!-- Vendor Rows will go here -->
+                    <!-- Vendor Rows with buttons will be dynamically generated -->
                 </tbody>
             </table>
         </div>
@@ -322,5 +325,5 @@
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
         <!--=========Scripts======== -->
-        <script type="module" src="../JS/OrdersTab.js"></script>
+<script type="module" src="../JS/OrdersTab.js"></script>
         </body>

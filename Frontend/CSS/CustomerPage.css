@@ -582,37 +582,6 @@ body {
     /* Darker blue on hover */
 }
 
-/* This is for the Customer Table Side */
-
-.manage-bills {
-    margin-top: 40px;
-}
-
-.manage-bills h2 {
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #000000;
-}
-
-.manage-bills table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.manage-bills th,
-.manage-bills td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-.manage-bills th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-}
-
 
 
 
@@ -780,60 +749,124 @@ body {
     /* Subtle blue glow */
 }
 
-.manage-invoices .invoice-table-container {
-    margin-top: 20px;
-        border-radius: 10px;
-        overflow: hidden;
-        background: var(--white);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.invoice-table-container {
+    margin: 30px auto;
+    margin-left: 90px;
+    /* Aligns with the navigation bar */
+    width: calc(100% - 175px);
+    /* Consistent width */
+    max-width: 1500px;
+    /* Limit the maximum width */
+    border-radius: 10px;
+    overflow: hidden;
+    /* Ensures rounded corners are respected */
+    background: var(--white);
+    /* White background for the table */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+        /* Slightly stronger shadow */
+    /* Soft shadow for aesthetics */
 }
 
-.manage-invoices .invoice-table {
-    width: 100%;
+
+.invoice-table {
+    width: 86%;
         border-collapse: collapse;
-        font-size: 13px;
+        /* Remove gaps between cells */
+        font-size: 11px;
+        /* Font size for readability */
         text-align: left;
+        margin-left: 86px;
+        /* Align text to the left */
         table-layout: fixed;
+        /* Ensures equal column width */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* Same shadow as customer table */
+            border-radius: 10px;
+            overflow: hidden;
 }
 
-.manage-invoices .invoice-table th,
-.manage-invoices .invoice-table td {
-    padding: 12px;
+.invoice-table table {
+    width: 100%;
+    /* Make sure the table takes the full width of its container */
+    border-collapse: collapse;
+    font-size: 11px;
+    text-align: left;
+    table-layout: fixed;
+    /* Ensure all columns are evenly distributed */
+}
+
+.invoice-table th,
+.invoice-table td {
+    padding: 15px;
+        /* Consistent padding for cells */
         border-bottom: 1px solid var(--gray);
+        /* Subtle border for rows */
         overflow: hidden;
+        /* Prevent overflow for long text */
         text-overflow: ellipsis;
+        /* Add ellipsis for truncated text */
         white-space: nowrap;
+        /* Prevent text wrapping */
 }
 
-.manage-invoices .invoice-table th {
-    background-color: #f5f5f5;
-        color: #666;
+.invoice-table th {
+    background-color: #ededed;
+        /* Light gray background for headers */
+        color: #a3a3a3;
+        /* Text color for headers */
         font-weight: bold;
+        /* Bold headers */
         text-transform: uppercase;
+        /* Uppercase headers */
+        letter-spacing: 0.5px;
+        /* Slight letter spacing for readability */
         text-align: left;
+        /* Align text to the left */
 }
 
-.manage-invoices .invoice-table td {
+.invoice-table td {
     color: var(--black1);
+        /* Text color for table cells */
+    }
+
+.invoice-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+        /* Light hover effect */
+        cursor: pointer;
+        /* Change cursor to pointer */
 }
 
 
-.manage-invoices .invoice-table tbody tr:hover {
+.invoice-table tbody tr:hover {
     background-color: rgba(0, 0, 0, 0.05);
     cursor: pointer;
 }
-
-.invoice-table td:last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    /* Adjust spacing between buttons */
+.invoice-table td:first-child {
+    font-weight: bold;
+        /* Highlight the first column */
+        color: var(--blue);
+        /* Blue text for emphasis */
 }
+.invoice-table td:last-child {
+    text-align: center;
+        /* Center-align action buttons */
+        display: flex;
+        gap: 8px;
+        /* Space between buttons */
+        justify-content: center;
+}
+
+
 
 .invoice-table td:last-child {
     text-align: right;
-    /* Align monetary values or total amounts to the right */
+        /* Align action buttons to the right */
+        display: flex;
+        /* Flexbox layout for buttons */
+        gap: 10px;
+        /* Space between buttons */
+        justify-content: flex-end;
+        /* Align buttons to the end */
 }
 
 .invoice-footer {
@@ -889,38 +922,29 @@ body {
 /* This is for the button of add invoice*/
 
 
+/* Align Add Invoice Button */
 .add-invoice {
     display: flex;
-    /* Use flexbox for alignment */
     justify-content: flex-end;
-    /* Align the button to the right */
     margin-bottom: 20px;
-    /* Add spacing below the button */
 }
 
 #addInvoiceBtn {
     background-color: var(--blue);
-    /* Button background */
     color: var(--white);
-    /* Button text color */
     border: none;
     padding: 10px 20px;
-    /* Adjust button size */
     font-size: 14px;
     font-weight: bold;
     border-radius: 5px;
-    /* Rounded corners */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 #addInvoiceBtn:hover {
     background-color: var(--black1);
-    /* Darker background on hover */
     transform: scale(1.05);
-    /* Slight zoom effect */
 }
-
 
 
 

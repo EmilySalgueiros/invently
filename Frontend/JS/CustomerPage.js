@@ -824,6 +824,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <td>
                     <button class="edit-btn" data-id="${docId}">Edit</button>
                     <button class="delete-btn" data-id="${docId}">Delete</button>
+                    <button class="status-btn" data-id="${docId}">${invoice.status === "Paid" ? "Pending" : "Paid"}</button>
+
                 </td>
             `;
 
@@ -835,6 +837,42 @@ document.addEventListener("DOMContentLoaded", async () => {
                         row.remove();
                     }
                 });
+
+
+
+
+
+
+                // Attach status button functionality
+                row.querySelector(".status-btn").addEventListener("click", async (e) => {
+                    const statusButton = e.target;
+                    const newStatus = invoice.status === "Paid" ? "Pending" : "Paid";
+
+                    try {
+                        // Update Firestore with the new status
+                        const invoiceRef = doc(db, "invoices", docId);
+                        await setDoc(invoiceRef, { status: newStatus }, { merge: true });
+
+                        // Update the row UI
+                        invoice.status = newStatus; // Update the local variable
+                        row.querySelector("td:nth-child(5)").textContent = newStatus; // Update the "Status" column
+                        statusButton.textContent = newStatus === "Paid" ? "Pending" : "Paid"; // Update button text
+
+                        console.log(`Invoice ${docId} status updated to ${newStatus}`);
+                    } catch (error) {
+                        console.error("Error updating status:", error);
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
             }
         });
     }

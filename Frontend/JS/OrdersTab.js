@@ -359,7 +359,7 @@ async function loadOrders() {
                 <td>
                     <button class="edit-order-btn" data-id="${doc.id}">Edit</button>
                     <button class="delete-order-btn" data-id="${doc.id}">Delete</button>
-                    <button class="toggle-status-btn" data-id="${doc.id}">${order.status === "Paid" ? "Mark Pending" : "Mark Paid"}</button>
+                    <button class="toggle-status-btn" data-id="${doc.id}">${order.status === "Paid" ? "Pending" : "Paid"}</button>
 
                 </td>
             `;

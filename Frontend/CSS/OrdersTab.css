@@ -181,35 +181,106 @@ body {
 
 .orders-header button {
     padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+        background-color: var(--blue);
+        /* Set the background color to blue */
+        color: var(--white);
+        /* White text color */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        /* Bold text for emphasis */
+        font-size: 14px;
+        /* Adjust font size */
+        transition: all 0.3s ease;
+        /* Smooth transition for hover effects */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow for depth */
+}
+
+
+.orders-header button:hover {
+    background-color: #1d174b;
+        /* Slightly darker blue on hover */
+        transform: translateY(-2px);
+        /* Lift the button slightly */
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        /* Stronger shadow on hover */
+        transition: all 0.3s ease;
+        /* Ensure smooth animation */
+}
+
+.orders-header button:focus {
+
+
+    outline: 2px solid #ffffff;
+        /* White outline for focus */
+        outline-offset: 2px;
+        /* Space between button and outline */
 }
 
 /* ========= Orders Table =========*/
 .orders-table {
-    margin-left: 320px;
-    margin-top: 20px;
-    overflow-x: auto;
+    margin: 30px auto;
+    margin-left: 360px;
+    /* Match left margin */
+    width: calc(100% - 100px);
+    max-width: 1100px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .orders-table table {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
+    font-size: 11px;
+    text-align: left;
+    table-layout: fixed;
 }
 
 .orders-table th,
 .orders-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--gray);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .orders-table th {
-    background-color: #f1f1f1;
+    background-color: #ededed;
+    color: #a3a3a3;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.orders-table td {
+    color: var(--black1);
+}
+
+
+/* Hover Effect */
+.orders-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+/* Highlight Specific Columns */
+.orders-table td:first-child {
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.orders-table td:last-child {
+    text-align: right;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    /* Add spacing between buttons */
 }
 
 /* ========= Modal Styling =========*/
@@ -318,26 +389,68 @@ body {
 /* ========= This is for the table for Manage Vendors Table =========*/
 
 .vendors-table {
-    margin-left: 320px;
-    margin-top: 20px;
-    overflow-x: auto;
+    margin: 30px auto;
+        margin-left: 360px;
+        /* Add left margin */
+        width: calc(100% - 175px);
+        /* Adjust the width */
+        max-width: 1100px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: var(--white);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .vendors-table table {
     width: 100%;
-    border-collapse: collapse;
-    background-color: white;
+        border-collapse: collapse;
+        font-size: 11px;
+        text-align: left;
+        table-layout: fixed;
 }
 
 .vendors-table th,
 .vendors-table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
+    padding: 15px;
+        border-bottom: 1px solid var(--gray);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
 }
 
 .vendors-table th {
-    background-color: #f1f1f1;
+        background-color: #ededed;
+            color: #a3a3a3;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+}
+
+.vendors-table td {
+    color: var(--black1);
+}
+
+
+
+/* Hover Effect */
+.vendors-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+/* Highlight Specific Columns */
+.vendors-table td:first-child {
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.vendors-table td:last-child {
+    text-align: right;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    /* Add spacing between buttons */
 }
 
 /* ========= Vendors Header =========*/
@@ -352,11 +465,41 @@ body {
 
 .vendors-header button {
     padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+        background-color: var(--blue);
+        /* Set the background color to blue */
+        color: var(--white);
+        /* White text color */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        /* Bold text for emphasis */
+        font-size: 14px;
+        /* Adjust font size */
+        transition: all 0.3s ease;
+        /* Smooth transition for hover effects */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Subtle shadow for depth */
+}
+
+
+
+.vendors-header button:hover {
+    background-color: #1d174b;
+    /* Slightly darker blue on hover */
+    transform: translateY(-2px);
+    /* Lift the button slightly */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    /* Stronger shadow on hover */
+    transition: all 0.3s ease;
+    /* Ensure smooth animation */
+}
+
+.vendors-header button:focus {
+    outline: 2px solid #ffffff;
+    /* White outline for focus */
+    outline-offset: 2px;
+    /* Space between button and outline */
 }
 
 .vendors-header h2 {
@@ -545,69 +688,48 @@ body {
 /* General Button Styles */
 button.edit-order-btn,
 button.delete-order-btn, button.toggle-status-btn {
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    outline: none;
-    border: none;
-    margin: 0 5px;
+    padding: 5px 2px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Edit Button Styles */
 button.edit-order-btn {
-    background-color: #4c6aaf;
-    /* Green background */
-    color: white;
-    /* White text */
+    background-color: #4c70af;
+        color: white;
 }
 
 button.edit-order-btn:hover {
-    background-color: #405994;
-    /* Slightly darker blue on hover */
-    box-shadow: 0px 4px 8px rgba(0, 34, 128, 0.3);
-    /* Add shadow */
-    transform: scale(1.05);
-    /* Slightly larger on hover */
+    background-color: #3d5b8f;
+        transform: scale(1.05);
 }
 
 /* Delete Button Styles */
 button.delete-order-btn {
     background-color: #f44336;
-    /* Red background */
-    color: white;
-    /* White text */
+        color: white;
 }
 
 button.delete-order-btn:hover {
-    background-color: #e53935;
-    /* Slightly darker red on hover */
-    box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.3);
-    /* Add shadow */
-    transform: scale(1.05);
-    /* Slightly larger on hover */
+    background-color: #d32f2f;
+        transform: scale(1.05);
 }
 
 /* Mark Paid or Pending Orders */
 
 /* paid or pending Button Styles */
 button.toggle-status-btn {
-    background-color: #f49e36;
-    /* Red background */
-    color: white;
-    /* White text */
+    background-color: #ffa500;
+        color: white;
 }
 
 button.toggle-status-btn:hover {
-    background-color: #c7812c;
-    /* Slightly darker orange on hover */
-    box-shadow: 0px 4px 8px rgba(255, 145, 0, 0.3);
-    /* Add shadow */
-    transform: scale(1.05);
-    /* Slightly larger on hover */
+    background-color: #e69500;
+        transform: scale(1.05);
 }
 
 
@@ -616,50 +738,35 @@ button.toggle-status-btn:hover {
 /* General Button Styles */
 button.edit-vendor-btn,
 button.delete-vendor-btn {
-    font-family: 'Arial', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    outline: none;
-    border: none;
-    margin: 0 5px;
+    padding: 5px 2px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Edit Button Styles */
 button.edit-vendor-btn {
-    background-color: #4c6aaf;
-    /* Green background */
+background-color: #4c70af;
     color: white;
-    /* White text */
 }
 
 button.edit-vendor-btn:hover {
-    background-color: #405994;
-    /* Slightly darker blue on hover */
-    box-shadow: 0px 4px 8px rgba(0, 34, 128, 0.3);
-    /* Add shadow */
-    transform: scale(1.05);
-    /* Slightly larger on hover */
+    background-color: #3d5b8f;
+        transform: scale(1.05);
 }
 
 /* Delete Button Styles */
 button.delete-vendor-btn {
     background-color: #f44336;
-    /* Red background */
-    color: white;
-    /* White text */
+        color: white;
 }
 
 button.delete-vendor-btn:hover {
-    background-color: #e53935;
-    /* Slightly darker red on hover */
-    box-shadow: 0px 4px 8px rgba(255, 0, 0, 0.3);
-    /* Add shadow */
-    transform: scale(1.05);
-    /* Slightly larger on hover */
+    background-color: #d32f2f;
+        transform: scale(1.05);
 }
 
 

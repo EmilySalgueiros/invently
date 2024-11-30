@@ -694,8 +694,8 @@ body {
 }
 
 .manage-invoices .invoice-table-container {
-    margin: 30px auto;
-    margin-left: 90px;
+    margin: 0px auto;
+    margin-left: 190px;
     width: calc(100% - 175px);
     max-width: 1600px;
     border-radius: 10px;
@@ -740,11 +740,12 @@ body {
     cursor: pointer;
 }
 
-.invoice-table td:first-child {
-    font-weight: bold;
-    /* Highlight the first column (e.g., Item Name) */
-    color: var(--blue);
-    /* Blue text for emphasis */
+.invoice-table td:last-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    /* Adjust spacing between buttons */
 }
 
 .invoice-table td:last-child {
@@ -914,4 +915,34 @@ table tbody tr td:last-child {
     gap: 8px;
     /* Space between buttons */
     justify-content: center;
+}
+
+/* Status button for the invoice */
+
+.status-btn {
+    background-color: #ffa500;
+    /* Orange for visibility */
+    color: white;
+    border: none;
+    padding: 5px 2px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.status-btn:hover {
+    background-color: #e69500;
+    /* Darker orange on hover */
+    transform: scale(1.05);
+    /* Slight zoom effect */
+}
+
+.edit-btn,
+.delete-btn,
+.status-btn {
+    padding: 5px 2px;
+    /* Adjust button padding */
+    font-size: 14px;
+    /* Adjust button text size */
 }

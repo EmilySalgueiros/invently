@@ -348,7 +348,7 @@ section {
 }
 
 .aboutIntro h2 {
-    font-size: 3rem;
+    font-size: 2rem;
     /* Bigger letters */
     color: #2a2185;
     /* Yellow color */
@@ -464,6 +464,7 @@ section {
 /* Team Section Title */
 .teamSection {
     text-align: center;
+    margin-bottom: 5px;
     padding: 20px 0;
 }
 

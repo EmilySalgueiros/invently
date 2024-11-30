@@ -53,45 +53,114 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Function to save a new inventory item to Firestore
-async function saveNewItemToFirestore(newItem) {
-    const inventoryRef = doc(db, "inventory", "mhi1OrJnP6xSZAvgpZ64");
-
-    try {
-        // Check if the document exists
-        const docSnapshot = await getDoc(inventoryRef);
-
-        if (docSnapshot.exists()) {
-            // Document exists, update the array field
-            await setDoc(
-                inventoryRef,
-                { items: arrayUnion(newItem) },
-                { merge: true } // Merge with existing data
-            );
-            console.log("New item successfully added to Firestore:", newItem);
-        } else {
-            // Document doesn't exist, create it with the first item
-            await setDoc(inventoryRef, { items: [newItem] });
-            console.log("Document created and new item added to Firestore:", newItem);
-        }
-    } catch (error) {
-        console.error("Error adding new item to Firestore:", error);
-    }
-}
-
-// Example usage of `saveNewItemToFirestore`
-const addProductButton = document.getElementById("addProductBtn");
-addProductButton.addEventListener("click", () => {
-    const newItem = {
+addProductBtn.addEventListener("click", async () => {
+    const newProduct = {
         itemCode: Math.floor(Math.random() * 1000).toString().padStart(3, "0"),
-        sku: `SKU${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`,
-        description: "New Product",
+        sku: generateUniqueSKU(),
+        description: "New Item",
         quantity: 10,
         threshold: 5,
         status: "In Stock",
-        location: "A01"
+        location: "A01",
     };
 
-    // Save the new item to Firestore
-    saveNewItemToFirestore(newItem);
+    try {
+        await setDoc(doc(db, "inventory", newProduct.sku), newProduct);
+        alert("Product added successfully!");
+        loadProducts(); // Reload the product table
+    } catch (error) {
+        console.error("Error adding product:", error);
+    }
+});
+async function loadProducts() {
+    try {
+        const querySnapshot = await getDocs(collection(db, "inventory"));
+        inventoryTable.innerHTML = ""; // Clear the table
+
+        querySnapshot.forEach((doc) => {
+            const product = doc.data();
+            const row = `
+                <tr>
+                    <td>${product.itemCode}</td>
+                    <td>${product.sku}</td>
+                    <td>${product.description}</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.threshold}</td>
+                    <td>${product.quantity <= product.threshold ? "Low Stock" : "In Stock"}</td>
+                    <td>${product.location}</td>
+                    <td>
+                        <button class="edit-btn" data-sku="${product.sku}">Edit</button>
+                        <button class="delete-btn" data-sku="${product.sku}">Delete</button>
+                    </td>
+                </tr>`;
+            inventoryTable.insertAdjacentHTML("beforeend", row);
+        });
+
+        // Attach event listeners for Edit and Delete buttons
+        document.querySelectorAll(".edit-btn").forEach((btn) =>
+            btn.addEventListener("click", () => editProduct(btn.dataset.sku))
+        );
+        document.querySelectorAll(".delete-btn").forEach((btn) =>
+            btn.addEventListener("click", () => deleteProduct(btn.dataset.sku))
+        );
+    } catch (error) {
+        console.error("Error loading products:", error);
+    }
+}
+
+// Load products on page load
+document.addEventListener("DOMContentLoaded", loadProducts);
+async function editProduct(sku) {
+    const productRef = doc(db, "inventory", sku);
+    const productSnapshot = await getDoc(productRef);
+
+    if (productSnapshot.exists()) {
+        const product = productSnapshot.data();
+        document.getElementById("editItemCode").value = product.itemCode;
+        document.getElementById("editSKU").value = product.sku;
+        document.getElementById("editDescription").value = product.description;
+        document.getElementById("editQuantity").value = product.quantity;
+        document.getElementById("editThreshold").value = product.threshold;
+        document.getElementById("editLocation").value = product.location;
+
+        editInventoryModal.classList.add("active");
+    }
+}
+
+editInventoryForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const sku = document.getElementById("editSKU").value;
+    try {
+        await updateDoc(doc(db, "inventory", sku), {
+            description: document.getElementById("editDescription").value,
+            quantity: parseInt(document.getElementById("editQuantity").value),
+            threshold: parseInt(document.getElementById("editThreshold").value),
+            location: document.getElementById("editLocation").value,
+        });
+        alert("Product updated successfully!");
+        loadProducts(); // Reload the product table
+        editInventoryModal.classList.remove("active");
+    } catch (error) {
+        console.error("Error updating product:", error);
+    }
+});
+async function deleteProduct(sku) {
+    try {
+        await deleteDoc(doc(db, "inventory", sku));
+        alert("Product deleted successfully!");
+        loadProducts(); // Reload the product table
+    } catch (error) {
+        console.error("Error deleting product:", error);
+    }
+}
+saveStockChangesBtn.addEventListener("click", async () => {
+    try {
+        for (const [binId, stock] of Object.entries(binStocks)) {
+            await updateDoc(doc(db, "bins", binId), { stock });
+        }
+        alert("Stock changes saved successfully!");
+    } catch (error) {
+        console.error("Error saving stock changes:", error);
+    }
 });

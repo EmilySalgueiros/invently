@@ -1,6 +1,3 @@
-import { setDoc, doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { db } from "../JS/dashboardFirestore.js";
-
 document.addEventListener("DOMContentLoaded", () => {
     const addProductBtn = document.getElementById("addProductBtn");
     const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
@@ -133,24 +130,6 @@ function updateRowStatus(row) {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-    const addPOBtn = document.getElementById("addPOBtn");
-    const purchaseOrderFormContainer = document.getElementById("purchaseOrderFormContainer");
-
-    if (addPOBtn) {
-        addPOBtn.addEventListener("click", () => {
-            if (purchaseOrderFormContainer) {
-                purchaseOrderFormContainer.classList.toggle("hidden"); // Toggle visibility
-            } else {
-                console.error("Purchase Order form container not found.");
-            }
-        });
-    } else {
-        console.error("Add Purchase Order button not found.");
-    }
-});
-
-
-document.addEventListener("DOMContentLoaded", () => {
     // Tab Switching
     const setupTabSwitching = () => {
         const tabs = document.querySelectorAll(".tab");
@@ -164,13 +143,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 // Add active class to the clicked tab and corresponding content
                 tab.classList.add("active");
-                const target = tab.getAttribute("data-tab");
                 document.getElementById(tab.getAttribute("data-tab")).classList.add("active");
             });
         });
     };
-
-    
 
     // Add/Remove Options for Vendor, Category, and Location
     const setupAddRemoveOptions = () => {
@@ -251,6 +227,245 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    const addPOBtn = document.getElementById("addPOBtn");
+    const purchaseOrderList = document.getElementById("purchaseOrderList");
+    const purchaseOrderForm = document.getElementById("purchaseOrderForm");
+    const purchaseOrderFormContainer = document.getElementById("purchaseOrderFormContainer");
+    const itemsTable = document.getElementById("itemsTable").querySelector("tbody");
+    const addItem = document.getElementById("addItem");
+    const attachmentsInput = document.getElementById("attachments");
+    const attachmentList = document.getElementById("attachmentList");
+    const cancelPurchaseOrder = document.getElementById("cancelPurchaseOrder");
+    const addVendorBtn = document.querySelector(".add-icon");
+    const deleteVendorBtn = document.querySelector(".delete-icon");
+    const vendorSelect = document.getElementById("editVendor");
+
+    let purchaseOrders = []; // Store all POs and their data
+    let editingPOIndex = null; // Track the currently edited PO
+
+    // Initialize the form with one row
+    const initializeItemsTable = () => {
+        itemsTable.innerHTML = ""; // Clear the table
+        addItemRow(); // Add a default row
+    };
+
+    // Add Item Row
+    const addItemRow = (item = { description: "", quantity: 1, rate: 0, tax: 0 }) => {
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+            <td><input type="text" placeholder="Item description" value="${item.description}" required /></td>
+            <td><input type="number" min="1" placeholder="Quantity" class="item-quantity" value="${item.quantity}" required /></td>
+            <td><input type="number" min="0.01" step="0.01" placeholder="Rate" class="item-rate" value="${item.rate}" required /></td>
+            <td><input type="number" min="0" step="0.01" placeholder="Tax (%)" class="item-tax" value="${item.tax}" required /></td>
+            <td class="total-cell">$0.00</td>
+            <td><button type="button" class="delete-item-btn" style="color: red;">X</button></td>
+        `;
+        itemsTable.appendChild(newRow);
+
+        const quantityInput = newRow.querySelector(".item-quantity");
+        const rateInput = newRow.querySelector(".item-rate");
+        const taxInput = newRow.querySelector(".item-tax");
+        const totalCell = newRow.querySelector(".total-cell");
+        const deleteBtn = newRow.querySelector(".delete-item-btn");
+
+        const calculateRowTotal = () => {
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+            const taxPercent = parseFloat(taxInput.value) || 0;
+            const subtotal = quantity * rate;
+            const total = subtotal + (subtotal * taxPercent) / 100;
+            totalCell.textContent = `$${total.toFixed(2)}`;
+        };
+
+        quantityInput.addEventListener("input", calculateRowTotal);
+        rateInput.addEventListener("input", calculateRowTotal);
+        taxInput.addEventListener("input", calculateRowTotal);
+
+        deleteBtn.addEventListener("click", () => {
+            newRow.remove();
+        });
+
+        calculateRowTotal(); // Initial calculation
+    };
+
+    // Ensure Add Item Button Works
+    addItem.addEventListener("click", () => {
+        addItemRow(); // Add a new row
+    });
+
+    // Handle Attachments
+    attachmentsInput.addEventListener("change", () => {
+        Array.from(attachmentsInput.files).forEach((file) => {
+            const listItem = document.createElement("div");
+            listItem.classList.add("attachment-item");
+
+            const fileLink = document.createElement("a");
+            fileLink.href = URL.createObjectURL(file);
+            fileLink.target = "_blank";
+            fileLink.textContent = file.name;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "X";
+            deleteBtn.style.color = "red";
+            deleteBtn.classList.add("delete-attachment-btn");
+
+            deleteBtn.addEventListener("click", () => {
+                listItem.remove();
+            });
+
+            listItem.appendChild(fileLink);
+            listItem.appendChild(deleteBtn);
+            attachmentList.appendChild(listItem);
+        });
+
+        // Clear input to allow adding the same file again
+        attachmentsInput.value = "";
+    });
+
+    // Show form and temporarily hide PO cards
+    addPOBtn.addEventListener("click", () => {
+        purchaseOrderFormContainer.classList.remove("hidden"); // Show the form
+        purchaseOrderList.classList.add("hidden"); // Hide the list
+        addPOBtn.style.display = "none"; // Hide the "Add Purchase Order" button
+        purchaseOrderForm.reset(); // Reset the form
+        initializeItemsTable(); // Initialize the items table
+        attachmentList.innerHTML = ""; // Clear attachments
+        editingPOIndex = null; // Reset editing state
+    });
+
+    // Cancel button functionality
+    cancelPurchaseOrder.addEventListener("click", () => {
+        purchaseOrderForm.reset();
+        purchaseOrderFormContainer.classList.add("hidden");
+        purchaseOrderList.classList.remove("hidden");
+        addPOBtn.style.display = "block"; // Show the "Add Purchase Order" button
+    });
+
+    // Save Purchase Order
+    purchaseOrderForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const poNumber = document.getElementById("poNumber").value.trim();
+        const poDate = document.getElementById("poDate").value;
+        if (!poNumber || !poDate) {
+            alert("PO Number and Date are required.");
+            return;
+        }
+
+        const vendor = vendorSelect.value || "N/A";
+        const items = Array.from(itemsTable.children).map((row) => {
+            return {
+                description: row.querySelector("td:first-child input").value,
+                quantity: parseFloat(row.querySelector(".item-quantity").value) || 0,
+                rate: parseFloat(row.querySelector(".item-rate").value) || 0,
+                tax: parseFloat(row.querySelector(".item-tax").value) || 0,
+                total: row.querySelector(".total-cell").textContent,
+            };
+        });
+
+        const attachments = Array.from(attachmentList.children).map((child) => {
+            return child.querySelector("a").textContent;
+        });
+
+        const poData = {
+            poNumber,
+            poDate,
+            vendor,
+            items,
+            attachments,
+        };
+
+        if (editingPOIndex !== null) {
+            purchaseOrders[editingPOIndex] = poData;
+        } else {
+            purchaseOrders.push(poData);
+        }
+
+        renderPOCards();
+
+        purchaseOrderForm.reset();
+        purchaseOrderFormContainer.classList.add("hidden");
+        purchaseOrderList.classList.remove("hidden");
+        addPOBtn.style.display = "block";
+    });
+
+    // Render PO Cards
+    const renderPOCards = () => {
+        purchaseOrderList.innerHTML = "";
+        purchaseOrders.forEach((po, index) => {
+            const card = document.createElement("div");
+            card.classList.add("po-card");
+            card.innerHTML = `
+                <div><strong>PO #${po.poNumber}</strong></div>
+                <div>Date: ${po.poDate}</div>
+                <div>Vendor: ${po.vendor}</div>
+            `;
+            card.addEventListener("click", () => {
+                loadPOData(index);
+            });
+            purchaseOrderList.appendChild(card);
+        });
+    };
+
+    // Load PO Data into Form
+    const loadPOData = (index) => {
+        const poData = purchaseOrders[index];
+        editingPOIndex = index;
+
+        document.getElementById("poNumber").value = poData.poNumber;
+        document.getElementById("poDate").value = poData.poDate;
+        vendorSelect.value = poData.vendor;
+
+        itemsTable.innerHTML = "";
+        poData.items.forEach(addItemRow);
+
+        attachmentList.innerHTML = "";
+        poData.attachments.forEach((fileName) => {
+            const listItem = document.createElement("div");
+            const fileLink = document.createElement("a");
+            fileLink.href = "#";
+            fileLink.textContent = fileName;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "X";
+            deleteBtn.style.color = "red";
+
+            deleteBtn.addEventListener("click", () => {
+                listItem.remove();
+            });
+
+            listItem.appendChild(fileLink);
+            listItem.appendChild(deleteBtn);
+            attachmentList.appendChild(listItem);
+        });
+
+        purchaseOrderFormContainer.classList.remove("hidden");
+        purchaseOrderList.classList.add("hidden");
+        addPOBtn.style.display = "none";
+    };
+
+    // Add Vendor
+    addVendorBtn.addEventListener("click", () => {
+        const newVendor = prompt("Enter new vendor name:");
+        if (newVendor) {
+            const option = document.createElement("option");
+            option.value = newVendor;
+            option.textContent = newVendor;
+            vendorSelect.appendChild(option);
+        }
+    });
+
+    // Delete Vendor
+    deleteVendorBtn.addEventListener("click", () => {
+        if (vendorSelect.selectedIndex > 0) {
+            vendorSelect.remove(vendorSelect.selectedIndex);
+        }
+    });
+
+    initializeItemsTable(); // Add default item row on load
+});
+
+document.addEventListener("DOMContentLoaded", () => {
     const aisleContainer = document.getElementById("aisleContainer");
     const addAisleBtn = document.getElementById("addAisleBtn");
     const binDetails = document.getElementById("binDetails");
@@ -262,12 +477,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedBin = null;
     let binStocks = {}; // Store stock data for bins
 
-    // Function to reset stock structure when location changes
+    // Reset stock structure when location changes
     const resetStockStructure = () => {
         if (confirm("Do you want to save changes before switching location?")) {
-            alert("Changes saved successfully!");
+            saveChangesToDatabase(); // Ensure changes are saved before reset
         }
         aisleContainer.innerHTML = ""; // Clear aisles
+        binStocks = {}; // Reset bin stocks
     };
 
     // Add Aisle
@@ -280,6 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="btn-add" onclick="addRack(this)">+ Rack</button>
             <button class="btn-delete" onclick="deleteElement(this, 'aisle')">- Aisle</button>
         `;
+        aisle.dataset.aisle = `Aisle ${aisleCount}`;
         aisleContainer.appendChild(aisle);
     });
 
@@ -294,6 +511,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="btn-add" onclick="addShelf(this)">+ Shelf</button>
             <button class="btn-delete" onclick="deleteElement(this, 'rack')">- Rack</button>
         `;
+        rack.dataset.rack = `Rack ${rackCount}`;
         aisle.appendChild(rack);
     };
 
@@ -308,6 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="btn-add" onclick="addBin(this)">+ Bin</button>
             <button class="btn-delete" onclick="deleteElement(this, 'shelf')">- Shelf</button>
         `;
+        shelf.dataset.shelf = `Shelf ${shelfCount}`;
         rack.appendChild(shelf);
     };
 
@@ -317,7 +536,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const binCount = shelf.querySelectorAll(".bin").length + 1;
         const bin = document.createElement("div");
         bin.className = "bin";
-        bin.dataset.bin = `BIN ${binCount}`;
+        const binId = `${shelf.closest(".aisle").dataset.aisle}-${shelf.closest(".rack").dataset.rack}-${shelf.dataset.shelf}-BIN${binCount}`;
+        bin.dataset.bin = binId;
+        bin.dataset.aisle = shelf.closest(".aisle").dataset.aisle;
+        bin.dataset.rack = shelf.closest(".rack").dataset.rack;
+        bin.dataset.shelf = shelf.dataset.shelf;
         bin.textContent = `BIN ${binCount}`;
         shelf.appendChild(bin);
 
@@ -325,48 +548,56 @@ document.addEventListener("DOMContentLoaded", () => {
         bin.addEventListener("click", () => selectBin(bin));
     };
 
-    // Select Bin
     const selectBin = (bin) => {
         if (selectedBin) {
             selectedBin.classList.remove("selected");
         }
         selectedBin = bin;
         selectedBin.classList.add("selected");
-
-        const binLabel = bin.dataset.bin;
-        const stock = binStocks[binLabel] || 0;
-
-        binDetails.value = `Bin: ${binLabel}\nStock: ${stock}`;
+    
+        const binId = bin.dataset.bin;
+        const stock = binStocks[binId] || 0;
+    
+        // Concise details without repetition
+        const binLocation = `${bin.dataset.aisle}, ${bin.dataset.rack}, ${bin.dataset.shelf}`;
+        binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${stock}`;
     };
-
+    
     // Add Stock to Selected Bin
     addStockToBinBtn.addEventListener("click", () => {
         if (!selectedBin) {
             alert("Please select a bin.");
             return;
         }
-
+    
         const quantity = parseInt(binStockQuantity.value, 10);
         if (!quantity || quantity <= 0) {
             alert("Please enter a valid quantity.");
             return;
         }
-
-        const binLabel = selectedBin.dataset.bin;
-        binStocks[binLabel] = (binStocks[binLabel] || 0) + quantity;
-
-        binDetails.value = `Bin: ${binLabel}\nStock: ${binStocks[binLabel]}`;
+    
+        const binId = selectedBin.dataset.bin;
+        binStocks[binId] = (binStocks[binId] || 0) + quantity;
+    
+        // Concise details without repetition
+        const binLocation = `${selectedBin.dataset.aisle}, ${selectedBin.dataset.rack}, ${selectedBin.dataset.shelf}`;
+        binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${binStocks[binId]}`;
         binStockQuantity.value = ""; // Clear input
     });
-
+    
+    
     // Save Stock Changes
     saveStockChangesBtn.addEventListener("click", () => {
+        saveChangesToDatabase();
         alert("Stock changes saved successfully!");
     });
-
-    // Change Location
-    locationSelect.addEventListener("change", resetStockStructure);
-
+    
+    // Save changes to Firebase (placeholder function)
+    const saveChangesToDatabase = () => {
+        console.log("Saving to Firebase:", binStocks);
+        // Add Firebase save logic here
+    };
+    
     // Delete Element
     window.deleteElement = (button, type) => {
         const element = button.parentNode;
@@ -374,4 +605,5 @@ document.addEventListener("DOMContentLoaded", () => {
             element.remove();
         }
     };
+    
 });

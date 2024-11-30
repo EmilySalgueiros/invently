@@ -8,8 +8,14 @@ let currentCustomerId = null; // Track whether you're editing an existing custom
 const modalTitle = document.getElementById("modalTitle"); // Get the modal title element
 
 
+/*============================================================================================*/
+/*============================================================================================*/
+/*============================================================================================*/ 
 
 
+
+
+// Now we will handle the firebase configuration
 // Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDZstZmYQ2HOdKX639ayM6L_OoGd64ozqs",
@@ -23,6 +29,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+
+/*============================================================================================*/
+/*============================================================================================*/ 
+/*============================================================================================*/ 
+
+
+// Now we start with the JS of th customer side and its modal
 
 // DOM elements
 const customerTableBody = document.getElementById("customerTableBody");
@@ -385,22 +399,6 @@ async function saveNewItemToFirestore(newItem) {
     }
 }
 
-// Example usage of `saveNewItemToFirestore`
-const addProductButton = document.getElementById("addProductBtn");
-addProductButton.addEventListener("click", () => {
-    const newItem = {
-        itemCode: Math.floor(Math.random() * 1000).toString().padStart(3, "0"),
-        sku: `SKU${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`,
-        description: "New Product",
-        quantity: 10,
-        threshold: 5,
-        status: "In Stock",
-        location: "A01"
-    };
-
-    // Save the new item to Firestore
-    saveNewItemToFirestore(newItem);
-});
 
 async function saveCustomerChanges(docId) {
     const customerType = document.getElementById("customerType").value;
@@ -469,7 +467,7 @@ async function saveCustomerChanges(docId) {
     } catch (error) {
         console.error("Error saving changes: ", error);
     }
-}
+
 
 const updatedRow = document.querySelector(`[data-id="${docId}"]`);
 updatedRow.innerHTML = `
@@ -483,3 +481,489 @@ updatedRow.innerHTML = `
         <button class="delete-btn" data-id="${docId}">Delete</button>
     </td>
 `;
+
+}
+
+//===========================================================================================================
+//===========================================================================================================
+// This is the part of the manage invoices
+
+// JavaScript to handle opening and closing the modal
+
+let currentInvoiceId = null; // Global variable to track the invoice being edited
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const addInvoiceBtn = document.getElementById("addInvoiceBtn");
+    const addInvoiceModal2 = document.getElementById("addInvoiceModal2");
+    const closeInvoiceModal2 = document.getElementById("closeInvoiceModal2");
+    const cancelInvoiceModal2 = document.getElementById("cancelInvoiceModal2");
+    const companySelect = document.getElementById("companySelect2"); // Dropdown element
+    const billToTextarea = document.getElementById("billTo2"); // "Bill To" textarea
+    const saveInvoiceBtn = document.getElementById("saveInvoiceBtn");
+    const invoiceTableBody = document.getElementById("InvoiceTableBody");
+    const addRowBtn = document.getElementById("addRowBtn"); // Button for adding rows
+    const itemsTable = document.getElementById("invoiceItemsBody"); // Table body for items
+
+    loadInvoices();
+
+
+    // Function to add a new row to the items table
+    const addNewItemRow = () => {
+        const newRow = document.createElement("tr");
+
+        newRow.innerHTML = `
+            <td><input type="text" placeholder="Item Name"></td>
+            <td><input type="number" placeholder="Qty"></td>
+            <td><input type="text" placeholder="Description"></td>
+            <td><input type="number" placeholder="Rate"></td>
+            <td><input type="number" placeholder="Amount" readonly></td>
+        `;
+
+        // Automatically calculate amount when quantity or rate changes
+        const quantityInput = newRow.querySelector("td:nth-child(2) input");
+        const rateInput = newRow.querySelector("td:nth-child(4) input");
+        const amountInput = newRow.querySelector("td:nth-child(5) input");
+
+        const calculateAmount = () => {
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+            amountInput.value = (quantity * rate).toFixed(2);
+        };
+
+        quantityInput.addEventListener("input", calculateAmount);
+        rateInput.addEventListener("input", calculateAmount);
+
+        itemsTable.appendChild(newRow);
+    };
+
+    // Attach the event listener to the "Add Row" button
+    addRowBtn.addEventListener("click", addNewItemRow);
+
+
+    // Now this is the function that will generate a random invoice Number ID
+
+    function generateInvoiceId() {
+        const timestamp = Date.now().toString(36); // Encode current timestamp
+        const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random string
+        return `INV-${timestamp}-${randomPart}`;
+    }
+
+
+    // Add a new row to the items table
+    function addNewItemRow2() {
+        const itemsTable = document.getElementById("invoiceItemsBody");
+        const newRow = document.createElement("tr");
+
+        newRow.innerHTML = `
+        <td><input type="text" placeholder="Item Name"></td>
+        <td><input type="number" placeholder="Qty"></td>
+        <td><input type="text" placeholder="Description"></td>
+        <td><input type="number" placeholder="Rate"></td>
+        <td><input type="number" placeholder="Amount" readonly></td>
+    `;
+
+        // Automatically calculate amount when quantity or rate changes
+        const quantityInput = newRow.querySelector("td:nth-child(2) input");
+        const rateInput = newRow.querySelector("td:nth-child(4) input");
+        const amountInput = newRow.querySelector("td:nth-child(5) input");
+
+        const calculateAmount = () => {
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+            amountInput.value = (quantity * rate).toFixed(2);
+        };
+
+        quantityInput.addEventListener("input", calculateAmount);
+        rateInput.addEventListener("input", calculateAmount);
+
+        itemsTable.appendChild(newRow);
+    }
+
+
+    // Function to reset the invoice modal
+    // Function to reset the invoice modal
+    function resetInvoiceModal() {
+        const invoiceIdField = document.getElementById("invoiceId");
+        if (invoiceIdField) {
+            // Generate and set the Invoice ID in the modal
+            const newInvoiceId = generateInvoiceId();
+            invoiceIdField.value = newInvoiceId;
+        }
+
+        // Reset other fields
+        const companySelect = document.getElementById("companySelect2");
+        if (companySelect) companySelect.value = "";
+
+        const billToField = document.getElementById("billTo2");
+        if (billToField) billToField.value = "";
+
+        const invoiceDateField = document.getElementById("invoiceDate");
+        if (invoiceDateField) invoiceDateField.value = new Date().toISOString().split("T")[0];
+
+        const totalAmountField = document.getElementById("totalAmount");
+        if (totalAmountField) totalAmountField.value = "0.00";
+
+        const balanceDueField = document.getElementById("balanceDue");
+        if (balanceDueField) balanceDueField.value = "0.00";
+
+        const itemsTable = document.getElementById("invoiceItemsBody");
+        if (itemsTable) itemsTable.innerHTML = ""; // Clear all rows
+
+        addNewItemRow(); // Add one default row
+    }
+
+
+
+    // Populate company dropdown
+    // Populate company dropdown
+    async function populateCompanyDropdown() {
+        companySelect.innerHTML = '<option value="" disabled selected>Select Company</option>'; // Reset dropdown
+
+        try {
+            const customerCollection = collection(db, "customers"); // Reference to the Firestore collection
+            const querySnapshot = await getDocs(customerCollection); // Fetch customers
+
+            querySnapshot.forEach((doc) => {
+                const customer = doc.data();
+                const option = document.createElement("option");
+                option.value = doc.id; // Use document ID as the value
+                option.textContent = `${customer.name} (${customer.companyName})`; // Display name and company
+                companySelect.appendChild(option);
+            });
+
+            console.log("Company dropdown populated successfully.");
+        } catch (error) {
+            console.error("Error populating company dropdown:", error);
+        }
+    }
+
+
+    // This function will let the table appear again and again
+
+    // Function to fetch and display all invoices
+    async function loadInvoices() {
+        const invoiceCollection = collection(db, "invoices"); // Reference the 'invoices' collection
+        const querySnapshot = await getDocs(invoiceCollection); // Fetch all documents in the collection
+
+        invoiceTableBody.innerHTML = ""; // Clear the table body before populating
+
+        querySnapshot.forEach((doc) => {
+            const invoice = doc.data();
+            addInvoiceToTable(invoice, doc.id); // Populate each invoice row
+        });
+
+        console.log("Invoices loaded successfully.");
+    }
+
+
+    // This is to add the button to edit the information of the respective invoice
+
+    async function editInvoice(docId) {
+        try {
+            // Fetch the invoice document from Firestore
+            const invoiceRef = doc(db, "invoices", docId);
+            const invoiceDoc = await getDoc(invoiceRef);
+
+            if (invoiceDoc.exists()) {
+                const invoice = invoiceDoc.data();
+
+                // Populate the modal fields with the invoice data
+                document.getElementById("invoiceId").value = invoice.invoiceId;
+                document.getElementById("invoiceDate").value = invoice.date;
+                document.getElementById("totalAmount").value = invoice.totalAmount.toFixed(2);
+                document.getElementById("balanceDue").value = invoice.balanceDue.toFixed(2);
+                document.getElementById("billTo2").value = invoice.billTo;
+
+                // Set the global variable to the current invoice ID
+                currentInvoiceId = docId;
+
+                // Populate the company dropdown and set the correct value
+                await populateCompanyDropdown(); // Populate dropdown options first
+                const companySelect = document.getElementById("companySelect2");
+                if (companySelect) {
+                    Array.from(companySelect.options).forEach((option) => {
+                        if (option.textContent.includes(invoice.companyName)) {
+                            option.selected = true; // Match and select the company name
+                        }
+                    });
+                }
+
+                // Open the modal
+                const addInvoiceModal2 = document.getElementById("addInvoiceModal2");
+                addInvoiceModal2.style.display = "flex";
+            } else {
+                console.error("Invoice not found!");
+            }
+        } catch (error) {
+            console.error("Error editing invoice:", error);
+        }
+    }
+
+
+
+
+    // Update "Bill To" textarea when a company is selected
+    companySelect.addEventListener("change", async () => {
+        const selectedCompanyId = companySelect.value; // Get the selected company's document ID
+
+        if (selectedCompanyId) {
+            try {
+                const customerRef = doc(db, "customers", selectedCompanyId); // Reference to the selected customer
+                const customerDoc = await getDoc(customerRef);
+
+                if (customerDoc.exists()) {
+                    const customer = customerDoc.data();
+                    billToTextarea.value = `${customer.name}\n${customer.companyName}\n${customer.billingAddress.address}, ${customer.billingAddress.city}, ${customer.billingAddress.state}, ${customer.billingAddress.zip}`;
+                } else {
+                    billToTextarea.value = "Selected company details not found.";
+                }
+            } catch (error) {
+                console.error("Error fetching selected company details:", error);
+                billToTextarea.value = "Error fetching company details.";
+            }
+        }
+    });
+
+    // This is the part that will let us add the information of the invoice
+    // to the firebase
+
+    // Save Invoice and Add to Firestore and Table
+    // Save Invoice and Add to Firestore and Table
+    saveInvoiceBtn.addEventListener("click", async () => {
+        const invoiceId = document.getElementById("invoiceId").value; // Use the invoice ID from the modal
+        const companySelect = document.getElementById("companySelect2");
+        const companyName = companySelect.options[companySelect.selectedIndex]?.text || "";
+        const selectedCompanyId = companySelect.value;
+        const invoiceDate = document.getElementById("invoiceDate").value;
+        const billTo = document.getElementById("billTo2").value;
+
+        // Get all items from the table
+        const itemsTable = document.getElementById("invoiceItemsBody");
+        const items = Array.from(itemsTable.querySelectorAll("tr")).map((row) => {
+            const itemName = row.querySelector("td:nth-child(1) input")?.value || "";
+            const quantity = parseFloat(row.querySelector("td:nth-child(2) input")?.value) || 0;
+            const description = row.querySelector("td:nth-child(3) input")?.value || "";
+            const rate = parseFloat(row.querySelector("td:nth-child(4) input")?.value) || 0;
+            const amount = quantity * rate;
+            return { itemName, quantity, description, rate, amount };
+        });
+
+        // Calculate totals
+        const totalAmount = items.reduce((total, item) => total + item.amount, 0);
+        const balanceDue = totalAmount; // Assuming the full amount is due initially
+
+        // Validate Inputs
+        if (!selectedCompanyId) {
+            alert("Please select a company.");
+            return;
+        }
+
+        try {
+            const invoiceData = {
+                invoiceId, // Include the Invoice ID from the modal
+                companyName,
+                customerId: selectedCompanyId,
+                date: invoiceDate,
+                billTo,
+                items,
+                totalAmount,
+                balanceDue,
+                status: "Pending", // Default status
+            };
+
+            if (currentInvoiceId) {
+                // Update the existing invoice
+                const invoiceRef = doc(db, "invoices", currentInvoiceId);
+                await setDoc(invoiceRef, invoiceData, { merge: true });
+
+                console.log("Invoice updated:", invoiceData);
+
+                // Update the table row
+                updateInvoiceTableRow(currentInvoiceId, invoiceData);
+            } else {
+                // Create a new invoice
+                const docRef = await addDoc(collection(db, "invoices"), invoiceData);
+                console.log("Invoice added to Firestore with ID:", docRef.id);
+
+                // Add a new row to the table
+                addInvoiceToTable(invoiceData, docRef.id);
+            }
+
+            // Reset the current invoice ID
+            currentInvoiceId = null;
+
+            // Close the modal
+            addInvoiceModal2.style.display = "none";
+
+            alert("Invoice saved successfully!");
+        } catch (error) {
+            console.error("Error saving invoice:", error);
+            alert("Failed to save the invoice. Please try again.");
+        }
+    });
+
+
+
+
+
+
+
+
+    // This function will work as an update for the table
+
+    function updateInvoiceTableRow(docId, invoice) {
+        const rows = document.querySelectorAll(`#InvoiceTableBody tr`);
+        rows.forEach((row) => {
+            if (row.querySelector(".edit-btn")?.getAttribute("data-id") === docId) {
+                row.innerHTML = `
+                <td>${invoice.invoiceId}</td>
+                <td>${invoice.companyName}</td>
+                <td>${invoice.totalAmount.toFixed(2)}</td>
+                <td>${invoice.date}</td>
+                <td>${invoice.status}</td>
+                <td>
+                    <button class="edit-btn" data-id="${docId}">Edit</button>
+                    <button class="delete-btn" data-id="${docId}">Delete</button>
+                    <button class="status-btn" data-id="${docId}">${invoice.status === "Paid" ? "Pending" : "Paid"}</button>
+
+                </td>
+            `;
+
+                // Reattach event listeners for Edit and Delete
+                row.querySelector(".edit-btn").addEventListener("click", () => editInvoice(docId));
+                row.querySelector(".delete-btn").addEventListener("click", async () => {
+                    if (confirm("Are you sure you want to delete this invoice?")) {
+                        await deleteDoc(doc(db, "invoices", docId));
+                        row.remove();
+                    }
+                });
+
+
+
+
+
+
+                // Attach status button functionality
+                row.querySelector(".status-btn").addEventListener("click", async (e) => {
+                    const statusButton = e.target;
+                    const newStatus = invoice.status === "Paid" ? "Pending" : "Paid";
+
+                    try {
+                        // Update Firestore with the new status
+                        const invoiceRef = doc(db, "invoices", docId);
+                        await setDoc(invoiceRef, { status: newStatus }, { merge: true });
+
+                        // Update the row UI
+                        invoice.status = newStatus; // Update the local variable
+                        row.querySelector("td:nth-child(5)").textContent = newStatus; // Update the "Status" column
+                        statusButton.textContent = newStatus === "Paid" ? "Pending" : "Paid"; // Update button text
+
+                        console.log(`Invoice ${docId} status updated to ${newStatus}`);
+                    } catch (error) {
+                        console.error("Error updating status:", error);
+                    }
+                });
+
+
+
+
+
+
+
+
+
+
+            }
+        });
+    }
+
+
+
+
+
+
+    // Add Invoice Row to Table
+    function addInvoiceToTable(invoice, docId) {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+        <td>${invoice.invoiceId || ""}</td>
+        <td>${invoice.companyName || ""}</td>
+        <td>${invoice.totalAmount ? invoice.totalAmount.toFixed(2) : "0.00"}</td>
+        <td>${invoice.date || ""}</td>
+        <td>${invoice.status || "Pending"}</td>
+        <td>
+            <button class="edit-btn" data-id="${docId}">Edit</button>
+            <button class="delete-btn" data-id="${docId}">Delete</button>
+            <button class="status-btn" data-id="${docId}">${invoice.status === "Paid" ? "Pending" : "Paid"}</button>
+        </td>
+    `;
+
+        invoiceTableBody.appendChild(row);
+
+        // Attach event listeners to the buttons
+        row.querySelector(".edit-btn").addEventListener("click", () => editInvoice(docId));
+        row.querySelector(".delete-btn").addEventListener("click", async () => {
+            if (confirm("Are you sure you want to delete this invoice?")) {
+                await deleteDoc(doc(db, "invoices", docId));
+                row.remove();
+                console.log("Invoice deleted:", docId);
+            }
+        });
+        // Attach event listener to the status button
+        row.querySelector(".status-btn").addEventListener("click", async (e) => {
+            const statusButton = e.target;
+            const newStatus = invoice.status === "Paid" ? "Pending" : "Paid";
+
+            try {
+                // Update Firestore with the new status
+                const invoiceRef = doc(db, "invoices", docId);
+                await setDoc(invoiceRef, { status: newStatus }, { merge: true });
+
+                // Update the row UI
+                invoice.status = newStatus; // Update the local variable
+                row.querySelector("td:nth-child(5)").textContent = newStatus; // Update the "Status" column
+                statusButton.textContent = newStatus === "Paid" ? "Pending" : "Paid"; // Update button text
+
+                console.log(`Invoice ${docId} status updated to ${newStatus}`);
+            } catch (error) {
+                console.error("Error updating status:", error);
+            }
+        });
+    }
+
+
+    if (addInvoiceBtn && addInvoiceModal2 && closeInvoiceModal2 && cancelInvoiceModal2) {
+        // Open modal and populate dropdown
+        addInvoiceBtn.addEventListener("click", async () => {
+            resetInvoiceModal(); // Reset all fields and content in the modal
+            await populateCompanyDropdown(); // Populate the dropdown with customer data
+            addInvoiceModal2.style.display = "flex"; // Open the modal
+            console.log("Add Invoice button clicked, modal opened."); // Debugging
+        });
+
+        // Close modal
+        closeInvoiceModal2.addEventListener("click", () => {
+            currentInvoiceId = null; // Reset the global variable
+            addInvoiceModal2.style.display = "none";
+            console.log("Close button clicked, modal closed."); // Debugging
+        });
+
+        // Cancel button
+        cancelInvoiceModal2.addEventListener("click", () => {
+            currentInvoiceId = null; // Reset the global variable
+            addInvoiceModal2.style.display = "none";
+            console.log("Cancel button clicked, modal closed."); // Debugging
+        });
+
+        // Close modal when clicking outside the modal
+        window.addEventListener("click", (event) => {
+            if (event.target === addInvoiceModal2) {
+                addInvoiceModal2.style.display = "none";
+                console.log("Clicked outside modal, modal closed."); // Debugging
+            }
+        });
+    } else {
+        console.error("One or more modal elements (addInvoiceBtn, addInvoiceModal2, closeInvoiceModal2, cancelInvoiceModal2) are missing.");
+    }
+});

@@ -1,0 +1,442 @@
+/* Use the same styles defined in dashboard.css */
+/* ========= Google Fonts =========*/
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+/* ========= General Styling =========*/
+* {
+    font-family: "Ubuntu", sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --blue: #2a2185;
+    --white: #fff;
+    --gray: #f5f5f5;
+    --black1: #222;
+    --black2: #999;
+}
+
+/* ========= Body and Container =========*/
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: var(--gray);
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+}
+
+.container {
+    position: relative;
+    width: 100%;
+}
+
+/* ========= Navigation =========*/
+.navigation {
+    position: fixed;
+    width: 300px;
+    height: 100%;
+    background: var(--blue);
+    border-left: 10px solid var(--blue);
+    transition: 0.5s;
+    overflow: hidden;
+}
+
+.navigation ul {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 0;
+    /* Add padding for spacing */
+}
+
+.navigation ul li {
+    position: relative;
+    list-style: none;
+    margin-bottom: 20px;
+    /* Add spacing between items */
+}
+
+/* Logo Styling */
+.navigation ul li:first-child {
+    margin-bottom: 40px;
+    /* Larger gap below the logo */
+}
+
+.navigation ul li:first-child a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* Align logo and text to the left */
+}
+
+.navigation ul li:first-child a .icon {
+    margin-right: 10px;
+    /* Space between logo and text */
+}
+
+.navigation ul li:first-child a .ti {
+    font-size: 1.8rem;
+    /* Larger font for the logo text */
+    font-weight: bold;
+    color: var(--white);
+}
+
+.navigation ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 6px 15px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    color: var(--white);
+}
+
+.navigation ul li a .icon {
+    margin-right: 15px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Hover Effect */
+.navigation ul li:hover a,
+.navigation ul li.hovered a {
+    background-color: var(--white);
+    color: var(--blue);
+}
+
+.navigation ul li a .icon ion-icon {
+    font-size: 1.8rem;
+}
+
+/* Main */
+.navigation ul li:hover a::before,
+.navigation ul li.hovered a::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px 35px 0 10px var(--white);
+    pointer-events: none;
+
+}
+
+.navigation ul li:hover a::after,
+.navigation ul li.hovered a::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    border-radius: 50%;
+    box-shadow: 35px -35px 0 10px var(--white);
+    pointer-events: none;
+}
+
+/* ========= This is for the header "Settings" =========*/
+
+/* Header Styling */
+.header {
+    position: absolute;
+    top: 20px;
+    left: 320px;
+    width: calc(100% - 320px);
+    padding: 10px 20px;
+    background: var(--gray);
+    z-index: 1;
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header h1 {
+    font-size: 28px;
+    color: var(--blue);
+    margin: 0;
+    font-weight: bold;
+}
+
+/* ======================================== */
+
+/* Settings Page Specific Styling */
+.main h1 {
+    font-size: 30px;
+    color: var(--blue);
+    margin-bottom: 20px;
+}
+
+/* Section Styling */
+.section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f9f9f9; /* Light background for contrast */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 0px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #2a2185; 
+    font-weight: bold;
+}
+
+/* Form Group Styling */
+.form-group {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 20px; 
+    margin-bottom: 15px;
+}
+
+/* Align Slider and Label Horizontally */
+.switch-label {
+    display: flex;
+    align-items: center; 
+    gap: -50px; 
+    font-size: 1rem;
+    color: #333; 
+}
+
+/* Toggle Switch Styling */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Hide the default checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc; 
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+/* When checked, change background and slider position */
+input:checked + .slider {
+    background-color: #2a2185; 
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px); 
+}
+
+/* Rounded Slider */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Adjusting Labels in Form Group */
+label {
+    display: flex;
+    flex-direction: column; 
+    align-items: right;
+}
+
+.section label {
+    display: block;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+    margin-right: 50px;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #18191A; /* Dark background for body */
+    color: #FFFFFF; /* White text for body */
+}
+
+body.dark-mode .main {
+    background-color: #242526; 
+    color: #FFFFFF; 
+}
+
+body.dark-mode .header {
+    background-color: #242526; 
+    color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+body.dark-mode .header h1 {
+    color: #FFFFFF; 
+}
+
+body.dark-mode .section {
+    background-color: #242526; 
+    color: #FFFFFF; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+body.dark-mode .section h2 {
+    color: #FFFFFF; 
+}
+
+body.dark-mode .section label {
+    color: #FFFFFF; 
+}
+
+/* Specific Styling for Slider Label */
+body.dark-mode .form-group .switch-label {
+    color: #FFFFFF; /* White text for slider labels */
+}
+
+/* Inputs and Select Elements */
+body.dark-mode .section input,
+body.dark-mode .section select {
+    background-color: #3A3B3C; 
+    color: #FFFFFF; 
+    border: 1px solid #555; 
+}
+
+/* Buttons */
+body.dark-mode .section button {
+    background-color: #2a2185; 
+    color: #FFFFFF; 
+}
+
+body.dark-mode .section button:hover {
+    background-color: #1f1870; 
+}
+
+/* Additional Elements for Toggles */
+body.dark-mode .slider {
+    background-color: #444; 
+}
+
+body.dark-mode .slider:before {
+    background-color: #ccc; 
+}
+
+/* Active toggle in dark mode */
+body.dark-mode input:checked + .slider {
+    background-color: #2a2185; 
+}
+
+body.dark-mode input:checked + .slider:before {
+    background-color: #666; 
+}
+
+
+/* ================================ */
+
+.section input[type="text"],
+.section input[type="email"],
+.section input[type="number"],
+.section select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.section input:focus,
+.section select:focus {
+    border-color: #2a2185;
+    outline: none;
+}
+
+/* Button Styling */
+.section button {
+    padding: 10px 20px;
+    background: #2a2185;
+    color: #fff;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 15px;
+}
+
+.section button:hover {
+    background: #1f1870;
+}
+
+/* Notifications Section */
+.section label input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+/* Advanced Options Link */
+.advanced-options {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.advanced-options a {
+    color: #2a2185;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.advanced-options a:hover {
+    color: #1f1870;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .settings-container {
+        padding: px;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    .section h2 {
+        font-size: 1.3rem;
+    }
+
+    .section button {
+        font-size: 0.9rem;
+    }
+}

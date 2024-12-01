@@ -121,6 +121,13 @@
                         </td>
                     </tbody>
                 </table>
+
+                <!-- Image preview element -->
+<div id="imagePreview" style="display: none; position: absolute; z-index: 1000; pointer-events: none;">
+    <img id="previewImage" src="" alt="Product Image"
+        style="max-width: 200px; border: 1px solid #ccc; border-radius: 5px; background: white; padding: 5px;">
+</div>
+
             </div>
         </div>
 
@@ -203,10 +210,8 @@
                                 </label>
                                 <div class="input-with-plus">
                                     <select id="editCategory">
-                                        <option value="Electronics">Electronics</option>
-                                        <option value="Clothing">Clothing</option>
-                                        <option value="Furniture">Furniture</option>
-                                    </select>
+            <option value="" disabled selected>Select Category</option>
+        </select>
                                     <button class="add-icon" id="addCategoryBtn">
                                         <ion-icon name="add-outline"></ion-icon>
                                     </button>

@@ -1,7 +1,9 @@
 //First we start integrating firebase 
 // Firebase Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, getDocs, onSnapshot, getDoc, doc, where, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, onSnapshot, getDoc, doc, where, addDoc, deleteDoc, updateDoc} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
+
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -23,6 +25,7 @@ const db = getFirestore(app);
 
 
 
+
 //just testing
 // Function to populate vendor dropdown in Manage Inventory modal
 // This part if for edit and delete button for the table
@@ -31,10 +34,140 @@ const saveProductBtn = document.querySelector('.submit-btn'); // Assuming this i
 
 
 
+
+
+
+
+
+
 // Fetch Inventory Data and Render Table
 let maxItemCode = 0; // Keep track of the highest item code
 
 let usedItemCodes = []; // Track all used item codes
+
+//This is to handle category selection
+
+// Handle Category Color Selection
+const categoryColorButtons = document.querySelectorAll('.color-btn');
+let selectedCategoryColor = '';
+
+categoryColorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // Remove selection from other buttons
+        categoryColorButtons.forEach(btn => btn.classList.remove('selected'));
+        // Highlight the clicked button
+        button.classList.add('selected');
+        // Store the selected color
+        selectedCategoryColor = button.dataset.color;
+        console.log(`Selected Color: ${selectedCategoryColor}`);
+    });
+});
+
+// Update Add Category Function to Include Color
+document.getElementById('addCategoryBtn').addEventListener('click', async () => {
+    const categoryName = prompt("Enter category name:");
+    if (!categoryName) return alert("Category name is required.");
+
+    if (!selectedCategoryColor) {
+        return alert("Please select a color for the category.");
+    }
+
+    try {
+        await addDoc(collection(db, "categories"), {
+            name: categoryName,
+            color: selectedCategoryColor,
+        });
+        alert("Category added successfully!");
+        fetchCategories(); // Refresh categories
+    } catch (error) {
+        console.error("Error adding category:", error);
+        alert("Failed to add category.");
+    }
+});
+
+
+
+// This is for the categories
+const fetchCategories = async () => {
+    const categoryDropdown = document.getElementById('editCategory');
+    categoryDropdown.innerHTML = '<option value="" disabled selected>Select Category</option>'; // Reset options
+
+    try {
+        const querySnapshot = await getDocs(collection(db, "categories"));
+        querySnapshot.forEach(doc => {
+            const data = doc.data();
+            const option = document.createElement('option');
+            option.value = data.name;
+            option.textContent = data.name;
+            option.dataset.color = data.color; // Attach the color as a data attribute
+            categoryDropdown.appendChild(option);
+        });
+        console.log("Categories fetched successfully!");
+    } catch (error) {
+        console.error("Error fetching categories:", error);
+    }
+};
+
+// Call fetchCategories when the page loads
+fetchCategories();
+
+// addition of categories
+
+const addCategoryBtn = document.getElementById("addCategoryBtn");
+addCategoryBtn.addEventListener("click", async () => {
+    const newCategory = prompt("Enter a new category:");
+    if (!newCategory) return;
+
+    try {
+        await addDoc(collection(db, "categories"), { name: newCategory });
+        alert("Category added successfully!");
+        fetchCategories(); // Refresh categories
+    } catch (error) {
+        console.error("Error adding category:", error);
+        alert("Failed to add category. Please try again.");
+    }
+});
+
+// delete categories 
+
+const deleteCategoryBtn = document.getElementById("deleteCategoryBtn");
+deleteCategoryBtn.addEventListener("click", async () => {
+    const categorySelect = document.getElementById("editCategory");
+    const selectedCategory = categorySelect.value;
+
+    if (!selectedCategory) {
+        alert("Please select a category to delete.");
+        return;
+    }
+
+    const confirmed = confirm(`Are you sure you want to delete the category "${selectedCategory}"?`);
+    if (!confirmed) return;
+
+    try {
+        const q = query(collection(db, "categories"), where("name", "==", selectedCategory));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+            const docId = querySnapshot.docs[0].id; // Assuming category names are unique
+            await deleteDoc(doc(db, "categories", docId));
+            alert("Category deleted successfully!");
+            fetchCategories(); // Refresh categories
+        } else {
+            alert("Category not found in Firestore.");
+        }
+    } catch (error) {
+        console.error("Error deleting category:", error);
+        alert("Failed to delete category. Please try again.");
+    }
+});
+
+
+
+
+
+
+
+
 
 
 const fetchInventory = async () => {
@@ -572,10 +705,14 @@ const setupColorSelection = () => {
 // Render Table with Edit and Delete Buttons
 // Render Table
 const renderTable = () => {
+    const tableBody = document.querySelector('#inventoryTable tbody');
+
     tableBody.innerHTML = ""; // Clear existing rows
 
     inventoryData.forEach((item) => {
         const row = document.createElement("tr");
+        const categoryColor = item.categoryColor || '#FFFFFF'; // Default to white if no color is assigned
+
         row.innerHTML = `
             <td>${item.itemCode}</td>
             <td>${item.sku}</td>
@@ -599,7 +736,32 @@ const renderTable = () => {
     document.querySelectorAll(".delete-btn").forEach((button) =>
         button.addEventListener("click", handleDelete)
     );
+
 };
+
+const setupImageHover = () => {
+    const tableBody = document.querySelector('#inventoryTable tbody');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImage = document.getElementById('previewImage');
+
+    tableBody.addEventListener('mouseover', (event) => {
+        const row = event.target.closest('tr');
+        if (row && row.dataset.imageUrl) {
+            previewImage.src = row.dataset.imageUrl;
+
+            // Position the preview near the mouse
+            imagePreview.style.top = `${event.clientY + 10}px`;
+            imagePreview.style.left = `${event.clientX + 10}px`;
+            imagePreview.style.display = 'block';
+        }
+    });
+
+    tableBody.addEventListener('mouseout', () => {
+        imagePreview.style.display = 'none';
+    });
+};
+
+
 
 //Create an edit save button listener
 
@@ -640,52 +802,58 @@ addProductBtn.addEventListener("click", () => {
 });
 
 
-
-// Save Button - Adds product to inventory
-saveProductBtn.addEventListener('click', async (e) => {
+// Save Product Handler - Combines Inventory and Image Handling
+saveProductBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
+    // Get product data
     const newProduct = {
-        itemCode: parseInt(document.getElementById('editItemCode').value.trim(), 10),
-        sku: document.getElementById('editSKU').value.trim(),
-        description: document.getElementById('editDescription').value.trim(),
-        quantity: parseInt(document.getElementById('editQuantity').value.trim(), 10),
-        threshold: parseInt(document.getElementById('editThreshold').value.trim(), 10),
-        category: document.getElementById('editCategory').value,
+        itemCode: parseInt(document.getElementById("editItemCode").value.trim(), 10),
+        sku: document.getElementById("editSKU").value.trim(),
+        description: document.getElementById("editDescription").value.trim(),
+        quantity: parseInt(document.getElementById("editQuantity").value.trim(), 10),
+        threshold: parseInt(document.getElementById("editThreshold").value.trim(), 10),
+        category: document.getElementById("editCategory").value,
         location: document.getElementById("editLocation").value, // Save selected location
-        price: parseFloat(document.getElementById('editPrice').value.trim()),
-        currency: document.getElementById('editCurrency').value,
-        status: parseInt(document.getElementById('editQuantity').value.trim(), 10) > 0 ? "In Stock" : "Out of Stock",
+        price: parseFloat(document.getElementById("editPrice").value.trim()),
+        currency: document.getElementById("editCurrency").value,
+        status: parseInt(document.getElementById("editQuantity").value.trim(), 10) > 0 ? "In Stock" : "Out of Stock",
     };
 
     try {
-        // Save the new product
-        await addDoc(collection(db, "inventory"), newProduct);
+        // Save the product to Firestore
+        const productRef = await addDoc(collection(db, "inventory"), newProduct);
+        const productId = productRef.id; // Get the product's ID
 
+        // Check if an image was uploaded
+        const fileInput = document.getElementById("editPhoto");
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const imageUrl = await saveProductImageToStorage(file, productId); // Save image to Storage
+            await saveProductImageToFirestore(productId, imageUrl); // Save metadata to Firestore
+        }
 
-        // Update maxItemCode to the current product's item code
+        // Update maxItemCode to ensure the correct sequence
         if (newProduct.itemCode > maxItemCode) {
             maxItemCode = newProduct.itemCode;
         }
 
-        // Update the local inventory data and table
-        inventoryData.push(newProduct);
-        renderTable();
+        // Update the local inventory data
+        inventoryData.push({ ...newProduct, id: productId }); // Include the product ID
+        renderTable(); // Update the table
 
         // Increment item code for the next product
         currentItemCode++;
 
-        const editModal = document.getElementById('editInventoryModal');
+        console.log("Product and image saved successfully.");
+        alert("Product added successfully!");
 
-        fetchInventory();
-
-
-        // Close the modal
-        editModal.style.display = 'none';
-
-        console.log("Product successfully added to Firestore and table!");
+        // Reset the form or modal
+        fileInput.value = ""; // Clear file input
+        editModal.style.display = "none"; // Close modal
+        fetchInventory(); // Refresh the table
     } catch (error) {
-        console.error("Error saving product to Firestore:", error);
+        console.error("Error saving product:", error);
         alert("Failed to save product. Please try again.");
     }
 });

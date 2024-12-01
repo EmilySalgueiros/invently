@@ -561,13 +561,9 @@ body {
 
 /* Status Badge Styling */
 .status-cell {
-    border-radius: 12px; /* Rounded edges */
-    padding: 4px 8px; /* Add padding for better alignment */
-    text-align: center; /* Center the text */
-    color: white; /* Ensure contrast for all text */
-    font-weight: bold;
-    display: inline-block; /* Maintain inline-block for compact appearance */
-    min-width: 100px; /* Ensure a consistent width */
+    border-radius: 12px; 
+    display: flex; 
+    margin-top: 10px;
 }
 
 /* Add Product Button */

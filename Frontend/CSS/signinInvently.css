@@ -33,15 +33,10 @@ body {
     padding: 0;
     box-sizing: border-box;
     background-image: url('/Images/BlueBack.jpg');
-    /* Replace with the actual path to your image */
     background-size: cover;
-    /* Ensures the image covers the entire area */
     background-repeat: no-repeat;
-    /* Prevents the image from repeating */
     background-position: center;
-    /* Centers the image */
     min-height: 100vh;
-    /* Ensures it covers the full viewport height */
 }
 
 a:not([class]) {
@@ -84,9 +79,9 @@ select {
     /* Vertical centering */
     justify-content: center;
     /* Horizontal centering */
-    height: 100vh;
+    height: 80vh;
     /* Full viewport height */
-    gap: 0px;
+    gap: 40px;
     /* Space between columns */
     background-color: #ffffff;
     /* Optional: Ensure background is consistent */
@@ -94,71 +89,31 @@ select {
 
 }
 
+.login-logo{
+    margin-top: 30px;
+    width: 400px;
+}
+
 .loginHeader {
-    flex: 1;
-    text-align: left;
-    /* Align text to the left */
-    max-width: 650px;
-    /* Allow unlimited width */
-    width: 100%;
-    /* Use full available width */
+    text-align: center;
 }
 
 .loginHeader h1 {
-    font-size: 5rem;
-    /* Adjust the size as needed */
+    font-size: 3.5rem;
     margin-top: 50px;
     margin-bottom: 10px;
-    /* Space between heading and paragraph */
     color: #333;
     white-space: nowrap;
-        /* Prevent wrapping to a new line */
-        overflow: hidden;
-        /* Prevent overflow if the container is smaller */
-
+    overflow: hidden;
 }
 
 .loginHeader p {
     margin-top: 20px;
-    font-size: 3rem;
+    font-size: 1.5rem;
     color: #666;
     padding: 0 20px;
-    /* Horizontal padding */
     line-height: 1.5;
-    /* Increase readability */
     margin-left: -20px;
-}
-
-.loginsmile {
-    flex: 0 0 auto;
-    /* Fix the width for the image */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px;
-    margin-top: 200px;
-    margin-left: -100px;
-}
-
-.loginsmile img {
-    width: 125px;
-    /* Set a smaller width */
-    height: 125px;
-    /* Automatically adjust height to keep the ratio */
-    animation: fade-in 2s ease-in-out infinite alternate;
-}
-
-/* Fade-In Animation */
-@keyframes fade-in {
-    0% {
-        opacity: 0.8;
-        transform: translateY(10px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateY(-10px);
-    }
 }
 
 .loginBody {
@@ -174,7 +129,6 @@ select {
 
 .loginInputsContainer {
     margin-bottom: 15px;
-    /* Space between input fields */
 }
 
 .loginInputsContainer label {
@@ -236,6 +190,7 @@ select {
 .navbar-links {
     list-style: none;
     display: flex;
+    margin-left: none;
     gap: 20px;
 }
 

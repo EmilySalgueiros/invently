@@ -25,22 +25,33 @@ const db = getFirestore(app);
 
 //just testing
 // Function to populate vendor dropdown in Manage Inventory modal
-const addSaveBtn = document.querySelector(".add-save-btn"); // For adding
-const editSaveBtn = document.querySelector(".edit-save-btn"); // For editing
 // This part if for edit and delete button for the table
 let editingProductId = null; // Store the ID of the product being edited
 const saveProductBtn = document.querySelector('.submit-btn'); // Assuming this is the Save button
 
 
+
 // Fetch Inventory Data and Render Table
+let maxItemCode = 0; // Keep track of the highest item code
+
+let usedItemCodes = []; // Track all used item codes
+
+
 const fetchInventory = async () => {
     try {
         const querySnapshot = await getDocs(collection(db, "inventory"));
         inventoryData.length = 0; // Clear existing data
+        usedItemCodes = []; // Reset used item codes
+
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             data.id = doc.id; // Attach document ID
             inventoryData.push(data);
+            // Update maxItemCode
+            const itemCode = parseInt(data.itemCode, 10);
+            if (!isNaN(itemCode)) {
+                usedItemCodes.push(itemCode);
+            }
         });
         renderTable(); // Render the updated table
     } catch (error) {
@@ -48,7 +59,62 @@ const fetchInventory = async () => {
     }
 };
 
-// Handle Edit Button Click
+
+//this function calculates the smallest unused item code
+const getNextAvailableItemCode = () => {
+    let code = 1; // Start from 1
+    while (usedItemCodes.includes(code)) {
+        code++; // Increment until we find an unused code
+    }
+    return code;
+};
+
+
+
+// Handle edit save button
+
+
+// Reference to the button
+const editSaveBtn = document.querySelector(".edit-save-btn");
+
+// Handle Save Edit Changes button
+editSaveBtn.addEventListener("click", async () => {
+    try {
+        // Collect the edited data from the form
+        const updatedProduct = {
+            itemCode: document.getElementById("editItemCode").value.trim(),
+            sku: document.getElementById("editSKU").value.trim(),
+            description: document.getElementById("editDescription").value.trim(),
+            quantity: parseInt(document.getElementById("editQuantity").value.trim(), 10),
+            threshold: parseInt(document.getElementById("editThreshold").value.trim(), 10),
+            category: document.getElementById("editCategory").value.trim(),
+            location: document.getElementById("editLocation").value.trim(),
+            price: parseFloat(document.getElementById("editPrice").value.trim()),
+            currency: document.getElementById("editCurrency").value.trim(),
+        };
+
+        // Update the product in Firebase
+        const productRef = doc(db, "inventory", editingProductId); // `editingProductId` should hold the ID of the product being edited
+        await updateDoc(productRef, updatedProduct);
+
+        // Close the modal
+        const editModal = document.getElementById("editInventoryModal");
+        editModal.style.display = "none";
+
+        // Refresh the table to reflect the changes
+        fetchInventory();
+        console.log("Product updated successfully.");
+    } catch (error) {
+        console.error("Error updating product:", error);
+        alert("Failed to update the product. Please try again.");
+    }
+});
+
+
+
+
+
+
 // Handle Edit Button Click
 const handleEdit = async (e) => {
     const id = e.target.dataset.id; // Get product ID
@@ -68,126 +134,17 @@ const handleEdit = async (e) => {
 
         editingProductId = id; // Set editing state
 
-        // Show "Save Changes" button, hide "Add Save" button
+        // Hide "Save Changes" button and show "Save Edit Changes" button
+        saveProductBtn.style.display = "none";
         editSaveBtn.style.display = "block";
-        addSaveBtn.style.display = "none";
+
 
         editModal.style.display = "flex"; // Show the modal
+    } else {
+        console.error("Product not found for editing.");
     }
 };
 
-editSaveBtn.addEventListener("click", async (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    if (!editingProductId) return;
-
-    const updatedProduct = {
-        itemCode: document.getElementById("editItemCode").value.trim(),
-        sku: document.getElementById("editSKU").value.trim(),
-        description: document.getElementById("editDescription").value.trim(),
-        quantity: parseInt(document.getElementById("editQuantity").value.trim(), 10),
-        threshold: parseInt(document.getElementById("editThreshold").value.trim(), 10),
-        category: document.getElementById("editCategory").value.trim(),
-        location: document.getElementById("editLocation").value.trim(),
-        price: parseFloat(document.getElementById("editPrice").value.trim()),
-        currency: document.getElementById("editCurrency").value.trim(),
-        status: parseInt(document.getElementById("editQuantity").value.trim(), 10) > 0 ? "In Stock" : "Out of Stock",
-    };
-
-    try {
-        const docRef = doc(db, "inventory", editingProductId);
-        await updateDoc(docRef, updatedProduct);
-        alert("Product updated successfully!");
-
-        // Reset state and refresh inventory
-        editingProductId = null;
-        editModal.style.display = "none";
-        fetchInventory(); // Refresh the table
-    } catch (error) {
-        console.error("Error updating product:", error);
-        alert("Failed to update product. Please try again.");
-    }
-});
-
-// Handle Add Save Button Click (Adding a New Product)
-addSaveBtn.addEventListener("click", async (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    const newProduct = {
-        itemCode: currentItemCode,
-        sku: document.getElementById("editSKU").value.trim(),
-        description: document.getElementById("editDescription").value.trim(),
-        quantity: parseInt(document.getElementById("editQuantity").value.trim(), 10),
-        threshold: parseInt(document.getElementById("editThreshold").value.trim(), 10),
-        category: document.getElementById("editCategory").value,
-        location: document.getElementById("editLocation").value,
-        price: parseFloat(document.getElementById("editPrice").value.trim()),
-        currency: document.getElementById("editCurrency").value,
-        status: parseInt(document.getElementById("editQuantity").value.trim(), 10) > 0 ? "In Stock" : "Out of Stock",
-    };
-
-    try {
-        const newDocRef = await addDoc(collection(db, "inventory"), newProduct);
-        alert("Product added successfully!");
-
-        // Increment item code for the next product
-        currentItemCode++;
-
-        // Close modal and refresh table
-        editModal.style.display = "none";
-        fetchInventory();
-    } catch (error) {
-        console.error("Error adding product:", error);
-        alert("Failed to add product. Please try again.");
-    }
-});
-
-
-
-
-
-
-
-        // Save changes
-// Handle Save Button Click
-saveProductBtn.onclick = async (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    const updatedProduct = {
-        itemCode: document.getElementById("editItemCode").value.trim(),
-        sku: document.getElementById("editSKU").value.trim(),
-        description: document.getElementById("editDescription").value.trim(),
-        quantity: parseInt(document.getElementById("editQuantity").value.trim(), 10),
-        threshold: parseInt(document.getElementById("editThreshold").value.trim(), 10),
-        category: document.getElementById("editCategory").value.trim(),
-        location: document.getElementById("editLocation").value.trim(),
-        price: parseFloat(document.getElementById("editPrice").value.trim()),
-        currency: document.getElementById("editCurrency").value.trim(),
-        status: parseInt(document.getElementById("editQuantity").value.trim(), 10) > 0 ? "In Stock" : "Out of Stock",
-    };
-
-    try {
-        if (editingProductId) {
-            // Edit existing product
-            const docRef = doc(db, "inventory", editingProductId);
-            await updateDoc(docRef, updatedProduct);
-            alert("Product updated successfully!");
-        } else {
-            // Add new product
-            const newDocRef = await addDoc(collection(db, "inventory"), updatedProduct);
-            console.log("Added product with ID:", newDocRef.id);
-            alert("Product added successfully!");
-        }
-
-        // Reset state and refresh inventory
-        editingProductId = null; // Reset editing ID
-        editModal.style.display = "none"; // Close the modal
-        fetchInventory(); // Refresh the table
-    } catch (error) {
-        console.error("Error saving product:", error);
-        alert("Failed to save product. Please try again.");
-    }
-};
 
 
 
@@ -210,7 +167,10 @@ const handleDelete = async (e) => {
         // Delete the document
         await deleteDoc(docRef);
         alert("Product deleted successfully!");
+
+        //Refreshes table to stay active
         fetchInventory(); // Refresh table
+
     } catch (error) {
         console.error("Error deleting product:", error);
         alert("Failed to delete product. Please check console logs for details.");
@@ -456,19 +416,6 @@ const editItemCodeInput = document.getElementById('editItemCode');
 
 
 // Increment item code and save the product when Save button is clicked
-saveProductBtn.addEventListener('click', (e) => {
-    e.preventDefault(); // Prevent form submission
-
-    // Increment the item code for the next product
-    currentItemCode++;
-
-    // Add logic to save the product details (if needed)
-    console.log(`Product saved with Item Code: ${editItemCodeInput.value}`);
-
-    // Close the modal
-    const editModal = document.getElementById('editInventoryModal');
-    editModal.style.display = 'none';
-});
 
 // Global inventory data
 const inventoryData = [];
@@ -527,7 +474,8 @@ const setupColorSelection = () => {
 // Render Table with Edit and Delete Buttons
 // Render Table
 const renderTable = () => {
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = ""; // Clear existing rows
+
     inventoryData.forEach((item) => {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -546,7 +494,7 @@ const renderTable = () => {
         tableBody.appendChild(row);
     });
 
-    // Add Event Listeners for Edit and Delete Buttons
+    // Add event listeners to Edit and Delete buttons
     document.querySelectorAll(".edit-btn").forEach((button) =>
         button.addEventListener("click", handleEdit)
     );
@@ -555,15 +503,21 @@ const renderTable = () => {
     );
 };
 
+//Create an edit save button listener
+
+
 
 // Add Product Button - Opens modal
 // Open Add Product Modal
 // Open Add Product Modal
 addProductBtn.addEventListener("click", () => {
-    editingProductId = null; // Clear editing state
+    editingProductId = null; // Clear editing state.
+
+    const nextItemCode = getNextAvailableItemCode();
+
 
     // Clear form fields
-    document.getElementById("editItemCode").value = "";
+    document.getElementById("editItemCode").value = nextItemCode;
     document.getElementById("editSKU").value = generateRandomSKU();
     document.getElementById("editDescription").value = "";
     document.getElementById("editQuantity").value = "";
@@ -574,18 +528,25 @@ addProductBtn.addEventListener("click", () => {
     document.getElementById("editCurrency").value = "";
 
     // Show "Add Save" button, hide "Save Changes" button
-    addSaveBtn.style.display = "block";
-    editSaveBtn.style.display = "none";
 
+    // Hide "Save Edit Changes" button
+    editSaveBtn.style.display = "none";
+    // Ensure "Save Changes" button is visible
+    saveProductBtn.style.display = "block";
+
+    // Show the modal for adding a product
+    const editModal = document.getElementById("editInventoryModal");
     editModal.style.display = "flex"; // Show the modal
 });
+
+
 
 // Save Button - Adds product to inventory
 saveProductBtn.addEventListener('click', async (e) => {
     e.preventDefault();
 
     const newProduct = {
-        itemCode: currentItemCode,
+        itemCode: parseInt(document.getElementById('editItemCode').value.trim(), 10),
         sku: document.getElementById('editSKU').value.trim(),
         description: document.getElementById('editDescription').value.trim(),
         quantity: parseInt(document.getElementById('editQuantity').value.trim(), 10),
@@ -598,15 +559,26 @@ saveProductBtn.addEventListener('click', async (e) => {
     };
 
     try {
-        // Add new product to Firestore "Inventory" collection
+        // Save the new product
         await addDoc(collection(db, "inventory"), newProduct);
 
-        // Add new product to the inventory table
+
+        // Update maxItemCode to the current product's item code
+        if (newProduct.itemCode > maxItemCode) {
+            maxItemCode = newProduct.itemCode;
+        }
+
+        // Update the local inventory data and table
         inventoryData.push(newProduct);
         renderTable();
 
         // Increment item code for the next product
         currentItemCode++;
+
+        const editModal = document.getElementById('editInventoryModal');
+
+        fetchInventory();
+
 
         // Close the modal
         editModal.style.display = 'none';
@@ -894,6 +866,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const deleteVendorBtn = document.querySelector(".delete-icon");
     const vendorSelect = document.getElementById("editVendor");
 
+
     let purchaseOrders = []; // Store all POs and their data
     let editingPOIndex = null; // Track the currently edited PO
 
@@ -902,6 +875,8 @@ document.addEventListener("DOMContentLoaded", () => {
         itemsTable.innerHTML = ""; // Clear the table
         addItemRow(); // Add a default row
     };
+
+    
 
     // Add Item Row
     const addItemRow = (item = { description: "", quantity: 1, rate: 0, tax: 0 }) => {

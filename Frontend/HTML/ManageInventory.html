@@ -116,6 +116,9 @@
                     </thead>
                     <tbody>
                         <!-- Dynamically added rows go here -->
+                        <td>
+                            <button class="edit-btn" data-id="product1">Edit</button>
+                        </td>
                     </tbody>
                 </table>
             </div>
@@ -289,6 +292,8 @@
                         <!-- Save Button -->
                         <div class="modal-footer">
                             <button type="submit" class="submit-btn">Save Changes</button>
+                            <button type="button" class="edit-save-btn" style="display: none;">Save Edit Changes</button>
+
                         </div>
                     </form>
                 </div>
@@ -461,7 +466,6 @@
                             <!-- Save Button -->
                             <div class="modal-footer">
                                 <button type="submit" class="submit-btn">Save Changes</button>
-                                <button class="add-save-btn">Add Save</button>
 
                             </div>
                         </form>
@@ -633,16 +637,27 @@
                             </form>
                         </div>
                     </div>
-
-
-
-
-
-
-
                 </div>
 
 
+
+
+                <!-- Adding the editing modal -->
+
+
+
+
+
+
+
+
+
+
+                <!-- Editing modal until here -->
+
+
+
+                
                 <!--========= Scripts======== -->
                 <script type="module" src="../JS/ManageInventory.js"></script>
 

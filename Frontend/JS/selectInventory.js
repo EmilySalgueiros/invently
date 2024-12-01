@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.location.href = "../HTML/dashboard.html";
             } else if (tileText === "Create New Inventory") {
                 console.log("Redirecting to Create New Inventory...");
-                window.location.href = "../HTML/setupInventory.html"; // Change to your desired page
+                window.location.href = "../HTML/setupInventory.html"; 
             } else {
                 console.log("Unknown tile clicked:", tileText);
             }

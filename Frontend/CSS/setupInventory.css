@@ -1,35 +1,3 @@
-/* Flexbox container for tiles */
-.tiles-container {
-    display: flex;
-    justify-content: space-around; /* Space between tiles */
-    align-items: center; /* Center align items vertically */
-    margin-top: 20px; /* Add some space above the tiles */
-    gap: 20px; /* Add spacing between tiles */
-}
-
-/* Inventory card - Adjust width and height to make them square */
-.inventory-card {
-    background-color: #fff;
-    color: #333;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    text-align: center;
-    width: 400px; /* Set fixed width */
-    height: 400px; /* Set fixed height to make them square */
-    display: flex; /* Flex layout for tile content */
-    flex-direction: column; /* Align content vertically */
-    justify-content: center; /* Center content inside the tile */
-    align-items: center; /* Center align content */
-}
-
-.inventory-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    background-color: #f0eee4;
-}
-
 /* ========= Google Fonts =========*/
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
@@ -172,10 +140,28 @@ body {
 
 /* User Info Section */
 .user-info {
-    top: 200px;
+    position: absolute;
+    /* Pin the user info position */
+    top: 20px;
     /* Adjust as needed */
     right: 20px;
     /* Adjust as needed */
+    text-align: right;
+    /* Align text to the right */
+}
+
+.user-info h2 {
+    color: var(--blue);
+    /* Make the "Welcome" text blue */
+    font-size: 20px;
+    /* Adjust size if needed */
+}
+
+.user-info h2 span {
+    color: var(--black1);
+    /* Keep the username black */
+    font-weight: bold;
+    /* Make the username text bold for emphasis */
 }
 
 
@@ -194,4 +180,358 @@ body {
     align-items: center; /* Center content horizontally */
     padding: 20px;
     box-sizing: border-box;
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+    /* Add a blur effect to the background */
+}
+
+.modal-content {
+    background-color: var(--white);
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    /* More rounded corners */
+    width: 1000px;
+    /* Adjust width as needed */
+    max-width: 90%;
+    height: auto;
+    max-height: 90%;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    /* Smooth and larger shadow for a floating effect */
+    position: relative;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    /* Add smooth transition for appearing/disappearing */
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    /* Slightly larger for emphasis */
+    color: var(--blue);
+}
+
+/* Add animation when opening */
+.modal-content.show {
+    transform: scale(1.05);
+    /* Slight pop effect */
+    opacity: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--black1);
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Subtle background for better visibility */
+    padding: 5px 8px;
+    border-radius: 50%;
+    /* Circular button */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    /* Darken on hover */
+    transform: scale(1.1);
+    /* Slight zoom effect */
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+.tiles-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
+
+.inventory-card {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.inventory-card:hover {
+    background-color: #eaeaea;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--blue);
+    font-size: 14px;
+}
+
+/* Align labels and inputs side by side */
+.form-group.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.form-group.row label {
+    flex: 1;
+    /* Label takes up equal space */
+    max-width: 200px;
+    /* Optional: Set max width for labels */
+    margin-right: 20px;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.form-group.row input,
+.form-group.row select {
+    flex: 2;
+    /* Input takes up more space */
+    padding: 10px;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-buttons button {
+    background-color: var(--blue);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    /* Rounded buttons */
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow for a floating button effect */
+}
+
+.form-buttons button:hover {
+    background-color: var(--black1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    /* Stronger shadow on hover */
+    transform: translateY(-2px);
+    /* Slight movement up */
+}
+
+/* This if for the style of the shipping and address */
+
+/* Address Section Styling */
+.address-container {
+    display: flex;
+    gap: 20px;
+    /* Space between Billing and Shipping sections */
+    margin-top: 20px;
+    /* Add space above the address section */
+}
+
+.address-container .form-group {
+    flex: 1;
+    /* Allow both Billing and Shipping sections to take equal space */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    /* Space between inputs in each section */
+}
+
+.address-container .form-group label {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--blue);
+    margin-bottom: 5px;
+    /* Align labels consistently with other containers */
+}
+
+.address-container .form-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* Ensure padding and borders are included in width */
+    background-color: var(--white);
+    /* Match the container's background */
+}
+
+/* Primary Contact Input Styling */
+.primary-contact-inputs {
+    display: flex;
+    gap: 20px;
+    /* Space between First Name and Last Name */
+    width: 76.5%;
+    /* Take up the full width of the container */
+}
+
+.primary-contact-inputs input {
+    flex: 1;
+    /* Allow both fields to take equal space */
+    padding: 12px;
+    /* Add padding for a better look */
+    font-size: 14px;
+    /* Font size for readability */
+    border: 1px solid var(--gray);
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* Ensure padding and borders are included in width */
+}
+
+.inventory-dashboard {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    width: 100%;                  /* Ensure it spans the full available width */
+    box-sizing: border-box;       /* Include padding and borders in the width */
+}
+
+
+/* Title styling remains unaffected */
+.inventory-dashboard h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: var(--blue);
+}
+
+/* New Flexbox container for cards */
+.cards-container {
+    display: flex;                 /* Flexbox for horizontal alignment */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Auto-fit columns */
+    flex-wrap: wrap;               /* Wrap to next row if necessary */
+    gap: 20px;                     /* Space between cards */
+    justify-content: flex-start;   /* Align cards to the left */
+    align-content: flex-start;     /* Align rows to the top */
+    width: 100%;                   /* Full container width */
+    box-sizing: border-box;        /* Include padding in width */
+}
+
+
+.cards-container {
+    height: 200px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+.dashboard-content {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 3fr; 
+    grid-template-rows: auto auto; /* Add rows for the inventory table */
+    gap: 20px; /* Space between grid items */
+    margin-top: 30px;
+}
+
+.tiles-container {
+    display: flex;
+    flex-wrap: wrap;               /* Allow wrapping for additional content */
+    gap: 20px;                     /* Space between elements */
+    justify-content: flex-start;   /* Align elements to the left */
+    margin-top: 20px;
+}
+
+.inventory-card {
+    width: calc(25% - 20px);       /* 4 cards per row with spacing */
+    min-width: 200px;              /* Minimum width for smaller screens */
+    height: 200px;                 /* Fixed height for uniformity */
+    box-sizing: border-box;        /* Ensure padding and border are included in the width */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;                 /* Center content inside the card */
+    flex-direction: column;        /* Stack content vertically */
+    justify-content: center;       /* Vertically center content */
+    align-items: center;           /* Horizontally center content */
+    text-align: center;            /* Center text alignment */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.inventory-card:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    background-color: #f0eee4;
+    transform: scale(1.05);        /* Slight enlarge effect on hover */
+}
+
+
+
+/* Add Product Button */
+.addInventoryButton {
+    position: absolute;
+    /* Pin the button position */
+    top: 20px;
+    /* Adjust as needed */
+    left: 20px;
+    /* Adjust as needed */
+}
+
+/* Styling for Add Product Button */
+.addInventoryButton #addInventoryBtn {
+    background-color: var(--blue);
+    /* Blue background */
+    color: var(--white);
+    /* White text */
+    border: none;
+    /* Remove border */
+    padding: 10px 20px;
+    /* Add padding for size */
+    border-radius: 25px;
+    /* Fully rounded corners */
+    font-size: 14px;
+    /* Text size */
+    font-weight: bold;
+    /* Bold text */
+    cursor: pointer;
+    /* Pointer cursor for hover */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* Smooth hover effects */
+}
+
+/* Hover Effect for Add Product Button */
+.addInventoryButton #addInventoryBtn:hover {
+    background-color: var(--black1);
+    /* Darker blue on hover */
+    transform: scale(1.05);
+    /* Slight zoom effect on hover */
 }

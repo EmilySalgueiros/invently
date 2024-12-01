@@ -132,6 +132,9 @@ function clearForm() {
 
 // Create Inventory Card
 function createInventoryCard(inventoryId, inventoryName) {
+    const inventoryDashboard = document.querySelector('.cards-container');
+
+    // Create the tile element
     const inventoryCard = document.createElement('div');
     inventoryCard.className = 'inventory-card';
     inventoryCard.innerHTML = `

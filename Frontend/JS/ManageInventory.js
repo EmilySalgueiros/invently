@@ -59,6 +59,100 @@ const fetchInventory = async () => {
     }
 };
 
+//This location will delete the location in firebase
+const deleteLocationBtn = document.getElementById("deleteLocationBtn");
+
+deleteLocationBtn.addEventListener("click", async () => {
+    const locationSelect = document.getElementById("editLocation");
+    const selectedOption = locationSelect.options[locationSelect.selectedIndex];
+
+    if (!selectedOption || !selectedOption.value) {
+        alert("Please select a location to delete.");
+        return;
+    }
+
+    const locationToDelete = selectedOption.value;
+
+    if (confirm(`Are you sure you want to delete the location "${locationToDelete}"?`)) {
+        try {
+            // Find and delete the location document in Firebase
+            const querySnapshot = await getDocs(
+                collection(db, "locations")
+            );
+
+            let locationDocId = null;
+
+            querySnapshot.forEach((doc) => {
+                if (doc.data().name === locationToDelete) {
+                    locationDocId = doc.id;
+                }
+            });
+
+            if (locationDocId) {
+                await deleteDoc(doc(db, "locations", locationDocId));
+                alert(`Location "${locationToDelete}" deleted successfully!`);
+                fetchLocations(); // Refresh dropdown
+            } else {
+                alert(`Location "${locationToDelete}" not found in Firebase.`);
+            }
+        } catch (error) {
+            console.error("Error deleting location:", error);
+            alert("Failed to delete the location. Please try again.");
+        }
+    }
+});
+
+
+
+
+// this function will locate the location added
+
+const fetchLocations = async () => {
+    try {
+        const querySnapshot = await getDocs(collection(db, "locations"));
+        const locationSelect = document.getElementById("editLocation");
+
+        locationSelect.innerHTML = '<option value="" disabled selected>Select Location</option>'; // Clear existing options
+
+        querySnapshot.forEach((doc) => {
+            const location = doc.data().name;
+            const option = document.createElement("option");
+            option.value = location;
+            option.textContent = location;
+            locationSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error fetching locations:", error);
+    }
+};
+
+// this is an event listener to addlocation btn:
+
+const addLocationBtn = document.getElementById("addLocationBtn");
+
+addLocationBtn.addEventListener("click", async () => {
+    const newLocation = prompt("Enter the new location name:");
+
+    if (newLocation && newLocation.trim() !== "") {
+        try {
+            await addDoc(collection(db, "locations"), { name: newLocation.trim() });
+
+            alert("Location added successfully!");
+
+            // Refresh the locations in the dropdown
+            fetchLocations();
+        } catch (error) {
+            console.error("Error adding location:", error);
+            alert("Failed to add location. Please try again.");
+        }
+    } else {
+        alert("Invalid location name. Please try again.");
+    }
+});
+
+
+
+
 
 //this function calculates the smallest unused item code
 const getNextAvailableItemCode = () => {
@@ -103,6 +197,8 @@ editSaveBtn.addEventListener("click", async () => {
 
         // Refresh the table to reflect the changes
         fetchInventory();
+        fetchLocations();
+
         console.log("Product updated successfully.");
     } catch (error) {
         console.error("Error updating product:", error);
@@ -298,6 +394,8 @@ document.getElementById("orderDropdown").addEventListener("change", (event) => {
 });
 
 fetchInventory();
+fetchLocations();
+
 //just testing end
 
 
@@ -533,6 +631,8 @@ addProductBtn.addEventListener("click", () => {
     editSaveBtn.style.display = "none";
     // Ensure "Save Changes" button is visible
     saveProductBtn.style.display = "block";
+    fetchLocations();
+
 
     // Show the modal for adding a product
     const editModal = document.getElementById("editInventoryModal");
@@ -552,7 +652,7 @@ saveProductBtn.addEventListener('click', async (e) => {
         quantity: parseInt(document.getElementById('editQuantity').value.trim(), 10),
         threshold: parseInt(document.getElementById('editThreshold').value.trim(), 10),
         category: document.getElementById('editCategory').value,
-        location: document.getElementById('editLocation').value,
+        location: document.getElementById("editLocation").value, // Save selected location
         price: parseFloat(document.getElementById('editPrice').value.trim()),
         currency: document.getElementById('editCurrency').value,
         status: parseInt(document.getElementById('editQuantity').value.trim(), 10) > 0 ? "In Stock" : "Out of Stock",

@@ -7,7 +7,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyDZstZmYQ2HOdKX639ayM6L_OoGd64ozqs",
     authDomain: "inventlylogin.firebaseapp.com",
     projectId: "inventlylogin",
-    storageBucket: "inventlylogin.appspot.com", // Fixed typo here
+    storageBucket: "inventlylogin.appspot.com",
     messagingSenderId: "120631227540",
     appId: "1:120631227540:web:526487d0dcbcdd61c63081"
 };
@@ -16,57 +16,46 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app); // Initialize Auth
 
-
-// Select the navbar icons container
-const navbarIcons = document.querySelector(".navbar-icons");
-
-// Select dynamic content container (optional for homepage)
-const bannerContent = document.querySelector(".bannerContent");
+// Function to handle logout
+function handleLogout() {
+    signOut(auth)
+        .then(() => {
+            console.log("User signed out successfully.");
+            // Redirect to homepage after logout
+            window.location.href = "InventlyHomepage.html";
+        })
+        .catch((error) => {
+            console.error("Error signing out:", error.message);
+        });
+}
 
 // Listen for authentication state changes
 onAuthStateChanged(auth, (user) => {
     if (user) {
-        console.log("Auth state changed:", user); // Debugging
-        // Update Navbar for Logged-In Users
-        navbarIcons.innerHTML = `
-            <a href="dashboard.html" class="navbar-link">Dashboard</a>
-            <a href="#" id="logout" class="navbar-link">Log Out</a>
-        `;
+        console.log("User is logged in:", user);
 
-        // Add Logout Functionality
-        document.getElementById("logout").addEventListener("click", () => {
-            signOut(auth)
-                .then(() => {
-                    // Redirect to homepage after logout
-                    window.location.href = "InventlyHomepage.html";
-                })
-                .catch((error) => {
-                    console.error("Error signing out:", error.message);
-                });
-        });
+        // Add event listener to the Sign Out button in the navbar
+        const navbarSignOutButton = document.getElementById("logout");
+        if (navbarSignOutButton) {
+            navbarSignOutButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                handleLogout();
+            });
+        }
 
-        // Update Homepage Content for Logged-In Users
-        if (bannerContent) {
-            bannerContent.innerHTML = `
-                <h1 class="bannerHeader">Welcome Back!</h1>
-                <p class="bannerSubheader">Your inventory dashboard awaits.</p>
-            `;
+        // Add event listener to the Sign Out button on the dashboard
+        const dashboardSignOutButton = document.getElementById("dashboardSignOut");
+        if (dashboardSignOutButton) {
+            dashboardSignOutButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                handleLogout();
+            });
         }
     } else {
-        // Update Navbar for Logged-Out Users
-        navbarIcons.innerHTML = `
-            <a href="signinInvently.html" class="navbar-link">Sign Up</a>
-            <a href="loginInvently.html" class="navbar-link">Log In</a>
-        `;
-
-        // Update Homepage Content for Logged-Out Users
-        if (bannerContent) {
-            bannerContent.innerHTML = `
-                <h1 class="bannerHeader">Invently</h1>
-                <p class="bannerSubheader">Inventory Management System</p>
-                <p class="bannerTagline">Track your goods throughout your entire supply chain, from purchasing to production
-                to end sales</p>
-            `;
+        console.log("No user is logged in.");
+        // Redirect to login page if no user is authenticated
+        if (window.location.pathname.includes("dashboard.html")) {
+            window.location.href = "loginInvently.html";
         }
     }
 });

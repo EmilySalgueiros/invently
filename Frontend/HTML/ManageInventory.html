@@ -250,7 +250,8 @@
                             <div class="form-group">
                                 <label for="editVendor">Location</label>
                                 <div class="input-with-plus">
-                                    <select id="editLocation">
+                                        <select id="stockLocation" class="location-dropdown">
+
                                         <option value="" disabled selected>Select Location</option>
                                     </select>
                                     <button class="add-icon" id="addLocationBtn">
@@ -305,24 +306,23 @@
 
                 <!-- Stock Details -->
                 <div class="tab-content" id="stockTab">
-                    <!-- Location Selection -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="editVendor">Location</label>
+                            <label for="stockLocation">Location</label>
                             <div class="input-with-plus">
-                                <select id="editLocation">
-                                    <option value="Location1">Location 1</option>
+                                <select id="stockLocation" class="location-dropdown">
+                                    <option value="" disabled selected>Select Location</option>
                                 </select>
-                                <button class="add-icon" id="addLocationBtn">
+                                <button class="add-icon" id="addStockLocationBtn">
                                     <ion-icon name="add-outline"></ion-icon>
                                 </button>
-                                <button class="delete-icon" id="deleteLocationBtn">
+                                <button class="delete-icon" id="deleteStockLocationBtn">
                                     <ion-icon name="trash-outline"></ion-icon>
                                 </button>
                             </div>
                         </div>
                     </div>
-
+                
                     <!-- Add Ionicons library -->
                     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
                     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

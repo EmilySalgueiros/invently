@@ -241,23 +241,34 @@ deleteLocationBtn.addEventListener("click", async () => {
 // this function will locate the location added
 
 const fetchLocations = async () => {
+    // Select all dropdowns with the 'location-dropdown' class
+    const locationDropdowns = document.querySelectorAll(".location-dropdown");
+
+    // Reset all dropdowns
+    locationDropdowns.forEach(dropdown => {
+        dropdown.innerHTML = '<option value="" disabled selected>Select Location</option>';
+    });
+
     try {
+        // Fetch locations from Firebase
         const querySnapshot = await getDocs(collection(db, "locations"));
-        const locationSelect = document.getElementById("editLocation");
-
-        locationSelect.innerHTML = '<option value="" disabled selected>Select Location</option>'; // Clear existing options
-
-        querySnapshot.forEach((doc) => {
-            const location = doc.data().name;
-            const option = document.createElement("option");
-            option.value = location;
-            option.textContent = location;
-            locationSelect.appendChild(option);
+        querySnapshot.forEach(doc => {
+            const locationData = doc.data();
+            // Add the location to all dropdowns
+            locationDropdowns.forEach(dropdown => {
+                const option = document.createElement("option");
+                option.value = locationData.name;
+                option.textContent = locationData.name;
+                dropdown.appendChild(option);
+            });
         });
+
+        console.log("Locations fetched and added to all dropdowns.");
     } catch (error) {
         console.error("Error fetching locations:", error);
     }
 };
+
 
 // this is an event listener to addlocation btn:
 
@@ -950,6 +961,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let selectedBin = null;
     let binStocks = {}; // Store stock data for bins
+
+
 
     // Reset stock structure when location changes
     const resetStockStructure = () => {

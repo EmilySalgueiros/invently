@@ -386,6 +386,7 @@ div.loginButtonContainer button {
     background-color: white;
     /* Light background color for contrast */
     padding: 20px;
+    margin-top: 0;
 }
 
 .SayHiTitle {
@@ -409,7 +410,7 @@ div.loginButtonContainer button {
 
 .AboutUsButton {
     padding: 10px 20px;
-    background-color: #0078d7;
+    background-color: #2a2185;
     /* Vibrant button color */
     color: #fff;
     border: none;

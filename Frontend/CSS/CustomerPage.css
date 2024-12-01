@@ -1097,3 +1097,141 @@ table tbody tr td:last-child {
     font-size: 14px;
     /* Adjust button text size */
 }
+
+/* General Dark Mode */
+body.dark-mode {
+    background-color: #18191A; /* Dark background for body */
+    color: #E4E6EB; /* Light text for body */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Navigation Bar */
+body.dark-mode .navigation {
+    background-color: #242526; /* Dark background for the navigation */
+    border-left: 10px solid #242526;
+}
+
+body.dark-mode .navigation ul li a {
+    color: #E4E6EB; /* Light text for navigation links */
+}
+
+body.dark-mode .navigation ul li a:hover,
+body.dark-mode .navigation ul li a.active {
+    background-color: #3A3B3C; /* Slightly lighter for hover/active state */
+    color: #FFFFFF; /* Bright text for active link */
+}
+
+/* Header and Main Content */
+body.dark-mode .header {
+    background-color: #242526; /* Dark header background */
+    color: #FFFFFF; /* White header text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Adjust shadow for dark mode */
+}
+
+body.dark-mode .main {
+    background-color: #242526; /* Dark main content background */
+    color: #E4E6EB; /* Light text for main content */
+}
+
+/* Section Styling */
+body.dark-mode .section,
+body.dark-mode .modal-content,
+body.dark-mode .modal-content2 {
+    background-color: #242526; /* Darker background for sections/modals */
+    color: #FFFFFF; /* White text for sections/modals */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+}
+
+/* Tables */
+body.dark-mode table {
+    background-color: #3A3B3C; /* Dark table background */
+    color: #FFFFFF; /* Light text in table */
+    border-collapse: collapse;
+    width: 100%;
+}
+
+body.dark-mode table th,
+body.dark-mode table td {
+    border: 1px solid #555; /* Subtle borders */
+    padding: 8px;
+}
+
+body.dark-mode table th {
+    background-color: #444; /* Darker background for table headers */
+}
+
+body.dark-mode table tr:nth-child(even) {
+    background-color: #2A2B2D; /* Alternate row background */
+}
+
+body.dark-mode table tr:hover {
+    background-color: #333; /* Hover effect on table rows */
+}
+
+/* Buttons */
+body.dark-mode button {
+    background-color: #2a2185; /* Deep blue buttons */
+    color: #FFFFFF; /* White text */
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode button:hover {
+    background-color: #1f1870; /* Darker blue for hover state */
+}
+
+/* Forms and Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #3A3B3C; /* Darker background for inputs */
+    color: #FFFFFF; /* White text for inputs */
+    border: 1px solid #555; /* Subtle borders */
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    outline: 2px solid #2a2185; /* Highlight focus state */
+}
+
+/* Modals */
+body.dark-mode .modal,
+body.dark-mode .modal2 {
+    background-color: rgba(0, 0, 0, 0.8); /* Dark semi-transparent background */
+}
+
+body.dark-mode .modal-content,
+body.dark-mode .modal-content2 {
+    background-color: #242526; /* Dark background for modal content */
+    color: #FFFFFF; /* Light text */
+}
+
+/* Dark Mode for Ionicons */
+body.dark-mode ion-icon {
+    color: #E4E6EB; /* Light icons */
+}
+
+/* Invoice Table */
+body.dark-mode .invoice-table {
+    background-color: #3A3B3C; /* Darker table background */
+    color: #FFFFFF; /* White text */
+    border-collapse: collapse;
+    width: 100%;
+}
+
+body.dark-mode .invoice-table th,
+body.dark-mode .invoice-table td {
+    border: 1px solid #555; /* Darker border */
+    padding: 10px;
+}
+
+body.dark-mode .invoice-table th {
+    background-color: #444; /* Darker background for table headers */
+}

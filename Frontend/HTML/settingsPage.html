@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Settings</title>
+    <link rel="stylesheet" href="../CSS/settings.css">
+</head>
+
+<body>
+    <!-- Navigation Bar-->
+    <div class="container">
+        <div class="navigation">
+            <ul>
+                <li>
+                    <a href="InventlyHomepage.html">
+                        <span class="icon">
+                            <ion-icon name="cube-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Invently</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="dashboard.html">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Dashboard</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="CustomerPage.html" class="active">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Customers</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="ManageInventory.html">
+                        <span class="icon">
+                            <ion-icon name="clipboard-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Manage Inventory</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="OrdersTab.html">
+                        <span class="icon">
+                            <ion-icon name="bag-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Orders</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="settingsPage.html">
+                        <span class="icon">
+                            <ion-icon name="settings-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Settings</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="Features.html">
+                        <span class = "icon">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                        </span>
+                        <span class="ti">Sign Out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main body Section -->
+        <div class="main">
+            <div class="header">
+            <h1>Inventory Settings</h1>
+    
+            <!-- User Preferences Section -->
+            <div class="section">
+                <h2>User Preferences</h2>
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter your new username">
+                
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your new email">
+
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your new password">
+                
+                <button>Save Changes</button>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="section">
+                <h2>Notifications</h2>
+                <label>
+                    <input type="checkbox"> Enable Email Notifications
+                </label>
+                <label>
+                    <input type="checkbox"> Enable SMS Notifications
+                </label>
+                
+                <button>Save Notification Preferences</button>
+            </div>
+    
+            <!-- Inventory Settings Section -->
+            <div class="section">
+                <h2>Theme Settings</h2>
+                <div class="form-group">
+                    <div class="switch-label">
+                        <label class="switch">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <span>Dark Mode Toggle</span>
+                    </div>
+                </div>
+            </div>
+            
+    
+    
+            <!-- Advanced Options -->
+            <div class="section">
+                <h2>Advanced Options</h2>
+                <p>
+                    Customize additional settings such as integrations, backup preferences, and system logs.
+                </p>
+                <div class="advanced-options">
+                    <a href="#">Access Advanced Options</a>
+                </div>
+            </div>
+            </div>
+        </div>
+        
+
+    
+
+    <!--=========ionicons======== -->
+ <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+ <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+ <script>
+    // Select the dark mode toggle switch
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+    // Check the current theme in localStorage
+    const currentTheme = localStorage.getItem('theme');
+
+    // If a theme is stored, apply it to the document body
+    if (currentTheme) {
+        document.body.classList.add(currentTheme);
+
+        // If the stored theme is 'dark-mode', set the toggle switch to checked
+        if (currentTheme === 'dark-mode') {
+            darkModeToggle.checked = true;
+        }
+    }
+
+    // Add an event listener to the dark mode toggle switch
+    darkModeToggle.addEventListener('change', function () {
+        if (darkModeToggle.checked) {
+            // Enable dark mode
+            document.body.classList.add('dark-mode');
+            document.body.classList.remove('light-mode');
+            // Save the theme in localStorage
+            localStorage.setItem('theme', 'dark-mode');
+        } else {
+            // Enable light mode
+            document.body.classList.add('light-mode');
+            document.body.classList.remove('dark-mode');
+            // Save the theme in localStorage
+            localStorage.setItem('theme', 'light-mode');
+        }
+    });
+</script>
+
+
+
+</body>
+
+</html>

@@ -47,7 +47,6 @@ submit.addEventListener("click", async function (event) {
             displayName: username,
         });
 
-        alert("Account created successfully! Please check your email to verify your account.");
         window.location.href = "../HTML/setupInventory.html"; // Redirect to setup inventory or join inventory page
     } catch (error) {
         const emailError = document.getElementById("emailError");

@@ -55,7 +55,6 @@ document.getElementById('submit').addEventListener("click", async (event) => {
         const userCredential = await signInWithEmailAndPassword(auth, emailOrUsername, password);
 
         // Successful login
-        alert("Logged in successfully!");
         window.location.href = "../HTML/setupInventory.html"; // Redirect to select inventory page
     } catch (error) {
         console.error("Error during login:", error);

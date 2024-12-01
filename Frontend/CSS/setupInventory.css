@@ -443,16 +443,6 @@ body {
     box-sizing: border-box;        /* Include padding in width */
 }
 
-
-.cards-container {
-    height: 200px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: flex-start;
-    align-content: flex-start;
-}
-
 .dashboard-content {
     width: 100%;
     display: grid;

@@ -156,7 +156,7 @@ function validateInputs() {
 
 // Function to Create and Add a New Inventory Tile
 function createInventoryCard(inventoryId, inventoryName) {
-    const inventoryDashboard = document.querySelector('.inventory-dashboard');
+    const inventoryDashboard = document.querySelector('.cards-container');
 
     // Create the tile element
     const inventoryCard = document.createElement('div');

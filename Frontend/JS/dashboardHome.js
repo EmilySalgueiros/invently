@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
  // Edit Button
  inventoryTable.addEventListener("click", (e) => {
     if (e.target.classList.contains("edit-btn") || e.target.classList.contains("edit-link")) {

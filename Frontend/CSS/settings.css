@@ -364,6 +364,7 @@ body.dark-mode input:checked + .slider:before {
 
 .section input[type="text"],
 .section input[type="email"],
+.section input[type="password"],
 .section input[type="number"],
 .section select {
     width: 100%;

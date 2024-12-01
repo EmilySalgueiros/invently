@@ -4,9 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Manage Inventory</title>
     <!-- Styles -->
-    <link rel="stylesheet" href="..\CSS\dashboard.css">
+    <link rel="stylesheet" href="..\CSS\ManageInventory.css">
+
+
 </head>
 
 <body>
@@ -69,7 +71,7 @@
                 </li>
                 <li>
                     <a href="Features.html">
-                        <span class = "icon">
+                        <span class="icon">
                             <ion-icon name="lock-closed-outline"></ion-icon>
                         </span>
                         <span class="ti">Sign Out</span>
@@ -77,74 +79,580 @@
                 </li>
             </ul>
         </div>
-
-        <!-- Username and Add Product Section -->
-        <div class="main">
-            <div class="AddProductbutton">
-                <button id="addProductBtn">Add Product</button>
-            </div>
-            <!-- Centered Search Bar -->
-            <div class="search-container">
-                <div class="search">
-                    <label>
-                        <input type="text" placeholder="Search Inventory">
-                        <ion-icon name="search-outline"></ion-icon>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Manage Inventory Section -->
-            <div class="manage-inventory-content">
-                <div class="recent-orders">
-                    <h2>Manage Inventory</h2>
-                    <table id="inventoryTable">
-                        <thead>
-                            <tr>
-                                <th>Item Code</th>
-                                <th>SKU</th>
-                                <th>Description</th>
-                                <th>Quantity</th>
-                                <th>Threshold</th>
-                                <th>Status</th>
-                                <th>Location</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Dynamically added rows go here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Camera Scan Button Section -->
-            <div class="scanner-container">
-                <!-- Link to trigger camera scan -->
-                <button id="scanButton" class="scan-button">Scan SKU</button>
-                <!-- Scanner Display -->
-                <div id="scanner" style="display: none;">
-                    <video id="video" width="300" height="200" style="border: 1px solid black;"></video>
-                    <button id="stopScanBtn">Stop Scanning</button>
-                </div>
-                <div id="result" style="margin-top: 20px; font-size: 18px; font-weight: bold;">
-                    <!-- Scanned SKU will be displayed here -->
-                </div>
-            </div>
-        </div>
     </div>
 
-    <!--========= Scripts======== -->
-    <script type="module" src="../JS/InventlyHomepage.js"></script>
-    <script src="../JS/dashboardHome.js"></script>
-    <script type="module" src="../JS/dashboardFirestore.js"></script>
+    <!-- Username and Add Product Section -->
+    <div class="main">
 
-    <!--========= ionicons======== -->
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
-    <!-- Barcode Scanner Integration -->
-    <script src="https://unpkg.com/@zxing/library@0.18.3/umd/index.min.js"></script>
-    <script src="../JS/barcodeScanner.js"></script> <!-- External JS file -->
+
+        <!-- Centered Search Bar -->
+        <div class="search-container">
+            <div class="search">
+                <label>
+                    <input type="text" placeholder="Search Inventory">
+                    <ion-icon name="search-outline"></ion-icon>
+                </label>
+            </div>
+
+        </div>
+
+        <!-- Manage Inventory Section -->
+        <div class="manage-inventory-content">
+            <div class="recent-orders">
+                <h2>Manage Inventory</h2>
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Item Code</th>
+                            <th>SKU</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Threshold</th>
+                            <th>Status</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamically added rows go here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <!-- Add Product Button -->
+            <button id="addProductBtn" class="add-product-btn">Add Product</button>
+
+            <!-- Camera Scan Button -->
+            <button id="scanButton" class="scan-button">Scan SKU</button>
+        </div>
+
+        <!-- Scanner Display (remains outside the container) -->
+        <!-- Scanner Display Section -->
+        <div id="scanner-container" class="scanner-wrapper" style="display: none;">
+            <!-- Video container for the live camera feed -->
+            <div id="scanner">
+                <video id="video" width="300" height="200" autoplay></video>
+                <button id="stopScanBtn" class="stop-scan-btn">Stop Scanning</button>
+            </div>
+
+            <!-- Placeholder for scan results -->
+            <div id="result" style="margin-top: 20px; font-size: 18px; font-weight: bold;">
+                <!-- Scanned SKU will be displayed here -->
+            </div>
+        </div>
+
+        <!--add product button action with modal-->
+
+        <!-- Add this Modal for Editing Inventory -->
+        <div class="modal" id="editInventoryModal">
+            <!-- Exit Button Positioned Correctly -->
+
+            <div class="modal-content">
+                <button class="exit-btn" id="exitModal">&times;</button>
+                <h2 class="modal-title">Add Product</h2>
+                <div class="tabs-container">
+                    <button class="tab active" data-tab="detailTab">Detail</button>
+                    <button class="tab" data-tab="stockTab">Stock</button>
+                    <button class="tab" data-tab="purchaseOrderTab">Purchase Order</button>
+                </div>
+
+                <!-- Tab Content: Detail -->
+                <div class="tab-content active" id="detailTab">
+                    <form id="editInventoryForm">
+                        <!-- Row 1 -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editItemCode">
+                                    <ion-icon name="barcode-outline"></ion-icon> Item Code
+                                </label>
+                                <input type="text" id="editItemCode" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label for="editSKU">SKU</label>
+                                <input type="text" id="editSKU" />
+                            </div>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editDescription">Description</label>
+                                <input type="text" id="editDescription" />
+                            </div>
+                            <div class="form-group">
+                                <label for="editQuantity">Quantity</label>
+                                <input type="number" id="editQuantity" />
+                            </div>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editThreshold">Threshold</label>
+                                <input type="number" id="editThreshold" />
+                            </div>
+                            <div class="form-group">
+                                <label for="editCategory">
+                                    <ion-icon name="pricetag-outline"></ion-icon> Category
+                                </label>
+                                <div class="input-with-plus">
+                                    <select id="editCategory">
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Clothing">Clothing</option>
+                                        <option value="Furniture">Furniture</option>
+                                    </select>
+                                    <button class="add-icon" id="addCategoryBtn">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </button>
+                                    <button class="delete-icon" id="deleteCategoryBtn">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                    <div class="color-options">
+                                        <button class="color-btn" data-color="#006699"
+                                            style="background-color: #006699;"></button>
+                                        <button class="color-btn" data-color="#5AAA46"
+                                            style="background-color: #5AAA46;"></button>
+                                        <button class="color-btn" data-color="#EEDD55"
+                                            style="background-color: #EEDD55;"></button>
+                                        <button class="color-btn" data-color="#DDAA77"
+                                            style="background-color: #DDAA77;"></button>
+                                        <button class="color-btn" data-color="#7799BB"
+                                            style="background-color: #7799BB;"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 4 -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editPhoto">
+                                    <ion-icon name="images-outline"></ion-icon> Photo
+                                </label>
+                                <input type="file" id="editPhoto" accept="image/*" />
+                            </div>
+
+                        </div>
+
+                        <!-- Row 5 -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editVendor">Location</label>
+                                <div class="input-with-plus">
+                                    <select id="editLocation">
+                                        <option value="Location1">Location 1</option>
+                                    </select>
+                                    <button class="add-icon" id="addLocationBtn">
+                                        <ion-icon name="add-outline"></ion-icon>
+                                    </button>
+                                    <button class="delete-icon" id="deleteLocationBtn">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Row 6: Price and Currency -->
+                        <div class="form-row">
+                            <!-- Price Input -->
+                            <div class="form-group" style="flex: 2;">
+                                <label for="editPrice">Price</label>
+                                <input type="number" id="editPrice" placeholder="Enter price" min="0" step="0.01">
+                            </div>
+                            <!-- Currency Selection -->
+                            <div class="form-group" style="flex: 1;">
+                                <label for="editCurrency">Currency</label>
+                                <select id="editCurrency">
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <label for="editLocation">
+                                                        <ion-icon name="location-outline"></ion-icon> Location
+                                                    </label>
+                                                    <div class="input-with-plus">
+                                                        <select id="editLocation">
+                                                            <option value="A01">A01</option>
+                                                        </select>
+                                                        <button class="add-icon" id="addLocationBtn">
+                                                            <ion-icon name="add-outline"></ion-icon>
+                                                        </button>
+                                                        <button class="delete-icon" id="deleteLocationBtn">
+                                                            <ion-icon name="trash-outline"></ion-icon>
+                                                        </button> -->
+
+                        <!-- Save Button -->
+                        <div class="modal-footer">
+                            <button type="submit" class="submit-btn">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Stock Details -->
+                <div class="tab-content" id="stockTab">
+                    <!-- Location Selection -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editVendor">Location</label>
+                            <div class="input-with-plus">
+                                <select id="editLocation">
+                                    <option value="Location1">Location 1</option>
+                                </select>
+                                <button class="add-icon" id="addLocationBtn">
+                                    <ion-icon name="add-outline"></ion-icon>
+                                </button>
+                                <button class="delete-icon" id="deleteLocationBtn">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Ionicons library -->
+                    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+                    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+
+
+                    <!-- Aisle Container -->
+                    <div class="aisle-container" id="aisleContainer">
+                        <!-- Dynamically Added Aisles Go Here -->
+                    </div>
+
+                    <!-- Add Aisle Button -->
+                    <button class="btn-add" id="addAisleBtn">+ Add Aisle</button>
+
+                    <!-- Bin Details -->
+                    <div class="bin-details">
+                        <h4>Selected Bin Details</h4>
+                        <textarea id="binDetails" readonly></textarea>
+                        <label for="binStockQuantity">Add Stock:</label>
+                        <input type="number" id="binStockQuantity" placeholder="Enter quantity" />
+                        <button class="btn-add-stock" id="addStockToBinBtn">Add Stock</button>
+                        <button class="btn-save-stock" id="saveStockChangesBtn">Save Changes</button>
+                    </div>
+                </div>
+
+
+
+
+                <div class="tab-content" id="purchaseOrderTab">
+                    <!-- Header with Add Button -->
+                    <div class="purchase-order-header">
+                        <h3>Purchase Orders</h3>
+                        <button id="addPOBtn" class="blue-btn">+ Add Purchase Order</button>
+                    </div>
+
+                    <!-- Purchase Order Cards -->
+                    <div id="purchaseOrderList" class="po-list-vertical">
+                        <!-- PO cards will be added dynamically here -->
+                    </div>
+
+
+                    <!-- Purchase Order Form -->
+                    <div id="purchaseOrderFormContainer" class="hidden">
+                        <form id="purchaseOrderForm">
+                            <!-- PO Number, Label, Date, and Currency -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="poNumber">PO Number <span class="required">*</span></label>
+                                    <input type="text" id="poNumber" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="poLabel">Label</label>
+                                    <input type="text" id="poLabel" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="currency">Currency</label>
+                                    <select id="currency">
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="poDate">Date <span class="required">*</span></label>
+                                    <input type="date" id="poDate" required />
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group half-width">
+                                    <label for="editVendor">Vendor</label>
+                                    <div class="input-with-plus">
+                                        <select id="editVendor">
+                                            <option value="" disabled selected>Loading Vendors...</option>
+
+                                        </select>
+                                        <button class="add-icon" id="addVendorBtn">
+                                            <ion-icon name="add-outline"></ion-icon>
+                                        </button>
+                                        <button class="delete-icon" id="deleteVendorBtn">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="editCost">Cost</label>
+                                    <input type="number" id="editCost" placeholder="Enter cost" />
+                                </div>
+                            </div>
+
+
+                            <!-- Billing and Shipping Section -->
+                            <div class="form-row" style="margin-top: 20px;">
+                                <div class="form-group">
+                                    <label for="billingAddress">Billing Address</label>
+                                    <textarea id="billingAddress" class="rounded-input"
+                                        placeholder="Enter billing address"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="shippingAddress">Shipping Address</label>
+                                    <textarea id="shippingAddress" class="rounded-input"
+                                        placeholder="Enter shipping address"></textarea>
+                                    <label>
+                                        <input type="checkbox" id="sameAsBilling" /> Same as Billing
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <!-- Item Table -->
+                            <div class="form-row">
+                                <table id="itemsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Item <span class="required">*</span></th>
+                                            <th>Quantity <span class="required">*</span></th>
+                                            <th>Rate <span class="required">*</span></th>
+                                            <th>Tax <span class="required">*</span></th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="text" placeholder="Item description" required />
+                                            </td>
+                                            <td><input type="number" min="1" placeholder="Quantity" required />
+                                            </td>
+                                            <td><input type="number" min="0.01" step="0.01" placeholder="Rate"
+                                                    required /></td>
+                                            <td><input type="number" min="0" placeholder="Tax" required /></td>
+                                            <td class="total-cell">$0.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button type="button" id="addItem" class="blue-btn">Add Item</button>
+                            </div>
+
+                            <!-- Attachments Section -->
+                            <div class="form-row">
+                                <div class="attachment-container">
+                                    <input type="file" id="attachments" multiple />
+                                    <div id="attachmentList"></div>
+                                </div>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="modal-footer">
+                                <button type="submit" class="submit-btn">Save Changes</button>
+                                <button class="add-save-btn">Add Save</button>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Stock Details -->
+                    <div class="tab-content" id="stockTab">
+                        <!-- Location Selection -->
+                        <div class="form-row">
+                            <label for="editLocation">Location</label>
+                            <select id="editLocation">
+                                <option value="A01">A01</option>
+                                <option value="A02">A02</option>
+                            </select>
+                        </div>
+
+                        <!-- Aisle Container -->
+                        <div class="aisle-container" id="aisleContainer">
+                            <!-- Dynamically Added Aisles Go Here -->
+                        </div>
+
+                        <!-- Add Aisle Button -->
+                        <button class="btn-add" id="addAisleBtn">+ Add Aisle</button>
+
+                        <!-- Bin Details -->
+                        <div class="bin-details">
+                            <h4>Selected Bin Details</h4>
+                            <textarea id="binDetails" readonly></textarea>
+                            <label for="binStockQuantity">Add Stock:</label>
+                            <input type="number" id="binStockQuantity" placeholder="Enter quantity" />
+                            <button class="btn-add-stock" id="addStockToBinBtn">Add Stock</button>
+                            <button class="btn-save-stock" id="saveStockChangesBtn">Save Changes</button>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="purchaseOrderTab">
+                        <!-- Header with Add Button -->
+                        <div class="purchase-order-header">
+                            <h3>Purchase Orders</h3>
+                            <button id="addPOBtn" class="blue-btn">+ Add Purchase Order</button>
+                        </div>
+
+                        <!-- Purchase Order Cards -->
+                        <div id="purchaseOrderList" class="po-list-vertical">
+                            <!-- PO cards will be added dynamically here -->
+                        </div>
+
+
+                        <!-- Purchase Order Form -->
+                        <div id="purchaseOrderFormContainer" class="hidden">
+                            <form id="purchaseOrderForm">
+                                <!-- PO Number, Label, Date, and Currency -->
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="poNumber">PO Number <span class="required">*</span></label>
+                                        <input type="text" id="poNumber" name="poNumber" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="poLabel">Label</label>
+                                        <input type="text" id="poLabel" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="currency">Currency</label>
+                                        <select id="currency">
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="poDate">Date <span class="required">*</span></label>
+                                        <input type="date" id="poDate" required />
+                                    </div>
+                                </div>
+                                <!-- Add the Order Selection Dropdown -->
+                                <div class="form-group">
+                                    <label for="orderDropdown">Select Order</label>
+                                    <select id="orderDropdown" class="form-control">
+                                        <option value="" disabled selected>Select Order</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group half-width">
+                                        <label for="editVendor">Vendor</label>
+                                        <div class="input-with-plus">
+                                            <select id="editVendor">
+                                                <option value="Vendor1">Vendor 1</option>
+                                            </select>
+                                            <button class="add-icon" id="addVendorBtn">
+                                                <ion-icon name="add-outline"></ion-icon>
+                                            </button>
+                                            <button class="delete-icon" id="deleteVendorBtn">
+                                                <ion-icon name="trash-outline"></ion-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label for="editCost">Cost</label>
+                                        <input type="number" id="editCost" placeholder="Enter cost" />
+                                    </div>
+                                </div>
+
+
+                                <!-- Billing and Shipping Section -->
+                                <div class="form-row" style="margin-top: 20px;">
+                                    <div class="form-group">
+                                        <label for="billingAddress">Billing Address</label>
+                                        <textarea id="billingAddress" class="rounded-input"
+                                            placeholder="Enter billing address"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="shippingAddress">Shipping Address</label>
+                                        <textarea id="shippingAddress" class="rounded-input"
+                                            placeholder="Enter shipping address"></textarea>
+                                        <label>
+                                            <input type="checkbox" id="sameAsBilling" /> Same as Billing
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <!-- Item Table -->
+                                <div class="form-row">
+                                    <table id="itemsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Item <span class="required">*</span></th>
+                                                <th>Quantity <span class="required">*</span></th>
+                                                <th>Rate <span class="required">*</span></th>
+                                                <th>Tax <span class="required">*</span></th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><input type="text" placeholder="Item description" required />
+                                                </td>
+                                                <td><input type="number" min="1" placeholder="Quantity" required />
+                                                </td>
+                                                <td><input type="number" min="0.01" step="0.01" placeholder="Rate"
+                                                        required />
+                                                </td>
+                                                <td><input type="number" min="0" placeholder="Tax" required />
+                                                </td>
+                                                <td class="total-cell">$0.00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button type="button" id="addItem" class="blue-btn">Add Item</button>
+                                </div>
+
+                                <!-- Attachments Section -->
+                                <div class="form-row">
+                                    <div class="attachment-container">
+                                        <input type="file" id="attachments" multiple />
+                                        <div id="attachmentList"></div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Save and Cancel Buttons -->
+                                <div class="form-actions">
+                                    <button type="button" class="cancel-btn" id="cancelPurchaseOrder">Cancel</button>
+                                    <button type="submit" class="save-btn">Save</button>
+                                </div>
+
+
+
+                            </form>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+
+                <!--========= Scripts======== -->
+                <script type="module" src="../JS/ManageInventory.js"></script>
+
+                <!--========= ionicons======== -->
+                <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+                <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+                <!-- Barcode Scanner Integration -->
+                <script src="https://unpkg.com/@zxing/library@0.18.3/umd/index.min.js"></script>
+                <script src="../JS/barcodeScanner.js"></script> <!-- External JS file -->
 </body>
 
 </html>

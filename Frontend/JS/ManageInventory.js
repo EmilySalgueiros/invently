@@ -950,28 +950,19 @@ setupAddRemoveOptions();
 
 
 
+
 document.addEventListener("DOMContentLoaded", () => {
     const aisleContainer = document.getElementById("aisleContainer");
     const addAisleBtn = document.getElementById("addAisleBtn");
+    const deleteAisleBtn = document.getElementById("deleteAisleBtn");
     const binDetails = document.getElementById("binDetails");
     const addStockToBinBtn = document.getElementById("addStockToBinBtn");
+    const subtractStockFromBinBtn = document.getElementById("subtractStockFromBinBtn");
     const binStockQuantity = document.getElementById("binStockQuantity");
     const saveStockChangesBtn = document.getElementById("saveStockChangesBtn");
-    const locationSelect = document.getElementById("editLocation");
 
     let selectedBin = null;
     let binStocks = {}; // Store stock data for bins
-
-
-
-    // Reset stock structure when location changes
-    const resetStockStructure = () => {
-        if (confirm("Do you want to save changes before switching location?")) {
-            saveChangesToDatabase(); // Ensure changes are saved before reset
-        }
-        aisleContainer.innerHTML = ""; // Clear aisles
-        binStocks = {}; // Reset bin stocks
-    };
 
     // Add Aisle
     addAisleBtn.addEventListener("click", () => {
@@ -987,7 +978,23 @@ document.addEventListener("DOMContentLoaded", () => {
         aisleContainer.appendChild(aisle);
     });
 
-    // Add Rack
+    // Delete Aisle
+    // Delete Aisle Functionality
+    deleteAisleBtn.addEventListener("click", () => {
+        const aisles = aisleContainer.querySelectorAll(".aisle");
+        if (aisles.length > 0) {
+            const lastAisle = aisles[aisles.length - 1];
+            if (confirm("Are you sure you want to delete the last aisle?")) {
+                lastAisle.remove();
+            }
+        } else {
+            alert("No aisles to delete!");
+        }
+    });
+
+
+
+
     window.addRack = (aisleElement) => {
         const aisle = aisleElement.parentNode;
         const rackCount = aisle.querySelectorAll(".rack").length + 1;
@@ -1002,7 +1009,13 @@ document.addEventListener("DOMContentLoaded", () => {
         aisle.appendChild(rack);
     };
 
-    // Add Shelf
+    window.deleteElement = (button, type) => {
+        const element = button.parentNode;
+        if (confirm(`Are you sure you want to delete this ${type}?`)) {
+            element.remove();
+        }
+    };
+
     window.addShelf = (rackElement) => {
         const rack = rackElement.parentNode;
         const shelfCount = rack.querySelectorAll(".shelf").length + 1;
@@ -1017,7 +1030,7 @@ document.addEventListener("DOMContentLoaded", () => {
         rack.appendChild(shelf);
     };
 
-    // Add Bin
+    // Attach event listeners to dynamically created bins
     window.addBin = (shelfElement) => {
         const shelf = shelfElement.parentNode;
         const binCount = shelf.querySelectorAll(".bin").length + 1;
@@ -1028,10 +1041,10 @@ document.addEventListener("DOMContentLoaded", () => {
         bin.dataset.aisle = shelf.closest(".aisle").dataset.aisle;
         bin.dataset.rack = shelf.closest(".rack").dataset.rack;
         bin.dataset.shelf = shelf.dataset.shelf;
-        bin.textContent = `BIN ${binCount}`;
+        bin.innerHTML = `BIN ${binCount} <button class="btn-delete" onclick="deleteElement(this, 'bin')">- Bin</button>`;
         shelf.appendChild(bin);
 
-        // Add click event to select bin
+        // Add click event listener to select the bin
         bin.addEventListener("click", () => selectBin(bin));
     };
 
@@ -1045,7 +1058,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const binId = bin.dataset.bin;
         const stock = binStocks[binId] || 0;
 
-        // Concise details without repetition
         const binLocation = `${bin.dataset.aisle}, ${bin.dataset.rack}, ${bin.dataset.shelf}`;
         binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${stock}`;
     };
@@ -1066,24 +1078,60 @@ document.addEventListener("DOMContentLoaded", () => {
         const binId = selectedBin.dataset.bin;
         binStocks[binId] = (binStocks[binId] || 0) + quantity;
 
-        // Concise details without repetition
+        updateBinDetails(binId);
+    });
+
+    // Subtract Stock from Selected Bin
+    subtractStockFromBinBtn.addEventListener("click", () => {
+        if (!selectedBin) {
+            alert("Please select a bin.");
+            return;
+        }
+
+        const quantity = parseInt(binStockQuantity.value, 10);
+        if (!quantity || quantity <= 0) {
+            alert("Please enter a valid quantity.");
+            return;
+        }
+
+        const binId = selectedBin.dataset.bin;
+        binStocks[binId] = Math.max((binStocks[binId] || 0) - quantity, 0);
+
+        updateBinDetails(binId);
+    });
+
+    const updateBinDetails = (binId) => {
         const binLocation = `${selectedBin.dataset.aisle}, ${selectedBin.dataset.rack}, ${selectedBin.dataset.shelf}`;
         binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${binStocks[binId]}`;
         binStockQuantity.value = ""; // Clear input
-    });
-
-
-    // Save Stock Changes
-    saveStockChangesBtn.addEventListener("click", () => {
-        saveChangesToDatabase();
-        alert("Stock changes saved successfully!");
-    });
-
-    // Save changes to Firebase (placeholder function)
-    const saveChangesToDatabase = () => {
-        console.log("Saving to Firebase:", binStocks);
-        // Add Firebase save logic here
     };
+
+    // Save Stock Changes to Firebase
+    saveStockChangesBtn.addEventListener("click", async () => {
+        try {
+            const stockDetails = Object.keys(binStocks).map((binId) => {
+                const [aisle, rack, shelf] = binId.split("-");
+                return {
+                    aisle,
+                    rack,
+                    shelf,
+                    bin: binId,
+                    quantity: binStocks[binId],
+                    timestamp: new Date(),
+                };
+            });
+
+            for (const stock of stockDetails) {
+                await addDoc(collection(db, "stockDetails"), stock);
+            }
+
+            alert("Stock details saved successfully!");
+            binStocks = {}; // Clear bin stocks after saving
+        } catch (error) {
+            console.error("Error saving stock details:", error);
+            alert("Failed to save stock details. Please try again.");
+        }
+    });
 
     // Delete Element
     window.deleteElement = (button, type) => {
@@ -1092,8 +1140,8 @@ document.addEventListener("DOMContentLoaded", () => {
             element.remove();
         }
     };
-
 });
+
 
 
 

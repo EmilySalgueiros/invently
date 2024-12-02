@@ -234,6 +234,7 @@ body {
     /* Vertically align the buttons */
     gap: 10px;
     /* Add spacing between buttons */
+    margin-top: 15px;
     margin: 20px 20px 0 0;
     /* Add margin to position the container */
     position: absolute;
@@ -606,6 +607,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+        margin-bottom: 10px;
 }
 
 .form-group label {
@@ -1096,7 +1098,7 @@ button {
     flex-wrap: wrap;
     /* Wrap aisles horizontally */
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 /* Aisle Styling */
@@ -1170,6 +1172,14 @@ button {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
+.bin-details {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
 .bin.selected {
     border: 2px solid #ff0000;
     background-color: #ffe6e6;
@@ -1192,6 +1202,7 @@ button {
     color: white;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 5px;
 }
 
 .btn-add:hover {
@@ -1212,13 +1223,26 @@ button {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+.btn-substract-stock{
+    display: inline-block;
+    background-color: red;
+        color: white;
+}
+
+.btn-save-stock {
+    background-color: blue;
+    color: white;
+}
+
+
 /* Add Stock and Save Stock Buttons */
 .btn-add-stock,
-.btn-save-stock {
+.btn-save-stock, .btn-substract-stock {
     background-color: #28a745;
     color: white;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 5px;
 }
 
 .btn-add-stock:hover,

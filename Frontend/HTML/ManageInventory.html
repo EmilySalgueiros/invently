@@ -334,18 +334,29 @@
                     <div class="aisle-container" id="aisleContainer">
                         <!-- Dynamically Added Aisles Go Here -->
                     </div>
-
+                    
                     <!-- Add Aisle Button -->
                     <button class="btn-add" id="addAisleBtn">+ Add Aisle</button>
+                    <button class="btn-delete" id="deleteAisleBtn">- Subtract Aisle</button>
 
+                    
                     <!-- Bin Details -->
                     <div class="bin-details">
                         <h4>Selected Bin Details</h4>
                         <textarea id="binDetails" readonly></textarea>
-                        <label for="binStockQuantity">Add Stock:</label>
-                        <input type="number" id="binStockQuantity" placeholder="Enter quantity" />
-                        <button class="btn-add-stock" id="addStockToBinBtn">Add Stock</button>
-                        <button class="btn-save-stock" id="saveStockChangesBtn">Save Changes</button>
+                    
+                        <!-- Quantity Input -->
+                        <div class="form-group">
+                            <label for="binStockQuantity">Quantity</label>
+                            <input type="number" id="binStockQuantity" placeholder="Enter quantity">
+                        </div>
+                    
+                        <!-- Action Buttons -->
+                        <div class="button-container">
+                            <button class="btn-add-stock" id="addStockToBinBtn">Add Stock</button>
+                            <button class="btn-substract-stock" id="subtractStockFromBinBtn">Subtract Stock</button>
+                            <button class="btn-save-stock" id="saveStockChangesBtn">Save Changes</button>
+                        </div>
                     </div>
                 </div>
 

@@ -133,7 +133,7 @@
 
         <div class="button-container">
             <!-- Add Product Button -->
-            <button id="addProductBtn" class="add-product-btn">Add Product</button>
+            <button id="addProductBtn" class="add-product-btn">Product</button>
 
             <!-- Camera Scan Button -->
             <button id="scanButton" class="scan-button">Scan SKU</button>
@@ -162,7 +162,7 @@
 
             <div class="modal-content">
                 <button class="exit-btn" id="exitModal">&times;</button>
-                <h2 class="modal-title">Add Product</h2>
+                <h2 class="modal-title">Product</h2>
                 <div class="tabs-container">
                     <button class="tab active" data-tab="detailTab">Detail</button>
                     <button class="tab" data-tab="stockTab">Stock</button>
@@ -250,7 +250,7 @@
                             <div class="form-group">
                                 <label for="editVendor">Location</label>
                                 <div class="input-with-plus">
-                                        <select id="stockLocation" class="location-dropdown">
+                                        <select id="editLocation" class="location-dropdown">
 
                                         <option value="" disabled selected>Select Location</option>
                                     </select>
@@ -308,15 +308,16 @@
                 <div class="tab-content" id="stockTab">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="stockLocation">Location</label>
+                            <label for="stockLocation" class="form-label">Location</label>
                             <div class="input-with-plus">
-                                <select id="stockLocation" class="location-dropdown">
+                                <select id="stockLocation" class="location-dropdown" aria-label="Select a location">
                                     <option value="" disabled selected>Select Location</option>
                                 </select>
-                                <button class="add-icon" id="addStockLocationBtn">
+                                <button type="button" class="add-icon btn-icon" id="addStockLocationBtn" aria-label="Add Location">
                                     <ion-icon name="add-outline"></ion-icon>
                                 </button>
-                                <button class="delete-icon" id="deleteStockLocationBtn">
+                                <button type="button" class="delete-icon btn-icon" id="deleteStockLocationBtn"
+                                    aria-label="Delete Selected Location">
                                     <ion-icon name="trash-outline"></ion-icon>
                                 </button>
                             </div>

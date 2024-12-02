@@ -49,7 +49,6 @@ let usedItemCodes = []; // Track all used item codes
 
 // Handle Category Color Selection
 const categoryColorButtons = document.querySelectorAll('.color-btn');
-let selectedCategoryColor = '';
 
 categoryColorButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -270,6 +269,9 @@ const fetchLocations = async () => {
 };
 
 
+
+
+
 // this is an event listener to addlocation btn:
 
 const addLocationBtn = document.getElementById("addLocationBtn");
@@ -291,6 +293,73 @@ addLocationBtn.addEventListener("click", async () => {
         }
     } else {
         alert("Invalid location name. Please try again.");
+    }
+});
+
+let selectedLocation = ""; // Store the selected location
+
+document.getElementById("editLocation").addEventListener("change", (event) => {
+    selectedLocation = event.target.value; // Update the selected location
+    console.log("Selected Location:", selectedLocation);
+});
+
+
+
+// Add Location to Firebase
+const addStockLocationBtn = document.getElementById("addStockLocationBtn");
+addStockLocationBtn.addEventListener("click", async () => {
+    const newLocation = prompt("Enter the new location name:");
+
+    if (newLocation && newLocation.trim() !== "") {
+        try {
+            await addDoc(collection(db, "locations"), { name: newLocation.trim() });
+            alert("Location added successfully!");
+            fetchLocations(); // Refresh the dropdown
+        } catch (error) {
+            console.error("Error adding location:", error);
+            alert("Failed to add location. Please try again.");
+        }
+    } else {
+        alert("Invalid location name. Please try again.");
+    }
+});
+
+// Delete Location from Firebase
+const deleteStockLocationBtn = document.getElementById("deleteStockLocationBtn");
+deleteStockLocationBtn.addEventListener("click", async () => {
+    const locationSelect = document.getElementById("stockLocation");
+    const selectedOption = locationSelect.options[locationSelect.selectedIndex];
+
+    if (!selectedOption || !selectedOption.value) {
+        alert("Please select a location to delete.");
+        return;
+    }
+
+    const locationToDelete = selectedOption.value;
+
+    if (confirm(`Are you sure you want to delete the location "${locationToDelete}"?`)) {
+        try {
+            const querySnapshot = await getDocs(collection(db, "locations"));
+
+            let locationDocId = null;
+
+            querySnapshot.forEach(doc => {
+                if (doc.data().name === locationToDelete) {
+                    locationDocId = doc.id;
+                }
+            });
+
+            if (locationDocId) {
+                await deleteDoc(doc(db, "locations", locationDocId));
+                alert(`Location "${locationToDelete}" deleted successfully!`);
+                fetchLocations(); // Refresh the dropdown
+            } else {
+                alert(`Location "${locationToDelete}" not found in Firebase.`);
+            }
+        } catch (error) {
+            console.error("Error deleting location:", error);
+            alert("Failed to delete the location. Please try again.");
+        }
     }
 });
 
@@ -355,6 +424,8 @@ editSaveBtn.addEventListener("click", async () => {
 
 
 
+
+
 // Handle Edit Button Click
 const handleEdit = async (e) => {
     const id = e.target.dataset.id; // Get product ID
@@ -388,6 +459,8 @@ const handleEdit = async (e) => {
 
 
 
+
+
 // Handle Delete Button Click
 const handleDelete = async (e) => {
     const id = e.target.dataset.id;
@@ -416,20 +489,6 @@ const handleDelete = async (e) => {
         alert("Failed to delete product. Please check console logs for details.");
     }
 };
-
-// Fetch inventory data on page load
-
-
-
-
-
-
-
-
-// Until here the buttons to edit and delete
-
-
-
 
 async function populateVendorDropdown() {
     const vendorSelect = document.getElementById("editVendor");
@@ -716,13 +775,12 @@ const setupColorSelection = () => {
 // Render Table with Edit and Delete Buttons
 // Render Table
 const renderTable = () => {
-    const tableBody = document.querySelector('#inventoryTable tbody');
+    const tableBody = document.querySelector("#inventoryTable tbody");
 
     tableBody.innerHTML = ""; // Clear existing rows
 
-    inventoryData.forEach((item) => {
+    inventoryData.forEach(item => {
         const row = document.createElement("tr");
-        const categoryColor = item.categoryColor || '#FFFFFF'; // Default to white if no color is assigned
 
         row.innerHTML = `
             <td>${item.itemCode}</td>
@@ -731,7 +789,7 @@ const renderTable = () => {
             <td>${item.quantity}</td>
             <td>${item.threshold}</td>
             <td>${item.status}</td>
-            <td>${item.location}</td>
+            <td>${item.location}</td> <!-- Updated location field -->
             <td>
                 <button class="edit-btn" data-id="${item.id}">Edit</button>
                 <button class="delete-btn" data-id="${item.id}">Delete</button>
@@ -741,14 +799,14 @@ const renderTable = () => {
     });
 
     // Add event listeners to Edit and Delete buttons
-    document.querySelectorAll(".edit-btn").forEach((button) =>
+    document.querySelectorAll(".edit-btn").forEach(button =>
         button.addEventListener("click", handleEdit)
     );
-    document.querySelectorAll(".delete-btn").forEach((button) =>
+    document.querySelectorAll(".delete-btn").forEach(button =>
         button.addEventListener("click", handleDelete)
     );
-
 };
+
 
 const setupImageHover = () => {
     const tableBody = document.querySelector('#inventoryTable tbody');
@@ -833,8 +891,7 @@ saveProductBtn.addEventListener("click", async (e) => {
 
     try {
         // Save the product to Firestore
-        const productRef = await addDoc(collection(db, "inventory"), newProduct);
-        const productId = productRef.id; // Get the product's ID
+        
 
         // Check if an image was uploaded
         const fileInput = document.getElementById("editPhoto");
@@ -850,7 +907,6 @@ saveProductBtn.addEventListener("click", async (e) => {
         }
 
         // Update the local inventory data
-        inventoryData.push({ ...newProduct, id: productId }); // Include the product ID
         renderTable(); // Update the table
 
         // Increment item code for the next product
@@ -961,8 +1017,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const binStockQuantity = document.getElementById("binStockQuantity");
     const saveStockChangesBtn = document.getElementById("saveStockChangesBtn");
 
+    let totalProductQuantity = 0; // Quantity fetched from Firebase
+    let allocatedQuantity = 0; // Total quantity allocated to bins
+    let binStocks = {}; // Track bin-specific stock allocation
     let selectedBin = null;
-    let binStocks = {}; // Store stock data for bins
+    let productId = null; // Declare globally or assign the correct ID
+
+
+
+    // Validate Allocation Against Total Quantity
+    const validateAllocation = () => {
+        const remaining = totalProductQuantity - allocatedQuantity;
+        binStockQuantity.max = remaining; // Set maximum input value
+        binDetails.value += `\nRemaining Quantity: ${remaining}`;
+        if (remaining < 0) {
+            alert("Total allocation exceeds the available product quantity!");
+        }
+    };
+
+
+
+
+
+
+
+
 
     // Add Aisle
     addAisleBtn.addEventListener("click", () => {
@@ -1062,6 +1141,39 @@ document.addEventListener("DOMContentLoaded", () => {
         binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${stock}`;
     };
 
+//This is to add the quantity in the second tab of stocks
+
+    document.getElementById('editQuantity').addEventListener('input', (e) => {
+        totalProductQuantity = parseInt(e.target.value, 10) || 0;
+        allocatedQuantity = Object.values(binStocks).reduce((sum, qty) => sum + qty, 0);
+    });
+
+
+// Handle Adding Stock to Bins
+
+    addStockToBinBtn.addEventListener('click', () => {
+        if (!selectedBin) {
+            alert('Please select a bin.');
+            return;
+        }
+
+        const quantityToAdd = parseInt(binStockQuantity.value, 10) || 0;
+        const remaining = totalProductQuantity - allocatedQuantity;
+
+        if (quantityToAdd <= 0 || quantityToAdd > remaining) {
+            alert(`Enter a valid quantity (0-${remaining}).`);
+            return;
+        }
+
+        const binId = selectedBin.dataset.bin;
+        binStocks[binId] = (binStocks[binId] || 0) + quantityToAdd;
+        allocatedQuantity += quantityToAdd;
+
+        updateBinDetails(binId);
+        validateAllocation();
+    });
+
+
     // Add Stock to Selected Bin
     addStockToBinBtn.addEventListener("click", () => {
         if (!selectedBin) {
@@ -1081,29 +1193,33 @@ document.addEventListener("DOMContentLoaded", () => {
         updateBinDetails(binId);
     });
 
-    // Subtract Stock from Selected Bin
     subtractStockFromBinBtn.addEventListener("click", () => {
         if (!selectedBin) {
             alert("Please select a bin.");
             return;
         }
 
-        const quantity = parseInt(binStockQuantity.value, 10);
-        if (!quantity || quantity <= 0) {
-            alert("Please enter a valid quantity.");
+        const quantityToSubtract = parseInt(binStockQuantity.value, 10) || 0;
+        const binId = selectedBin.dataset.bin;
+
+        if (quantityToSubtract <= 0 || quantityToSubtract > (binStocks[binId] || 0)) {
+            alert("Enter a valid quantity to subtract.");
             return;
         }
 
-        const binId = selectedBin.dataset.bin;
-        binStocks[binId] = Math.max((binStocks[binId] || 0) - quantity, 0);
+        binStocks[binId] -= quantityToSubtract;
+        allocatedQuantity -= quantityToSubtract;
 
         updateBinDetails(binId);
+        validateAllocation();
     });
 
+    // Update Bin Details Display
     const updateBinDetails = (binId) => {
+        const binStock = binStocks[binId] || 0;
         const binLocation = `${selectedBin.dataset.aisle}, ${selectedBin.dataset.rack}, ${selectedBin.dataset.shelf}`;
-        binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${binStocks[binId]}`;
-        binStockQuantity.value = ""; // Clear input
+        binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${binStock}`;
+        binStockQuantity.value = ""; // Clear input field
     };
 
     // Save Stock Changes to Firebase
@@ -1117,21 +1233,34 @@ document.addEventListener("DOMContentLoaded", () => {
                     shelf,
                     bin: binId,
                     quantity: binStocks[binId],
-                    timestamp: new Date(),
                 };
             });
 
+            // Save stock details to the stockDetails collection
             for (const stock of stockDetails) {
-                await addDoc(collection(db, "stockDetails"), stock);
+                await addDoc(collection(db, "BinStock"), {
+                    ...stock,
+                    productId, // Include the product ID for reference
+                    timestamp: new Date(),
+                });
             }
 
-            alert("Stock details saved successfully!");
+            await updateDoc(productRef, {
+                binDetails: stockDetails, // Store all bin details under the product
+            });
+
+            alert("Stock details saved successfully to inventory and stock details!");
             binStocks = {}; // Clear bin stocks after saving
+            allocatedQuantity = 0; // Reset allocated quantity
+            fetchProductQuantity(); // Refresh total product quantity from Firebase
         } catch (error) {
-            console.error("Error saving stock details:", error);
+            console.error("Error saving stock details to inventory:", error);
             alert("Failed to save stock details. Please try again.");
         }
     });
+
+    
+});
 
     // Delete Element
     window.deleteElement = (button, type) => {
@@ -1140,7 +1269,7 @@ document.addEventListener("DOMContentLoaded", () => {
             element.remove();
         }
     };
-});
+
 
 
 

@@ -192,7 +192,7 @@ function resetOrderModal() {
 
 //This function will show in the modal the different vendors possible to select from
 
-async function populateCompanyDropdown(selectedCompanyName="") {
+async function populateCompanyDropdown(selectedCompany) {
     const companySelect = document.getElementById("companySelect");
     companySelect.innerHTML = '<option value="" disabled selected>Select Company</option>'; // Clear existing options
 
@@ -204,11 +204,10 @@ async function populateCompanyDropdown(selectedCompanyName="") {
             option.value = doc.id; // Use vendor ID as the value
             option.textContent = `${vendor.companyName} - ${vendor.firstName} ${vendor.lastName}`;
             
-            // If the current vendor matches the selectedCompanyName, mark it as selected
-            if (vendor.companyName === selectedCompanyName) {
+            // Pre-select the current company
+            if (doc.id === selectedCompany) {
                 option.selected = true;
             }
-
             companySelect.appendChild(option);
         });
     } catch (error) {
@@ -281,17 +280,22 @@ async function deleteOrder(docId) {
 async function saveOrder() {
     const orderNumber = document.getElementById("orderNumber").value; // Use this to identify the order being edited
     const companySelect = document.getElementById("companySelect");
-    const companyName = companySelect.options[companySelect.selectedIndex]?.text || "";
+    const selectedVendorId = companySelect.value;
+    const selectedVendorName = companySelect.options[companySelect.selectedIndex]?.text || ""; // Fetch the display text (company name)
     const orderDate = document.getElementById("orderDate").value;
     const orderToCompany = document.getElementById("orderToCompany").value;
     const totalAmount = document.getElementById("totalAmount").value;
     const balanceDue = document.getElementById("balanceDue").value;
+    const selectedCompany = companySelect.value;
+
+    
+
 
     // Determine status based on balanceDue
     const status = balanceDue === "0" || balanceDue === 0 ? "Paid" : "Pending";
 
     // Validate required fields
-    if (!orderNumber || !companyName || !orderDate || !orderToCompany) {
+    if (!orderNumber || !selectedVendorId || !orderDate || !orderToCompany) {
         alert("Please fill in all required fields.");
         return;
     }
@@ -316,7 +320,8 @@ async function saveOrder() {
         // Save or update order in Firestore
         await setDoc(doc(db, "orders", orderNumber), {
             "Order#": orderNumber,
-            Companyname: companyName,
+            vendorId: selectedVendorId, // Save vendor ID
+            companyName: selectedVendorName, // Save company name
             Date: orderDate,
             OrderTo: orderToCompany,
             Items: orderItems,
@@ -350,7 +355,7 @@ async function loadOrders() {
 
             row.innerHTML = `
                 <td>${order["Order#"]}</td>
-                <td>${order.Companyname}</td>
+                <td>${order.companyName}</td>
                 <td>${order.Date}</td>
                 <td>${order.Items ? order.Items.length : 0}</td>
                 <td>${order.totalAmount}</td>
@@ -421,6 +426,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Delegated Event Listeners for dynamic elements
+    // Delegated Event Listeners for dynamic elements
+
+    let lastSelectedCompany = ""; // Global variable to store the last selected company
+
+
     document.addEventListener("click", async (event) => {
         const target = event.target;
 
@@ -432,17 +442,23 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 // Fetch the order data from Firestore
                 const orderDoc = await getDoc(doc(db, "orders", orderId));
-                if (orderDoc.exists()) { // Use .exists() to check if document exists
+                if (orderDoc.exists()) {
                     const order = orderDoc.data();
 
                     // Populate the modal fields with order data
                     document.getElementById("orderNumber").value = order["Order#"];
-                    document.getElementById("companySelect").value = order.companyName;
                     document.getElementById("orderDate").value = order.Date;
                     document.getElementById("orderToCompany").value = order.OrderTo;
 
+                    // Set the company dropdown
+                    const companySelect = document.getElementById("companySelect");
+                    companySelect.innerHTML = ""; // Clear existing options
+
                     // Populate the dropdown and ensure the correct company is selected
-                    await populateCompanyDropdown(order.Companyname);
+                    await populateCompanyDropdown(order.companyName);
+
+                    // Set the selected company
+                    companySelect.value = order.companyName;
 
                     // Populate order items
                     const orderItemsBody = document.getElementById("orderItemsBody");
@@ -450,12 +466,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     order.Items.forEach((item) => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
-                    <td><input type="text" placeholder="Item Name" value="${item.itemName}"></td>
-                    <td><input type="number" placeholder="Qty" value="${item.quantity}"></td>
-                    <td><input type="text" placeholder="Description" value="${item.description}"></td>
-                    <td><input type="number" placeholder="Rate" value="${item.rate}"></td>
-                    <td><input type="number" placeholder="Amount" value="${item.amount}" readonly></td>
-                `;
+                        <td><input type="text" placeholder="Item Name" value="${item.itemName}"></td>
+                        <td><input type="number" placeholder="Qty" value="${item.quantity}"></td>
+                        <td><input type="text" placeholder="Description" value="${item.description}"></td>
+                        <td><input type="number" placeholder="Rate" value="${item.rate}"></td>
+                        <td><input type="number" placeholder="Amount" value="${item.amount}" readonly></td>
+                    `;
                         orderItemsBody.appendChild(row);
                     });
 
@@ -479,22 +495,76 @@ document.addEventListener("DOMContentLoaded", () => {
             deleteOrder(target.dataset.id);
         }
 
-
-
-        //Order toggle button
-
-        // Toggle Status
+        // Order Toggle Button
         if (target.classList.contains("toggle-status-btn")) {
             const orderId = target.dataset.id;
             toggleOrderStatus(orderId);
         }
+        // Add Item Button
+        if (target.id === "addRowBtn") { // Assuming the button has an ID "addItemBtn"
+            const orderItemsBody = document.getElementById("orderItemsBody");
 
-
+            if (orderItemsBody) {
+                // Create a new row for the item
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                <td><input type="text" placeholder="Item Name"></td>
+                <td><input type="number" placeholder="Qty"></td>
+                <td><input type="text" placeholder="Description"></td>
+                <td><input type="number" placeholder="Rate"></td>
+                <td><input type="number" placeholder="Amount" readonly></td>
+            `;
+                orderItemsBody.appendChild(newRow);
+            }
+        }
     });
-
 
     
 
+    // Delegated Input Listener for Quantity and Rate Changes
+    document.addEventListener("input", (event) => {
+        const target = event.target;
+
+        // Check if the input is in the modal table (Quantity or Rate fields)
+        if (target.closest("#orderItemsBody")) {
+            const row = target.closest("tr");
+            const quantityInput = row.querySelector("input[placeholder='Qty']");
+            const rateInput = row.querySelector("input[placeholder='Rate']");
+            const amountInput = row.querySelector("input[placeholder='Amount']");
+
+            if (quantityInput && rateInput && amountInput) {
+                const quantity = parseFloat(quantityInput.value) || 0;
+                const rate = parseFloat(rateInput.value) || 0;
+
+                // Calculate the amount
+                const amount = quantity * rate;
+
+                // Update the Amount field
+                amountInput.value = amount.toFixed(2);
+
+                // Update the Total and Balance Due
+                updateOrderTotals();
+            }
+        }
+    });
+
+    // Function to Update Totals and Balance Due
+    function updateOrderTotals() {
+        const orderItemsBody = document.getElementById("orderItemsBody");
+        const rows = orderItemsBody.querySelectorAll("tr");
+
+        let total = 0;
+
+        rows.forEach((row) => {
+            const amountInput = row.querySelector("input[placeholder='Amount']");
+            const amount = parseFloat(amountInput.value) || 0;
+            total += amount;
+        });
+
+        // Update Total and Balance Due fields
+        document.getElementById("totalAmount").value = total.toFixed(2);
+        document.getElementById("balanceDue").value = total.toFixed(2); // Assuming full balance due initially
+    }
 
 
 

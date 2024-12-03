@@ -1093,7 +1093,6 @@ const renderTable = () => {
                 : item.quantity === item.threshold
                     ? "status-yellow"
                     : "status-red";
-
         const row = document.createElement("tr");
 
         row.innerHTML = `
@@ -1102,7 +1101,7 @@ const renderTable = () => {
             <td>${item.description}</td>
             <td>${item.quantity}</td>
             <td>${item.threshold}</td>
-            <td><span class="${statusClass}">${item.quantity > item.threshold ? "In Stock" : item.quantity === item.threshold ? "Threshold Reached" : "Low Stock"}</span></td>
+            <td><span class="${statusClass}">${item.quantity > item.threshold ? "In Stock" : "Low Stock"}</span></td>
             <td>${item.location}</td> <!-- Updated location field -->
             <td>
                 <button class="edit-btn" data-id="${item.id}">Edit</button>

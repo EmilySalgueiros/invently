@@ -1,7 +1,7 @@
 //First we start integrating firebase 
 // Firebase Imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getFirestore, collection, getDocs, onSnapshot, getDoc, doc, where, addDoc, deleteDoc, updateDoc} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, onSnapshot, getDoc, doc, where, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
 
 
@@ -26,11 +26,224 @@ const db = getFirestore(app);
 
 
 
+
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+//global variables
+// this is new 
+
+let totalProductQuantity = 0; // Quantity fetched from Firebase
+let allocatedQuantity = 0; // Total quantity allocated to bins
+let binStocks = {}; // Track bin-specific stock allocation
+
+// this is new until here
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //just testing
 // Function to populate vendor dropdown in Manage Inventory modal
 // This part if for edit and delete button for the table
 let editingProductId = null; // Store the ID of the product being edited
 const saveProductBtn = document.querySelector('.submit-btn'); // Assuming this is the Save button
+
+
+
+
+
+
+
+
+
+
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+// THis is new 
+// Validate Allocation Against Total Quantity
+const validateAllocation = () => {
+    allocatedQuantity = Object.values(binStocks).reduce((sum, quantity) => sum + quantity, 0);
+    const remaining = totalProductQuantity - allocatedQuantity;
+    console.log("Total Product Quantity:", totalProductQuantity);
+    console.log("Allocated Quantity:", allocatedQuantity);
+    console.log("Remaining Quantity:", remaining);
+
+    if (remaining < 0) {
+        alert("Total allocation exceeds the available product quantity!");
+        return false;
+    }
+    return true;
+};
+
+
+const fetchProductQuantity = async () => {
+    const productId = editingProductId; // Use the global editingProductId
+    if (!productId) {
+        console.error("No productId available. Ensure it's set correctly.");
+        return;
+    }
+
+    console.log("Fetching product quantity and stock details for productId:", productId);
+
+    try {
+        const productRef = doc(db, "inventory", productId);
+        const productDoc = await getDoc(productRef);
+
+        if (productDoc.exists()) {
+            const productData = productDoc.data();
+            console.log("Product data fetched from Firebase:", productData);
+
+            // Update global variables
+            totalProductQuantity = productData.quantity || 0;
+            allocatedQuantity = productData.allocatedQuantity || 0;
+
+            document.getElementById("stockLocation").value = productData.location || "";
+
+
+            // Render the bins based on binDetails
+            if (productData.binDetails && productData.binDetails.length > 0) {
+                renderBins(productData.binDetails);
+            } else {
+                console.log("No bin details found for this product.");
+            }
+
+            validateAllocation(); // Ensure allocations are updated
+        } else {
+            console.error("Product not found in Firebase for productId:", productId);
+        }
+    } catch (error) {
+        console.error("Error fetching product data:", error);
+    }
+};
+
+
+
+
+// render the bins, rebuilding it all
+
+const renderBins = (binDetails) => {
+    const aisleContainer = document.getElementById("aisleContainer");
+    aisleContainer.innerHTML = ""; // Clear existing aisles
+
+    binDetails.forEach(({ aisle, rack, shelf, bin, quantity }) => {
+        const sanitizedBinId = bin.replace(/\s+/g, "_");
+
+        let aisleDiv = document.querySelector(`.aisle[data-aisle="${aisle}"]`);
+        if (!aisleDiv) {
+            aisleDiv = document.createElement("div");
+            aisleDiv.className = "aisle";
+            aisleDiv.dataset.aisle = aisle;
+            aisleDiv.innerHTML = `<h4>Aisle: ${aisle}</h4>`;
+            aisleContainer.appendChild(aisleDiv);
+        }
+
+        let rackDiv = aisleDiv.querySelector(`.rack[data-rack="${rack}"]`);
+        if (!rackDiv) {
+            rackDiv = document.createElement("div");
+            rackDiv.className = "rack";
+            rackDiv.dataset.rack = rack;
+            rackDiv.innerHTML = `<h5>Rack: ${rack}</h5>`;
+            aisleDiv.appendChild(rackDiv);
+        }
+
+        let shelfDiv = rackDiv.querySelector(`.shelf[data-shelf="${shelf}"]`);
+        if (!shelfDiv) {
+            shelfDiv = document.createElement("div");
+            shelfDiv.className = "shelf";
+            shelfDiv.dataset.shelf = shelf;
+            shelfDiv.innerHTML = `<h6>Shelf: ${shelf}</h6>`;
+            rackDiv.appendChild(shelfDiv);
+        }
+
+        let binDiv = shelfDiv.querySelector(`.bin[data-bin="${sanitizedBinId}"]`);
+        if (!binDiv) {
+            binDiv = document.createElement("div");
+            binDiv.className = "bin";
+            binDiv.dataset.bin = sanitizedBinId;
+            const sanitizedBinId = bin.replace(/\s+/g, "_");
+
+            binDiv.innerHTML = `
+    <p>Bin: ${bin} | Quantity: ${quantity}</p>
+    <input type="number" min="0" id="binQuantity-${sanitizedBinId}" value="${quantity}" />
+    <button onclick="updateBinStock('${sanitizedBinId}', 'add')">Add</button>
+    <button onclick="updateBinStock('${sanitizedBinId}', 'subtract')">Subtract</button>
+`;
+
+            shelfDiv.appendChild(binDiv);
+        }
+    });
+};
+
+
+
+const syncQuantityLimits = () => {
+    const detailQuantity = parseInt(document.getElementById("editQuantity").value, 10) || 0;
+    totalProductQuantity = detailQuantity;
+
+    validateAllocation(); // Check for allocation overflow
+};
+
+
+const updateBinStock = async (binId, action) => {
+    try {
+        const escapedBinId = CSS.escape(binId);
+        const inputField = document.getElementById(`binQuantity-${escapedBinId}`);
+        if (!inputField) {
+            console.error(`Input field with id "binQuantity-${escapedBinId}" does not exist.`);
+            return;
+        }
+
+        const currentQuantity = parseInt(inputField.value, 10);
+        const delta = action === "add" ? 1 : -1;
+        const newQuantity = currentQuantity + delta;
+
+        if (newQuantity < 0) {
+            alert("Quantity cannot be negative.");
+            return;
+        }
+
+        const remainingQuantity = totalProductQuantity - allocatedQuantity + currentQuantity - newQuantity;
+        if (remainingQuantity < 0) {
+            alert("Exceeded total quantity limit.");
+            return;
+        }
+
+        inputField.value = newQuantity;
+
+        // Update global and Firebase data
+        binStocks[binId] = newQuantity;
+        allocatedQuantity += delta;
+
+        const productRef = doc(db, "inventory", editingProductId);
+        await updateDoc(productRef, {
+            binDetails: Object.entries(binStocks).map(([key, quantity]) => ({
+                bin: key,
+                quantity,
+            })),
+        });
+        alert("Stock updated successfully.");
+    } catch (error) {
+        console.error("Error updating bin stock:", error);
+    }
+};
+
+
+// this is new until here
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+// NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWW
+
 
 
 
@@ -49,6 +262,7 @@ let usedItemCodes = []; // Track all used item codes
 
 // Handle Category Color Selection
 const categoryColorButtons = document.querySelectorAll('.color-btn');
+let selectedCategoryColor = '';
 
 categoryColorButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -236,6 +450,8 @@ deleteLocationBtn.addEventListener("click", async () => {
 
 
 
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
 // this function will locate the location added
 
@@ -251,24 +467,42 @@ const fetchLocations = async () => {
     try {
         // Fetch locations from Firebase
         const querySnapshot = await getDocs(collection(db, "locations"));
+        const locations = []; // Store all fetched locations
         querySnapshot.forEach(doc => {
             const locationData = doc.data();
-            // Add the location to all dropdowns
+            locations.push(locationData.name);
+        });
+
+
+        // Populate all dropdowns with the fetched locations
+        locations.forEach(location => {
             locationDropdowns.forEach(dropdown => {
                 const option = document.createElement("option");
-                option.value = locationData.name;
-                option.textContent = locationData.name;
+                option.value = location;
+                option.textContent = location;
                 dropdown.appendChild(option);
             });
         });
 
         console.log("Locations fetched and added to all dropdowns.");
+
+        // Add event listeners to synchronize selections
+        locationDropdowns.forEach(dropdown => {
+            dropdown.addEventListener("change", (event) => {
+                const selectedLocation = event.target.value;
+                // Update all dropdowns to the selected location
+                locationDropdowns.forEach(otherDropdown => {
+                    otherDropdown.value = selectedLocation;
+                });
+            });
+        });
     } catch (error) {
         console.error("Error fetching locations:", error);
     }
 };
 
-
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
 
 
@@ -296,11 +530,18 @@ addLocationBtn.addEventListener("click", async () => {
     }
 });
 
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
 let selectedLocation = ""; // Store the selected location
 
 document.getElementById("editLocation").addEventListener("change", (event) => {
     selectedLocation = event.target.value; // Update the selected location
+    document.getElementById("stockLocation").value = selectedLocation;
+
     console.log("Selected Location:", selectedLocation);
+    fetchProductQuantity();
+
 });
 
 
@@ -363,6 +604,8 @@ deleteStockLocationBtn.addEventListener("click", async () => {
     }
 });
 
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+//NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
 
 
@@ -400,24 +643,46 @@ editSaveBtn.addEventListener("click", async () => {
             currency: document.getElementById("editCurrency").value.trim(),
         };
 
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        // Update the location in the "Stock" tab to match the "Details" tab
+        document.getElementById("stockLocation").value = updatedProduct.location;
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
         // Update the product in Firebase
         const productRef = doc(db, "inventory", editingProductId); // `editingProductId` should hold the ID of the product being edited
         await updateDoc(productRef, updatedProduct);
+
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+         //Synchronize all dropdowns to reflect the selected location
+          const selectedLocation = updatedProduct.location;
+          const locationDropdowns = document.querySelectorAll(".location-dropdown");
+          locationDropdowns.forEach(dropdown => {
+               dropdown.value = selectedLocation;
+            });
+
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        //NNNNNNNNNNNNNNNNNNNNNNNNNNNWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
 
         // Close the modal
         const editModal = document.getElementById("editInventoryModal");
         editModal.style.display = "none";
 
-        // Refresh the table to reflect the changes
+        // Refresh the table to reflect the changes (if needed)
         fetchInventory();
-        fetchLocations();
 
-        console.log("Product updated successfully.");
+        // IN THE OLD CODE U ADDED THIS         fetchLocations();    , CHECK IF U WOULD LIKE TO SEE IT AGAIN
+
+
+        console.log("Product updated successfully and dropdowns synchronized.");
     } catch (error) {
         console.error("Error updating product:", error);
         alert("Failed to update the product. Please try again.");
     }
 });
+
 
 
 
@@ -442,13 +707,18 @@ const handleEdit = async (e) => {
         document.getElementById("editLocation").value = product.location;
         document.getElementById("editPrice").value = product.price;
         document.getElementById("editCurrency").value = product.currency;
+        document.getElementById("stockLocation").value = product.location;
 
-        editingProductId = id; // Set editing state
+        editingProductId = id; // Set the global editingProductId
+
+
 
         // Hide "Save Changes" button and show "Save Edit Changes" button
         saveProductBtn.style.display = "none";
         editSaveBtn.style.display = "block";
 
+        //THIS IS TO UPDATE THE QUANTITY IN THE "STOCK" TAB
+        fetchProductQuantity();
 
         editModal.style.display = "flex"; // Show the modal
     } else {
@@ -674,17 +944,54 @@ closeEditModal.addEventListener('click', (e) => {
 const tabs = document.querySelectorAll('.tab');
 const tabContents = document.querySelectorAll('.tab-content');
 
-tabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-        // Remove active class from all tabs and contents
-        tabs.forEach((t) => t.classList.remove('active'));
-        tabContents.forEach((content) => content.classList.remove('active'));
 
-        // Add active class to clicked tab and corresponding content
-        tab.classList.add('active');
+//NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+//NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+// Function to update the Stock tab
+const updateStockTab = () => {
+    const detailQuantity = parseInt(document.getElementById('editQuantity').value, 10) || 0;
+    totalProductQuantity = detailQuantity; // Synchronize with the "Details" tab
+
+    console.log("Stock Tab Updated:");
+    console.log("Total Product Quantity:", totalProductQuantity);
+    console.log("Allocated Quantity:", allocatedQuantity);
+    console.log("Remaining Quantity:", totalProductQuantity - allocatedQuantity);
+
+
+
+    document.getElementById('binStockQuantity').max = remaining; // Update the max value for bin stock quantity
+};
+
+//NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+//NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
+
+
+tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        tabContents.forEach((content) => content.classList.remove("active"));
+
+        tab.classList.add("active");
         document
-            .getElementById(tab.getAttribute('data-tab'))
-            .classList.add('active');
+            .getElementById(tab.getAttribute("data-tab"))
+            .classList.add("active");
+
+
+        //NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        //NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
+        if (tab.getAttribute("data-tab") === "stockTab") {
+            console.log("Switched to Stock tab");
+            if (!binStocks || Object.keys(binStocks).length === 0) {
+                fetchProductQuantity(); // Fetch bins only if necessary
+            }
+        }
+
+        //NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+        //NNNNNNNNNNNNNNNNNNNNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
+
     });
 });
 
@@ -780,6 +1087,13 @@ const renderTable = () => {
     tableBody.innerHTML = ""; // Clear existing rows
 
     inventoryData.forEach(item => {
+        const statusClass =
+            item.quantity > item.threshold
+                ? "status-green"
+                : item.quantity === item.threshold
+                    ? "status-yellow"
+                    : "status-red";
+
         const row = document.createElement("tr");
 
         row.innerHTML = `
@@ -788,7 +1102,7 @@ const renderTable = () => {
             <td>${item.description}</td>
             <td>${item.quantity}</td>
             <td>${item.threshold}</td>
-            <td>${item.status}</td>
+            <td><span class="${statusClass}">${item.quantity > item.threshold ? "In Stock" : item.quantity === item.threshold ? "Threshold Reached" : "Low Stock"}</span></td>
             <td>${item.location}</td> <!-- Updated location field -->
             <td>
                 <button class="edit-btn" data-id="${item.id}">Edit</button>
@@ -806,30 +1120,6 @@ const renderTable = () => {
         button.addEventListener("click", handleDelete)
     );
 };
-
-
-const setupImageHover = () => {
-    const tableBody = document.querySelector('#inventoryTable tbody');
-    const imagePreview = document.getElementById('imagePreview');
-    const previewImage = document.getElementById('previewImage');
-
-    tableBody.addEventListener('mouseover', (event) => {
-        const row = event.target.closest('tr');
-        if (row && row.dataset.imageUrl) {
-            previewImage.src = row.dataset.imageUrl;
-
-            // Position the preview near the mouse
-            imagePreview.style.top = `${event.clientY + 10}px`;
-            imagePreview.style.left = `${event.clientX + 10}px`;
-            imagePreview.style.display = 'block';
-        }
-    });
-
-    tableBody.addEventListener('mouseout', () => {
-        imagePreview.style.display = 'none';
-    });
-};
-
 
 
 //Create an edit save button listener
@@ -891,7 +1181,8 @@ saveProductBtn.addEventListener("click", async (e) => {
 
     try {
         // Save the product to Firestore
-        
+        const productRef = await addDoc(collection(db, "inventory"), newProduct);
+        const productId = productRef.id; // Get the product's ID
 
         // Check if an image was uploaded
         const fileInput = document.getElementById("editPhoto");
@@ -907,6 +1198,7 @@ saveProductBtn.addEventListener("click", async (e) => {
         }
 
         // Update the local inventory data
+        inventoryData.push({ ...newProduct, id: productId }); // Include the product ID
         renderTable(); // Update the table
 
         // Increment item code for the next product
@@ -924,6 +1216,8 @@ saveProductBtn.addEventListener("click", async (e) => {
         alert("Failed to save product. Please try again.");
     }
 });
+
+
 
 
 const setupTabSwitching = () => {
@@ -1017,23 +1311,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const binStockQuantity = document.getElementById("binStockQuantity");
     const saveStockChangesBtn = document.getElementById("saveStockChangesBtn");
 
-    let totalProductQuantity = 0; // Quantity fetched from Firebase
-    let allocatedQuantity = 0; // Total quantity allocated to bins
-    let binStocks = {}; // Track bin-specific stock allocation
     let selectedBin = null;
     let productId = null; // Declare globally or assign the correct ID
 
 
 
-    // Validate Allocation Against Total Quantity
-    const validateAllocation = () => {
-        const remaining = totalProductQuantity - allocatedQuantity;
-        binStockQuantity.max = remaining; // Set maximum input value
-        binDetails.value += `\nRemaining Quantity: ${remaining}`;
-        if (remaining < 0) {
-            alert("Total allocation exceeds the available product quantity!");
-        }
-    };
 
 
 
@@ -1134,141 +1416,198 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedBin = bin;
         selectedBin.classList.add("selected");
 
-        const binId = bin.dataset.bin;
+        const binId = selectedBin.dataset.bin;
         const stock = binStocks[binId] || 0;
 
         const binLocation = `${bin.dataset.aisle}, ${bin.dataset.rack}, ${bin.dataset.shelf}`;
         binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${stock}`;
     };
 
-//This is to add the quantity in the second tab of stocks
+    //This is to add the quantity in the second tab of stocks
 
     document.getElementById('editQuantity').addEventListener('input', (e) => {
         totalProductQuantity = parseInt(e.target.value, 10) || 0;
-        allocatedQuantity = Object.values(binStocks).reduce((sum, qty) => sum + qty, 0);
+        console.log("Edit Quantity Updated:");
+        console.log("Total Product Quantity:", totalProductQuantity);
+        validateAllocation(); // Ensure validation stays updated
     });
 
 
-// Handle Adding Stock to Bins
+    // Handle Adding Stock to Bins
 
-    addStockToBinBtn.addEventListener('click', () => {
+    addStockToBinBtn.addEventListener("click", () => {
         if (!selectedBin) {
-            alert('Please select a bin.');
+            alert("Please select a bin."); // Ensure a bin is selected
             return;
         }
 
+        // Parse and validate the quantity to add
         const quantityToAdd = parseInt(binStockQuantity.value, 10) || 0;
         const remaining = totalProductQuantity - allocatedQuantity;
 
+        console.log("Before Adding:");
+        console.log("Total Product Quantity:", totalProductQuantity);
+        console.log("Allocated Quantity:", allocatedQuantity);
+        console.log("Remaining Quantity:", remaining);
+
         if (quantityToAdd <= 0 || quantityToAdd > remaining) {
-            alert(`Enter a valid quantity (0-${remaining}).`);
+            alert(`Enter a valid quantity (0-${remaining}).`); // Validate against remaining quantity
             return;
         }
 
+        // Update bin-specific stock and total allocated quantity
         const binId = selectedBin.dataset.bin;
         binStocks[binId] = (binStocks[binId] || 0) + quantityToAdd;
         allocatedQuantity += quantityToAdd;
 
+        // Update UI and validate allocation
         updateBinDetails(binId);
         validateAllocation();
     });
 
-
-    // Add Stock to Selected Bin
-    addStockToBinBtn.addEventListener("click", () => {
-        if (!selectedBin) {
-            alert("Please select a bin.");
-            return;
+    const updateBinUI = (binId, newQuantity) => {
+        const binDiv = document.querySelector(`.bin[data-bin="${binId}"]`);
+        if (binDiv) {
+            const quantityInput = binDiv.querySelector('input[type="number"]');
+            quantityInput.value = newQuantity; // Update the quantity in the UI
         }
+    };
 
-        const quantity = parseInt(binStockQuantity.value, 10);
-        if (!quantity || quantity <= 0) {
-            alert("Please enter a valid quantity.");
-            return;
-        }
 
-        const binId = selectedBin.dataset.bin;
-        binStocks[binId] = (binStocks[binId] || 0) + quantity;
-
-        updateBinDetails(binId);
-    });
 
     subtractStockFromBinBtn.addEventListener("click", () => {
         if (!selectedBin) {
-            alert("Please select a bin.");
+            alert("Please select a bin."); // Ensure a bin is selected
             return;
         }
 
+        // Parse and validate the quantity to subtract
         const quantityToSubtract = parseInt(binStockQuantity.value, 10) || 0;
         const binId = selectedBin.dataset.bin;
 
+
+        console.log("Before Subtracting:");
+        console.log("Total Product Quantity:", totalProductQuantity);
+        console.log("Allocated Quantity:", allocatedQuantity);
+        console.log("Bin Stock:", binStocks[binId] || 0);
+
         if (quantityToSubtract <= 0 || quantityToSubtract > (binStocks[binId] || 0)) {
-            alert("Enter a valid quantity to subtract.");
+            alert("Enter a valid quantity to subtract."); // Check against current bin stock
             return;
         }
 
+        // Update bin-specific stock and allocated quantity
         binStocks[binId] -= quantityToSubtract;
         allocatedQuantity -= quantityToSubtract;
 
+        console.log("After Subtracting:");
+        console.log("Total Product Quantity:", totalProductQuantity);
+        console.log("Allocated Quantity:", allocatedQuantity);
+        console.log("Remaining Quantity:", totalProductQuantity - allocatedQuantity);
+
+        // Update UI and validate allocation
         updateBinDetails(binId);
         validateAllocation();
     });
 
+
     // Update Bin Details Display
     const updateBinDetails = (binId) => {
-        const binStock = binStocks[binId] || 0;
+        const binStock = binStocks[binId] || 0; // Get current bin stock
         const binLocation = `${selectedBin.dataset.aisle}, ${selectedBin.dataset.rack}, ${selectedBin.dataset.shelf}`;
+
+        // Update bin details and clear input field
         binDetails.value = `Location: ${binLocation}\nBin: ${binId}\nStock: ${binStock}`;
         binStockQuantity.value = ""; // Clear input field
     };
 
-    // Save Stock Changes to Firebase
-    saveStockChangesBtn.addEventListener("click", async () => {
+
+
+
+    fetchProductQuantity();
+
+
+    document.getElementById("saveStockChangesBtn").addEventListener("click", async () => {
         try {
-            const stockDetails = Object.keys(binStocks).map((binId) => {
-                const [aisle, rack, shelf] = binId.split("-");
-                return {
-                    aisle,
-                    rack,
-                    shelf,
+            const updatedBinDetails = [];
+            const bins = document.querySelectorAll(".bin");
+
+            bins.forEach((binDiv) => {
+                const binId = selectedBin.dataset.bin; // Use data-bin attribute
+                const quantityInput = binDiv.querySelector('input[type="number"]');
+
+                if (!quantityInput) {
+                    console.error(`Input field not found for binId: ${binId}`);
+                    return; // Skip this bin if input is missing
+                }
+
+                const quantity = parseInt(quantityInput.value, 10);
+
+                updatedBinDetails.push({
+                    aisle: binDiv.closest(".aisle").dataset.aisle,
+                    rack: binDiv.closest(".rack").dataset.rack,
+                    shelf: binDiv.closest(".shelf").dataset.shelf,
                     bin: binId,
-                    quantity: binStocks[binId],
-                };
+                    quantity: quantity,
+                });
             });
 
-            // Save stock details to the stockDetails collection
-            for (const stock of stockDetails) {
-                await addDoc(collection(db, "BinStock"), {
-                    ...stock,
-                    productId, // Include the product ID for reference
-                    timestamp: new Date(),
-                });
+            if (updatedBinDetails.length === 0) {
+                alert("No bins found to update.");
+                return;
             }
 
-            await updateDoc(productRef, {
-                binDetails: stockDetails, // Store all bin details under the product
-            });
+            console.log("Updated Bin Details:", updatedBinDetails);
 
-            alert("Stock details saved successfully to inventory and stock details!");
-            binStocks = {}; // Clear bin stocks after saving
-            allocatedQuantity = 0; // Reset allocated quantity
-            fetchProductQuantity(); // Refresh total product quantity from Firebase
+            const productRef = doc(db, "inventory", editingProductId);
+            await updateDoc(productRef, { binDetails: updatedBinDetails });
+
+            alert("Bin details saved successfully!");
+
+            binStocks = updatedBinDetails.reduce((acc, bin) => {
+                acc[bin.bin] = bin.quantity;
+                return acc;
+            }, {});
+
+            allocatedQuantity = Object.values(binStocks).reduce((sum, qty) => sum + qty, 0);
+            console.log("Firestore updated without UI refresh");
         } catch (error) {
-            console.error("Error saving stock details to inventory:", error);
-            alert("Failed to save stock details. Please try again.");
+            console.error("Error saving bin details:", error);
+            alert(`Failed to save bin details. Error: ${error.message}`);
         }
     });
 
-    
+
+
+
+    document.querySelectorAll('input[id^="binQuantity-"]').forEach((input) => {
+        input.addEventListener("input", (e) => {
+            const binDiv = e.target.closest(".bin");
+            const binId = binDiv.dataset.bin;
+            const newQuantity = parseInt(e.target.value, 10) || 0;
+
+            // Update the "Selected Bin Details" section
+            const binDetailsTextarea = document.getElementById("binDetails");
+            binDetailsTextarea.value = `Bin: ${binId}, Quantity: ${newQuantity}`;
+            console.log("Rendered Input ID:", input.id);
+            console.log("Updating bin with ID:", binId);
+
+
+        });
+    });
+
+
+
+
 });
 
-    // Delete Element
-    window.deleteElement = (button, type) => {
-        const element = button.parentNode;
-        if (confirm(`Are you sure you want to delete this ${type}?`)) {
-            element.remove();
-        }
-    };
+// Delete Element
+window.deleteElement = (button, type) => {
+    const element = button.parentNode;
+    if (confirm(`Are you sure you want to delete this ${type}?`)) {
+        element.remove();
+    }
+};
 
 
 
@@ -1334,7 +1673,7 @@ document.addEventListener("DOMContentLoaded", () => {
         addItemRow(); // Add a default row
     };
 
-    
+
 
     // Add Item Row
     const addItemRow = (item = { description: "", quantity: 1, rate: 0, tax: 0 }) => {
@@ -1374,7 +1713,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         calculateRowTotal(); // Initial calculation
     };
-   
+
 
     // Ensure Add Item Button Works
     addItem.addEventListener("click", () => {

@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Inventory</title>
     <!-- Styles -->
-    <link rel="stylesheet" href="..\CSS\dashboard.css">
-    <link rel="stylesheet" href="../CSS/settings.css">
+    <link rel="stylesheet" href="..\CSS\ManageInventory.css">
 <script src="../JS/settings.js"></script>
+
+
+
+
 </head>
 
 <body>
@@ -123,17 +126,17 @@
                 </table>
 
                 <!-- Image preview element -->
-<div id="imagePreview" style="display: none; position: absolute; z-index: 1000; pointer-events: none;">
-    <img id="previewImage" src="" alt="Product Image"
-        style="max-width: 200px; border: 1px solid #ccc; border-radius: 5px; background: white; padding: 5px;">
-</div>
+                <div id="imagePreview" style="display: none; position: absolute; z-index: 1000; pointer-events: none;">
+                    <img id="previewImage" src="" alt="Product Image"
+                        style="max-width: 200px; border: 1px solid #ccc; border-radius: 5px; background: white; padding: 5px;">
+                </div>
 
             </div>
         </div>
 
         <div class="button-container">
             <!-- Add Product Button -->
-            <button id="addProductBtn" class="add-product-btn">Product</button>
+            <button id="addProductBtn" class="add-product-btn">Add Product</button>
 
             <!-- Camera Scan Button -->
             <button id="scanButton" class="scan-button">Scan SKU</button>
@@ -210,8 +213,8 @@
                                 </label>
                                 <div class="input-with-plus">
                                     <select id="editCategory">
-            <option value="" disabled selected>Select Category</option>
-        </select>
+                                        <option value="" disabled selected>Select Category</option>
+                                    </select>
                                     <button class="add-icon" id="addCategoryBtn">
                                         <ion-icon name="add-outline"></ion-icon>
                                     </button>
@@ -250,7 +253,7 @@
                             <div class="form-group">
                                 <label for="editVendor">Location</label>
                                 <div class="input-with-plus">
-                                        <select id="editLocation" class="location-dropdown">
+                                    <select id="editLocation" class="location-dropdown">
 
                                         <option value="" disabled selected>Select Location</option>
                                     </select>
@@ -298,7 +301,8 @@
                         <!-- Save Button -->
                         <div class="modal-footer">
                             <button type="submit" class="submit-btn">Save Changes</button>
-                            <button type="button" class="edit-save-btn" style="display: none;">Save Edit Changes</button>
+                            <button type="button" class="edit-save-btn" style="display: none;">Save Edit
+                                Changes</button>
 
                         </div>
                     </form>
@@ -313,7 +317,8 @@
                                 <select id="stockLocation" class="location-dropdown" aria-label="Select a location">
                                     <option value="" disabled selected>Select Location</option>
                                 </select>
-                                <button type="button" class="add-icon btn-icon" id="addStockLocationBtn" aria-label="Add Location">
+                                <button type="button" class="add-icon btn-icon" id="addStockLocationBtn"
+                                    aria-label="Add Location">
                                     <ion-icon name="add-outline"></ion-icon>
                                 </button>
                                 <button type="button" class="delete-icon btn-icon" id="deleteStockLocationBtn"
@@ -323,7 +328,7 @@
                             </div>
                         </div>
                     </div>
-                
+
                     <!-- Add Ionicons library -->
                     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
                     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
@@ -335,23 +340,23 @@
                     <div class="aisle-container" id="aisleContainer">
                         <!-- Dynamically Added Aisles Go Here -->
                     </div>
-                    
+
                     <!-- Add Aisle Button -->
                     <button class="btn-add" id="addAisleBtn">+ Add Aisle</button>
                     <button class="btn-delete" id="deleteAisleBtn">- Subtract Aisle</button>
 
-                    
+
                     <!-- Bin Details -->
                     <div class="bin-details">
                         <h4>Selected Bin Details</h4>
                         <textarea id="binDetails" readonly></textarea>
-                    
+
                         <!-- Quantity Input -->
                         <div class="form-group">
                             <label for="binStockQuantity">Quantity</label>
                             <input type="number" id="binStockQuantity" placeholder="Enter quantity">
                         </div>
-                    
+
                         <!-- Action Buttons -->
                         <div class="button-container">
                             <button class="btn-add-stock" id="addStockToBinBtn">Add Stock</button>
@@ -674,7 +679,7 @@
 
 
 
-                
+
                 <!--========= Scripts======== -->
                 <script type="module" src="../JS/ManageInventory.js"></script>
 

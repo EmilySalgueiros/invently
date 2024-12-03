@@ -243,7 +243,7 @@ body {
     /* Align container to the right edge */
     top: 100px;
     /* Position container at the top */
-   
+
 }
 
 .scan-button,
@@ -360,7 +360,7 @@ body {
     transition: background-color 0.3s ease;
     /* Smooth hover effect */
 
-    
+
 }
 
 .edit-btn:hover {
@@ -607,7 +607,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-        margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
@@ -669,6 +669,36 @@ body {
     min-width: 100px;
     /* Ensure a consistent width */
 }
+
+.status-green {
+    background-color: #28a745;
+    /* Green */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.status-yellow {
+    background-color: #ffc107;
+    /* Yellow */
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.status-red {
+    background-color: #dc3545;
+    /* Red */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+
+
+
+
+
 
 /* Add Product Button */
 .AddProductbutton {
@@ -1037,7 +1067,7 @@ button {
     border: none;
     transition: background-color 0.3s ease;
     font-size: 16px;
-    
+
 }
 
 .save-btn:hover {
@@ -1202,7 +1232,7 @@ button {
     color: white;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 5px;
+    margin: 5px;
 }
 
 .btn-add:hover {
@@ -1223,10 +1253,10 @@ button {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.btn-substract-stock{
+.btn-substract-stock {
     display: inline-block;
     background-color: red;
-        color: white;
+    color: white;
 }
 
 .btn-save-stock {
@@ -1237,12 +1267,13 @@ button {
 
 /* Add Stock and Save Stock Buttons */
 .btn-add-stock,
-.btn-save-stock, .btn-substract-stock {
+.btn-save-stock,
+.btn-substract-stock {
     background-color: #28a745;
     color: white;
     font-weight: bold;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin: 5px;
+    margin: 5px;
 }
 
 .btn-add-stock:hover,

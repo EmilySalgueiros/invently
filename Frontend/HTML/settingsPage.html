@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory Settings</title>
     <link rel="stylesheet" href="../CSS/settings.css">
+    <script src="../JS/settings.js"></script>
 </head>
 
 <body>
@@ -115,7 +116,7 @@
                 <div class="form-group">
                     <div class="switch-label">
                         <label class="switch">
-                            <input type="checkbox" id="dark-mode-toggle">
+                            <input type="checkbox" id="darkModeToggle">
                             <span class="slider round"></span>
                         </label>
                         <span>Dark Mode Toggle</span>
@@ -145,38 +146,38 @@
  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
  <script>
-    // Select the dark mode toggle switch
-    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    // // Select the dark mode toggle switch
+    // const darkModeToggle = document.getElementById('dark-mode-toggle');
 
-    // Check the current theme in localStorage
-    const currentTheme = localStorage.getItem('theme');
+    // // Check the current theme in localStorage
+    // const currentTheme = localStorage.getItem('theme');
 
-    // If a theme is stored, apply it to the document body
-    if (currentTheme) {
-        document.body.classList.add(currentTheme);
+    // // If a theme is stored, apply it to the document body
+    // if (currentTheme) {
+    //     document.body.classList.add(currentTheme);
 
-        // If the stored theme is 'dark-mode', set the toggle switch to checked
-        if (currentTheme === 'dark-mode') {
-            darkModeToggle.checked = true;
-        }
-    }
+    //     // If the stored theme is 'dark-mode', set the toggle switch to checked
+    //     if (currentTheme === 'dark-mode') {
+    //         darkModeToggle.checked = true;
+    //     }
+    // }
 
-    // Add an event listener to the dark mode toggle switch
-    darkModeToggle.addEventListener('change', function () {
-        if (darkModeToggle.checked) {
-            // Enable dark mode
-            document.body.classList.add('dark-mode');
-            document.body.classList.remove('light-mode');
-            // Save the theme in localStorage
-            localStorage.setItem('theme', 'dark-mode');
-        } else {
-            // Enable light mode
-            document.body.classList.add('light-mode');
-            document.body.classList.remove('dark-mode');
-            // Save the theme in localStorage
-            localStorage.setItem('theme', 'light-mode');
-        }
-    });
+    // // Add an event listener to the dark mode toggle switch
+    // darkModeToggle.addEventListener('change', function () {
+    //     if (darkModeToggle.checked) {
+    //         // Enable dark mode
+    //         document.body.classList.add('dark-mode');
+    //         document.body.classList.remove('light-mode');
+    //         // Save the theme in localStorage
+    //         localStorage.setItem('theme', 'dark-mode');
+    //     } else {
+    //         // Enable light mode
+    //         document.body.classList.add('light-mode');
+    //         document.body.classList.remove('dark-mode');
+    //         // Save the theme in localStorage
+    //         localStorage.setItem('theme', 'light-mode');
+    //     }
+    // });
 </script>
 
 

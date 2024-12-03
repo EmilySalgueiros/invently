@@ -163,14 +163,12 @@ body {
     color: var(--blue);
     font-weight: bold;
 }
-.orders-header h2 {
-    font-size: 22px;
-    color: black;
-    font-weight: bold;
-}
+
 
 /* ========= Orders Header =========*/
 .orders-header {
+    color: black;
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -197,7 +195,6 @@ body {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         /* Subtle shadow for depth */
 }
-
 
 .orders-header button:hover {
     background-color: #1d174b;
@@ -458,6 +455,8 @@ body {
 
 /* ========= Vendors Header =========*/
 .vendors-header {
+    color: black;
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -503,12 +502,6 @@ body {
     /* White outline for focus */
     outline-offset: 2px;
     /* Space between button and outline */
-}
-
-.vendors-header h2 {
-    font-size: 22px;
-    color: black;
-    font-weight: bold;
 }
 
 

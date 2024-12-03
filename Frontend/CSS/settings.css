@@ -284,78 +284,82 @@ label {
 }
 
 /* Dark Mode Styles */
-body.dark-mode {
-    background-color: #18191A; /* Dark background for body */
-    color: #FFFFFF; /* White text for body */
+body.darkmode orders-header{
+    color: #FFFFFF;
 }
 
-body.dark-mode .main {
+body.darkmode {
+    background-color: #18191A; 
+    color: #FFFFFF; 
+}
+
+body.darkmode .main {
     background-color: #242526; 
     color: #FFFFFF; 
 }
 
-body.dark-mode .header {
+body.darkmode .header {
     background-color: #242526; 
     color: #FFFFFF;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
 }
 
-body.dark-mode .header h1 {
+body.darkmode .header h1 {
     color: #FFFFFF; 
 }
 
-body.dark-mode .section {
+body.darkmode .section {
     background-color: #242526; 
     color: #FFFFFF; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
 }
 
-body.dark-mode .section h2 {
+body.darkmode .section h2 {
     color: #FFFFFF; 
 }
 
-body.dark-mode .section label {
+body.darkmode .section label {
     color: #FFFFFF; 
 }
 
-/* Specific Styling for Slider Label */
-body.dark-mode .form-group .switch-label {
-    color: #FFFFFF; /* White text for slider labels */
+
+body.darkmode .form-group .switch-label {
+    color: #FFFFFF; 
 }
 
-/* Inputs and Select Elements */
-body.dark-mode .section input,
-body.dark-mode .section select {
+
+body.darkmode .section input,
+body.darkmode .section select {
     background-color: #3A3B3C; 
     color: #FFFFFF; 
     border: 1px solid #555; 
 }
 
-/* Buttons */
-body.dark-mode .section button {
+
+body.darkmode .section button {
     background-color: #2a2185; 
     color: #FFFFFF; 
 }
 
-body.dark-mode .section button:hover {
+body.darkmode .section button:hover {
     background-color: #1f1870; 
 }
 
-/* Additional Elements for Toggles */
-body.dark-mode .slider {
+
+body.darkmode .slider {
     background-color: #444; 
 }
 
-body.dark-mode .slider:before {
+body.darkmode .slider:before {
     background-color: #ccc; 
 }
 
-/* Active toggle in dark mode */
-body.dark-mode input:checked + .slider {
+
+body.darkmode input:checked + .slider {
     background-color: #2a2185; 
 }
 
-body.dark-mode input:checked + .slider:before {
+body.darkmode input:checked + .slider:before {
     background-color: #666; 
 }
 

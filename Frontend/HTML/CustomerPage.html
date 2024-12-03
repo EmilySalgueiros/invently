@@ -6,6 +6,8 @@
     <title>Customer Page</title>
     <!-- Styles -->
     <link rel="stylesheet" href="../CSS/CustomerPage.css">
+    <link rel="stylesheet" href="../CSS/settings.css">
+    <script src="../JS/settings.js"></script>
 </head>
 
 <body>
@@ -131,27 +133,29 @@
                     <div class="add-invoice">
                         <button id="addInvoiceBtn">Add Invoice</button>
                     </div>
-                <div class="invoice-table-container"></div>
-                <table class="invoice-table"> <!-- Ensure this class is applied -->
+                    <div class="customer-table">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Invoice ID</th>
-                                <th>Customer</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th style="width: 20%;">Invoice ID</th>
+                                <th style="width: 20%;">Customer</th>
+                                <th style="width: 20%;">Amount</th>
+                                <th style="width: 20%;">Date</th>
+                                <th style="width: 20%;">Status</th>
+                                <th style="width: 20%;">Actions</th> <!-- New column for delete button -->
+
                             </tr>
                         </thead>
                         <tbody id="InvoiceTableBody">
-                            <!-- Dynamic invoice rows will be added here via JS -->
-        <td>
-            <button class="edit-btn" data-id="2">Edit</button>
-            <button class="delete-btn" data-id="2">Delete</button>
-            <button class="status-btn" data-id="2">Paid</button>
-
-        </td>
+                            <!-- Dynamic customer rows will be added here via JS -->
+                                    <td>
+                                        <button class="edit-btn" data-id="1">Edit</button>
+                                        <button class="delete-btn" data-id="1">Delete</button>
+                                        <button class="status-btn" data-id="2">Paid</button>
+                                    </td>
                         </tbody>
+                    </table>
+                </div>
                     </table>
                 </div>
              </div>

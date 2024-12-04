@@ -1,0 +1,131 @@
+
+/* Settings */
+
+body.darkmode orders-header{
+    color: #FFFFFF;
+}
+
+body.darkmode {
+    background-color: #18191A; 
+    color: #FFFFFF; 
+}
+
+body.darkmode .main {
+    background-color: #242526; 
+    color: #FFFFFF; 
+}
+
+body.darkmode .header {
+    background-color: #242526; 
+    color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+body.darkmode .header h1 {
+    color: #FFFFFF; 
+}
+
+body.darkmode .section {
+    background-color: #242526; 
+    color: #FFFFFF; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+body.darkmode .section h2 {
+    color: #FFFFFF; 
+}
+
+body.darkmode .section label {
+    color: #FFFFFF; 
+}
+
+
+body.darkmode .form-group .switch-label {
+    color: #FFFFFF; 
+}
+
+
+body.darkmode .section input,
+body.darkmode .section select {
+    background-color: #3A3B3C; 
+    color: #FFFFFF; 
+    border: 1px solid #555; 
+}
+
+
+body.darkmode .section button {
+    background-color: #2a2185; 
+    color: #FFFFFF; 
+}
+
+body.darkmode .section button:hover {
+    background-color: #1f1870; 
+}
+
+
+body.darkmode .slider {
+    background-color: #444; 
+}
+
+body.darkmode .slider:before {
+    background-color: #ccc; 
+}
+
+
+body.darkmode input:checked + .slider {
+    background-color: #2a2185; 
+}
+
+body.darkmode input:checked + .slider:before {
+    background-color: #666; 
+}
+
+/* Manage Inventory */
+
+.darkmode .tbody{
+    color: black;
+}
+
+/* Orders */
+
+.darkmode .orders-header{
+    color: #FFFFFF;
+}
+
+.darkmode #ordersTableBody{
+    color: black;
+}
+
+.darkmode .vendors-header{
+    color: #FFFFFF;
+}
+
+.darkmode #vendorsTableBody{
+    color: black;
+}
+
+
+/* Dashboard */
+
+.darkmode .mainDash{
+    background-color: #18191A;
+}
+.darkmode .dashH1{
+    background-color: #18191A;
+}
+
+.darkmode h1{
+    color: #FFFFFF;
+}
+
+.darkmode .analytics-card{
+    color: black;
+}
+
+.darkmode .analytics{
+    background: #242526;
+}
+
+.darkmode .analytics h2{
+    color: #FFFFFF;
+}

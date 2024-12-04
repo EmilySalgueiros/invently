@@ -282,10 +282,10 @@ h1{
 /*Standind */
 .standing-grid {
     display: flex;
-    flex-wrap: wrap; /* Allows cards to wrap to the next line if needed */
+    /* flex-wrap: wrap; Allows cards to wrap to the next line if needed */
     justify-content: space-around; /* Even spacing between cards */
     gap: 20px; /* Space between cards */
-    margin: 20px;
+    margin: 10px;
 }
 
 .standing-card {
@@ -295,7 +295,7 @@ h1{
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 269px; /* Adjust the card width */
+    width: 250px; /* Adjust the card width */
     text-align: center; 
     margin-top: 100px; /* Space for the banner above */
     transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;

@@ -294,6 +294,7 @@ h1{
     width: 180px; /* Adjust the card width */
     text-align: center; 
     margin-top: 100px; /* Space for the banner above */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .card-banner {
@@ -320,38 +321,46 @@ h1{
     margin-top: 10px;
     font-size: 30px;
     font-weight: bold;
-    color: #ebe3e3;
+    color: #000000;
 }
 
 .standing-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-2px);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    background-color: #f0eee4;
 }
 
-
-/* Recent Orders Table */
-.recent-orders table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+/* Default background colors */
+.card-step-1 {
+    background-color: #6488eb;
 }
 
-.recent-orders table th, .recent-orders table td {
-    text-align: left;
-    padding: 10px;
-    border-bottom: 1px solid var(--gray);
+.card-step-2 {
+    background-color: #e6a462;
 }
 
-.recent-orders table th {
-    color: var(--black2);
+.card-step-3 {
+    background-color: #68c683;
 }
 
-.recent-orders table td span {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    color: var(--white);
+.card-step-4 {
+    background-color: #e37474;
+}
+
+/* Hover colors for each specific card */
+.card-step-1:hover {
+    background-color: #3045e4;
+}
+
+.card-step-2:hover {
+    background-color: #D9822B; 
+}
+
+.card-step-3:hover {
+    background-color: #2fa250; 
+}
+
+.card-step-4:hover {
+    background-color: #d53030; 
 }
 
 /* Analytics Section */

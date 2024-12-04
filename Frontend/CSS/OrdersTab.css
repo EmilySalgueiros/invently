@@ -765,4 +765,17 @@ button.delete-vendor-btn:hover {
         transform: scale(1.05);
 }
 
+/* Dark Mode */
+/* Header and Main Content */
+body.dark-mode .box {
+    background-color: #242526; /* Dark header background */
+    color: #FFFFFF; /* White header text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Adjust shadow for dark mode */
+}
+
+body.dark-mode .main {
+    background-color: #242526; /* Dark main content background */
+    color: #E4E6EB; /* Light text for main content */
+}
+
 

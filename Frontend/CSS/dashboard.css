@@ -198,6 +198,20 @@ body {
     pointer-events: none;
 }
 
+/* Dashboard Title */
+h1{
+    position: absolute;
+    top: 20px;
+    left: 320px;
+    width: calc(100% - 320px);
+    padding: 10px 20px;
+    background: var(--gray);
+    z-index: 1;
+    text-align: left;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-left: -300px;
+}
+
 /* Grid Content Below Search */
 .dashboard-content {
     width: 100%;
@@ -249,43 +263,52 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.analytics-card img {
+    width: 100%; /* Allow the image to take up the full width of the card */
+    height: auto; /* Maintain the aspect ratio */
+    max-width: 150px; /* Set a maximum width for the image */
+    max-height: 150px; /* Set a maximum height for the image */
+    margin: 0 auto; /* Center the image horizontally */
+    display: block; /* Ensure the image behaves as a block element */
+    object-fit: contain; /* Ensure the image fits properly without distortion */
+    margin-top: 30px;
+}
+
 
 /*Standind */
 .standing-grid {
     display: flex;
-    justify-content: space-around;
-    align-items: flex-start;
-    gap: 20px;
+    flex-wrap: wrap; /* Allows cards to wrap to the next line if needed */
+    justify-content: space-around; /* Even spacing between cards */
+    gap: 20px; /* Space between cards */
     margin: 20px;
 }
 
-.card-banner {
-    position: absolute;
-    top: 0; 
-    left: 0; 
-    width: 100%;
-    background-color: #006666; 
-    color: white;
-    padding: 10px 0; 
-    text-align: center; 
-    font-weight: bold;
-    border-top-left-radius: 10px; 
-    border-top-right-radius: 10px; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
 .standing-card {
-    position: relative; /* Ensure the banner is positioned relative to the card */
-    text-align: center;
+    position: relative; /* Enables positioning the banner relative to the card */
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    width: 180px; 
-    overflow: hidden; 
+    width: 180px; /* Adjust the card width */
+    text-align: center; 
+    margin-top: 100px; /* Space for the banner above */
 }
 
+.card-banner {
+    position: absolute;
+    top: -30px; /* Position the banner above the card */
+    left: 0; /* Align the banner with the left edge of the card */
+    width: 100%; /* Make the banner the full width of the card */
+    background-color: #3045e4; /* Default color */
+    color: white;
+    padding: 10px 0; /* Add vertical padding */
+    border-radius: 10px 10px 0 0; /* Match the top corners of the card */
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
 
 .standing-card img {
     width: 100px;
@@ -295,11 +318,16 @@ body {
 
 .standing-card h4 {
     margin-top: 10px;
-    font-size: 16px;
+    font-size: 30px;
     font-weight: bold;
-    color: #333;
+    color: #ebe3e3;
 }
 
+.standing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    background-color: #f0eee4;
+}
 
 
 /* Recent Orders Table */

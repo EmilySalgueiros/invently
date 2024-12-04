@@ -77,9 +77,6 @@ async function loadProducts() {
         const querySnapshot = await getDocs(collection(db, "inventory"));
         inventoryTable.innerHTML = ""; // Clear the table
 
-        let inStockCount = 0;
-        let lowStockCount = 0;
-
         querySnapshot.forEach((doc) => {
             const product = doc.data();
             const row = `
@@ -97,13 +94,6 @@ async function loadProducts() {
                     </td>
                 </tr>`;
             inventoryTable.insertAdjacentHTML("beforeend", row);
-
-            // Count stock status
-            if (product.quantity <= product.threshold) {
-                lowStockCount++;
-            } else {
-                inStockCount++;
-            }
         });
 
         // Attach event listeners for Edit and Delete buttons
@@ -113,46 +103,10 @@ async function loadProducts() {
         document.querySelectorAll(".delete-btn").forEach((btn) =>
             btn.addEventListener("click", () => deleteProduct(btn.dataset.sku))
         );
-
-        // Render pie chart
-        renderStockPieChart(inStockCount, lowStockCount);
     } catch (error) {
         console.error("Error loading products:", error);
     }
 }
-
-function renderStockPieChart(inStock, lowStock) {
-    const ctx = document.getElementById("stockPieChart").getContext("2d");
-
-    new Chart(ctx, {
-        type: "pie",
-        data: {
-            labels: ["In Stock", "Low Stock"],
-            datasets: [
-                {
-                    data: [inStock, lowStock],
-                    backgroundColor: ["#36A2EB", "#FF6384"],
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: "top",
-                },
-                title: {
-                    display: true,
-                    text: "Stock Status Distribution",
-                },
-            },
-        },
-    });
-}
-
-// Load products and chart on page load
-document.addEventListener("DOMContentLoaded", loadProducts);
-
 
 // Load products on page load
 document.addEventListener("DOMContentLoaded", loadProducts);
@@ -210,4 +164,3 @@ saveStockChangesBtn.addEventListener("click", async () => {
         console.error("Error saving stock changes:", error);
     }
 });
-

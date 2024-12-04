@@ -1,3 +1,34 @@
+import { fetchInventoryStatuses } from "./ManageInventory.js"; // Adjust the import path as needed
+
+const loadStatusesInDashboard = async () => {
+    try {
+        const statuses = await fetchInventoryStatuses();
+        
+        // Example: Log the statuses
+        console.log("Statuses for Dashboard:", statuses);
+
+        // Use the statuses as needed in the dashboard
+        statuses.forEach(({ id, status }) => {
+            console.log(`Item ID: ${id}, Status: ${status}`);
+            // Example: Update UI with this data
+            // document.querySelector(`#status-${id}`).textContent = status;
+        });
+    } catch (error) {
+        console.error("Error loading statuses in dashboard:", error);
+    }
+};
+
+// Call the function where appropriate in dashboardHome
+loadStatusesInDashboard();
+
+
+
+
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     const addProductBtn = document.getElementById("addProductBtn");
     const inventoryTable = document.getElementById("inventoryTable").querySelector("tbody");
@@ -118,9 +149,14 @@ function updateRowStatus(row) {
 
     if (quantity <= threshold) {
         statusCell.textContent = "Low Stock";
-        statusCell.style.backgroundColor = "red";
+        statusCell.style.backgroundColor = "yellow";
         statusCell.style.color = "white";
-    } else {
+    } 
+    if (quantity ==0) {
+        statusCell.textContent = "No Stock";
+        statusCell.style.backgroundColor = "Red";
+        statusCell.style.color = "white";
+    }else {
         statusCell.textContent = "In Stock";
         statusCell.style.backgroundColor = "green";
         statusCell.style.color = "white";

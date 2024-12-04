@@ -1892,3 +1892,34 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+// Can delete this is for analytics to fetch from databse if not able to figure out
+/**
+ * Fetch inventory statuses from Firestore.
+ * @returns {Promise<Object[]>} Array of inventory objects with `id` and `status`.
+ */
+export const fetchInventoryStatuses = async () => {
+    try {
+        const querySnapshot = await getDocs(collection(db, "inventory"));
+
+        const statuses = querySnapshot.docs.map((doc) => ({
+            id: doc.id, // Document ID
+            status: doc.data().status || "Unknown", // Default to "Unknown" if status is missing
+        }));
+
+        console.log("Fetched inventory statuses:", statuses);
+        return statuses;
+    } catch (error) {
+        console.error("Error fetching inventory statuses:", error);
+        throw error;
+    }
+};

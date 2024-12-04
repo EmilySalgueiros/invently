@@ -3,7 +3,10 @@
 <!--Styles-->
 <link rel="stylesheet" href="..\CSS\dashboard.css">
 <link rel="stylesheet" href="../CSS/settings.css">
-<script src="../JS/settings.js"></script>
+<!--<script src="../JS/settings.js"></script> -->
+<script type="module" src="../JS/dashboardPieChart.js"></script>
+<script type="module" src="../JS/dashboardBarGraph.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 </head>
 
 <body>
@@ -114,24 +117,19 @@
                         <!-- First Card -->
                         <div class="analytics-card">
                             <h3>Stock Distribution</h3>
-                            <img src="../Images/pie-chart.png" alt="packed">
                             <canvas id="stockPieChart"></canvas>
                         </div>
                         <!-- Second Card -->
                         <div class="analytics-card">
                             <h3>Sales Trends</h3>
-                            <img src="../Images/trend.png" alt="packed">
-                            <canvas id="salesLineChart"></canvas>
+                            <canvas id="invoicesVsOrdersChart" width="400" height="400"></canvas>
                         </div>
                     </div>
                 </div>
 
+
                             <!--=========Scripts======== -->
                             <script type="module" src="../JS/InventlyHomepage.js"></script>
-
-                            <script type="module" src="../JS/dashboardHome.js"></script>
-
-                            <script type="module" src="../JS/dashboardFirestore.js"></script>
 
                             <!--=========ionicons======== -->
                             <script type="module"

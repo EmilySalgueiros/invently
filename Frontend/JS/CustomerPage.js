@@ -153,6 +153,57 @@ function clearForm() {
     customerDetailsForm.style.display = "block";
 }
 
+
+//This is to calculate the receivables
+
+const calculateReceivables = async () => {
+    try {
+        const invoicesSnapshot = await getDocs(collection(db, "invoices"));
+        const receivables = {};
+
+        invoicesSnapshot.forEach((doc) => {
+            const invoice = doc.data();
+            const { customerId, totalAmount } = invoice;
+
+            if (customerId) {
+                if (!receivables[customerId]) {
+                    receivables[customerId] = 0;
+                }
+                receivables[customerId] += parseFloat(totalAmount || 0);
+            }
+        });
+
+        console.log("Calculated receivables:", receivables);
+        return receivables;
+    } catch (error) {
+        console.error("Error calculating receivables:", error);
+        return {};
+    }
+};
+
+const updateCustomerReceivables = async () => {
+    try {
+        const receivables = await calculateReceivables();
+        const customerCollection = collection(db, "customers");
+
+        for (const [customerId, totalReceivable] of Object.entries(receivables)) {
+            const customerRef = doc(customerCollection, customerId);
+
+            await setDoc(customerRef, { receivables: `$${totalReceivable.toFixed(2)}` }, { merge: true });
+            console.log(`Updated receivables for customer ${customerId}: $${totalReceivable.toFixed(2)}`);
+        }
+
+        console.log("All receivables updated successfully.");
+    } catch (error) {
+        console.error("Error updating customer receivables:", error);
+    }
+};
+
+
+
+
+// Until here to calculate the receivables 
+
 // Validation function
 function validateInputs() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email validation regex
@@ -280,30 +331,31 @@ function addCustomerToTable(customer, docId) {
         <td>${customer.email || ""}</td>
         <td>${customer.workPhone || ""}</td>
         <td>${customer.receivables || "$0.00"}</td>
-                <td>
+        <td>
             <button class="edit-btn" data-id="${docId}">Edit</button>
             <button class="delete-btn" data-id="${docId}">Delete</button>
         </td>
     `;
     customerTableBody.appendChild(row);
 
-    // Attach event listener to the delete button
-    row.querySelector(".delete-btn").addEventListener("click", async (e) => {
-        const id = e.target.getAttribute("data-id");
+    // Attach event listeners for edit and delete
+    row.querySelector(".edit-btn").addEventListener("click", async () => {
+        const id = docId;
+        editCustomer(id);
+    });
 
-        // Show confirmation dialog
+    row.querySelector(".delete-btn").addEventListener("click", async () => {
+        const id = docId;
+
         if (confirm("Are you sure you want to delete this customer?")) {
             await deleteCustomer(id);
+            await updateCustomerReceivables();
+            await loadCustomers(); // Refresh the table to remove deleted customer
             row.remove(); // Remove the row from the table
         }
     });
-
-    // Attach event listener to the edit button
-    row.querySelector(".edit-btn").addEventListener("click", async (e) => {
-        const id = e.target.getAttribute("data-id");
-        editCustomer(id);
-    });
 }
+
 
 async function editCustomer(docId) {
     try {
@@ -668,29 +720,49 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const invoice = invoiceDoc.data();
 
                 // Populate the modal fields with the invoice data
-                document.getElementById("invoiceId").value = invoice.invoiceId;
-                document.getElementById("invoiceDate").value = invoice.date;
-                document.getElementById("totalAmount").value = invoice.totalAmount.toFixed(2);
-                document.getElementById("balanceDue").value = invoice.balanceDue.toFixed(2);
-                document.getElementById("billTo2").value = invoice.billTo;
+                document.getElementById("invoiceId").value = invoice.invoiceId || "";
+                document.getElementById("invoiceDate").value = invoice.date || "";
+                document.getElementById("totalAmount").value = invoice.totalAmount?.toFixed(2) || "0.00";
+                document.getElementById("balanceDue").value = invoice.balanceDue?.toFixed(2) || "0.00";
+                document.getElementById("billTo2").value = invoice.billTo || "";
 
                 // Set the global variable to the current invoice ID
                 currentInvoiceId = docId;
 
                 // Populate the company dropdown and set the correct value
-                await populateCompanyDropdown(); // Populate dropdown options first
+                await populateCompanyDropdown(); // Ensure dropdown options are loaded first
                 const companySelect = document.getElementById("companySelect2");
                 if (companySelect) {
                     Array.from(companySelect.options).forEach((option) => {
-                        if (option.textContent.includes(invoice.companyName)) {
-                            option.selected = true; // Match and select the company name
+                        if (option.value === invoice.customerId || option.textContent.includes(invoice.companyName)) {
+                            option.selected = true; // Match by customerId or companyName
                         }
+                    });
+                }
+
+                // Populate the items table
+                const itemsTable = document.getElementById("invoiceItemsBody");
+                itemsTable.innerHTML = ""; // Clear any existing rows
+
+                if (invoice.items && Array.isArray(invoice.items)) {
+                    invoice.items.forEach((item) => {
+                        const newRow = document.createElement("tr");
+                        newRow.innerHTML = `
+                        <td><input type="text" value="${item.itemName || ""}" placeholder="Item Name"></td>
+                        <td><input type="number" value="${item.quantity || 0}" placeholder="Qty"></td>
+                        <td><input type="text" value="${item.description || ""}" placeholder="Description"></td>
+                        <td><input type="number" value="${item.rate || 0}" placeholder="Rate"></td>
+                        <td><input type="number" value="${(item.amount || 0).toFixed(2)}" placeholder="Amount" readonly></td>
+                    `;
+                        itemsTable.appendChild(newRow);
                     });
                 }
 
                 // Open the modal
                 const addInvoiceModal2 = document.getElementById("addInvoiceModal2");
                 addInvoiceModal2.style.display = "flex";
+
+                console.log("Invoice loaded into modal for editing:", invoice);
             } else {
                 console.error("Invoice not found!");
             }
@@ -698,6 +770,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Error editing invoice:", error);
         }
     }
+
 
 
 
@@ -789,6 +862,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 addInvoiceToTable(invoiceData, docRef.id);
             }
 
+            await updateCustomerReceivables();
+
+
             // Reset the current invoice ID
             currentInvoiceId = null;
 
@@ -833,8 +909,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 row.querySelector(".edit-btn").addEventListener("click", () => editInvoice(docId));
                 row.querySelector(".delete-btn").addEventListener("click", async () => {
                     if (confirm("Are you sure you want to delete this invoice?")) {
-                        await deleteDoc(doc(db, "invoices", docId));
-                        row.remove();
+                        await deleteDoc(doc(db, "invoices", id));
+                        await updateCustomerReceivables();
+                        await loadCustomers(); // Refresh the customer table
+                        row.remove(); // Remove the row from the table
                     }
                 });
 

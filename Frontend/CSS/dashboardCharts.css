@@ -1,0 +1,35 @@
+.analytics {
+    text-align: center;
+    margin: 5px;
+    /* Further reduce overall margin */
+}
+
+.analytics-content {
+    display: flex;
+    justify-content: center;
+    /* Center align the graphs closer together */
+    flex-wrap: wrap;
+    gap: 5px;
+    /* Optional: Add a small gap for spacing */
+}
+
+.analytics-card {
+    width: 140px;
+    /* Further reduce card width */
+    margin: 3px;
+    /* Reduce space between cards */
+    padding: 3px;
+    /* Reduce padding inside cards */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    /* Reduce border radius */
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.analytics-card canvas {
+    width: 80% !important;
+    /* Further reduce canvas size */
+    height: auto !important;
+    /* Maintain aspect ratio */
+}

@@ -6,8 +6,9 @@
     <title>Customer Page</title>
     <!-- Styles -->
     <link rel="stylesheet" href="../CSS/CustomerPage.css">
-    <link rel="stylesheet" href="../CSS/settings.css">
+
     <script src="../JS/settings.js"></script>
+    <!-- <link rel="stylesheet" href="../CSS/settings.css"> -->
 </head>
 
 <body>
@@ -16,7 +17,7 @@
         <div class="navigation">
             <ul>
                 <li>
-                    <a href="setupInventory.html">
+                    <a href="InventlyHomepage.html">
                         <span class="icon">
                             <ion-icon name="cube-outline"></ion-icon>
                         </span>
@@ -41,16 +42,16 @@
                         <span class="ti">Customers</span>
                     </a>
                 </li>
-               
+
                 <li>
 
-                 <li>
+                <li>
                     <a href="ManageInventory.html">
                         <span class="icon">
                             <ion-icon name="clipboard-outline"></ion-icon>
                         </span>
                         <span class="ti">Manage Inventory</span>
-                     </a>
+                    </a>
                 </li>
 
                 <li>
@@ -72,7 +73,7 @@
                 </li>
                 <li>
                     <a href="Features.html">
-                        <span class = "icon">
+                        <span class="icon">
                             <ion-icon name="lock-closed-outline"></ion-icon>
                         </span>
                         <span class="ti">Sign Out</span>
@@ -90,13 +91,13 @@
 
 
                 <div class="ManageCustomerh2">
-                <h2>Manage Customers</h2>
+                    <h2>Manage Customers</h2>
 
                 </div>
 
-                    <div class="add-customer">
-                            <button id="addCustomerBtn">Add Customer</button>
-                    </div>
+                <div class="add-customer">
+                    <button id="addCustomerBtn">Add Customer</button>
+                </div>
 
                 <div class="customer-table">
                     <table>
@@ -113,52 +114,52 @@
                         </thead>
                         <tbody id="customerTableBody">
                             <!-- Dynamic customer rows will be added here via JS -->
-                                    <td>
-                                        <button class="edit-btn" data-id="1">Edit</button>
-                                        <button class="delete-btn" data-id="1">Delete</button>
-                                    </td>
+                            <td>
+                                <button class="edit-btn" data-id="1">Edit</button>
+                                <button class="delete-btn" data-id="1">Delete</button>
+                            </td>
                         </tbody>
                     </table>
                 </div>
 
 
 
-<!-- ====================================================================================================================  -->
-<!--================================================================================================================= -->
+                <!-- ====================================================================================================================  -->
+                <!--================================================================================================================= -->
 
 
                 <!-- Add new section for Manage Invoices -->
-            <div class="manage-invoices">
+                <div class="manage-invoices">
                     <h2>Manage Invoice</h2>
                     <div class="add-invoice">
                         <button id="addInvoiceBtn">Add Invoice</button>
                     </div>
                     <div class="customer-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 20%;">Invoice ID</th>
-                                <th style="width: 20%;">Customer</th>
-                                <th style="width: 20%;">Amount</th>
-                                <th style="width: 20%;">Date</th>
-                                <th style="width: 20%;">Status</th>
-                                <th style="width: 20%;">Actions</th> <!-- New column for delete button -->
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;">Invoice ID</th>
+                                    <th style="width: 20%;">Customer</th>
+                                    <th style="width: 20%;">Amount</th>
+                                    <th style="width: 20%;">Date</th>
+                                    <th style="width: 20%;">Status</th>
+                                    <th style="width: 20%;">Actions</th> <!-- New column for delete button -->
 
-                            </tr>
-                        </thead>
-                        <tbody id="InvoiceTableBody">
-                            <!-- Dynamic customer rows will be added here via JS -->
-                                    <td>
-                                        <button class="edit-btn" data-id="1">Edit</button>
-                                        <button class="delete-btn" data-id="1">Delete</button>
-                                        <button class="status-btn" data-id="2">Paid</button>
-                                    </td>
-                        </tbody>
+                                </tr>
+                            </thead>
+                            <tbody id="InvoiceTableBody">
+                                <!-- Dynamic customer rows will be added here via JS -->
+                                <td>
+                                    <button class="edit-btn" data-id="1">Edit</button>
+                                    <button class="delete-btn" data-id="1">Delete</button>
+                                    <button class="status-btn" data-id="2">Paid</button>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
                     </table>
                 </div>
-                    </table>
-                </div>
-             </div>
+            </div>
 
 
 
@@ -167,9 +168,7 @@
 
 
 
-                <!-- This is the modal for the invoice-->
-
-               
+            <!-- This is the modal for the invoice-->
 
 
 
@@ -178,35 +177,37 @@
 
 
 
-                <!-- Add Invoice Modal -->
-                <div id="addInvoiceModal2" class="modal2">
-                    <div class="modal-content2">
-                        <span class="close-btn" id="closeInvoiceModal2">&times;</span>
-                        <h2>Invoice</h2>
-                        <div class="invoice-form">
-                            <!-- Top Section -->
-                            <div class="invoice-header">
-                                <div class="form-row2">
-                                    <label for="companySelect2">Company</label>
-                                    <select id="companySelect2">
-                                        <option value="" disabled selected>Select Company</option>
-                                    </select>
-                                </div>
-                                <div class="form-row2">
-                                    <label for="invoiceDate2">Date</label>
-                                    <input type="text" id="invoiceDate" value="11/29/2024" readonly>
-                                </div>
-                                <div class="form-row2">
-                                    <label for="invoiceNumber">Invoice#</label>
-                                    <input type="text" id="invoiceId" readonly>
-                                </div>
-                                <div class="form-row2">
-                                    <label for="billTo2">Bill To</label>
-                                    <textarea id="billTo2" rows="3" readonly></textarea>
-                                </div>
+
+
+            <!-- Add Invoice Modal -->
+            <div id="addInvoiceModal2" class="modal2">
+                <div class="modal-content2">
+                    <span class="close-btn" id="closeInvoiceModal2">&times;</span>
+                    <h2>Invoice</h2>
+                    <div class="invoice-form">
+                        <!-- Top Section -->
+                        <div class="invoice-header">
+                            <div class="form-row2">
+                                <label for="companySelect2">Company</label>
+                                <select id="companySelect2">
+                                    <option value="" disabled selected>Select Company</option>
+                                </select>
                             </div>
-                            <!-- Table Section -->
-                             <div class="invoice-table-container">
+                            <div class="form-row2">
+                                <label for="invoiceDate2">Date</label>
+                                <input type="text" id="invoiceDate" value="11/29/2024" readonly>
+                            </div>
+                            <div class="form-row2">
+                                <label for="invoiceNumber">Invoice#</label>
+                                <input type="text" id="invoiceId" readonly>
+                            </div>
+                            <div class="form-row2">
+                                <label for="billTo2">Bill To</label>
+                                <textarea id="billTo2" rows="3" readonly></textarea>
+                            </div>
+                        </div>
+                        <!-- Table Section -->
+                        <div class="invoice-table-container">
                             <table class="invoice-table">
                                 <thead>
                                     <tr>
@@ -228,35 +229,35 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            </div>
-                            <div class="add-row">
-                                <button id="addRowBtn">Add Item</button>
-                            </div>
-                            <!-- Total Section -->
-                            <div class="invoice-footer">
-                                <div class="totals">
-                                    <div class="form-row2">
-                                        <label>Total</label>
-                                        <input type="number" id="totalAmount" readonly value="0.00">
-                                    </div>
-                                    <div class="form-row2">
-                                        <label>Balance Due</label>
-                                        <input type="number" id="balanceDue" readonly value="0.00">
-                                    </div>
+                        </div>
+                        <div class="add-row">
+                            <button id="addRowBtn">Add Item</button>
+                        </div>
+                        <!-- Total Section -->
+                        <div class="invoice-footer">
+                            <div class="totals">
+                                <div class="form-row2">
+                                    <label>Total</label>
+                                    <input type="number" id="totalAmount" readonly value="0.00">
                                 </div>
-                                <div class="actions">
-                                    <button id="saveInvoiceBtn">Save</button>
-                                    <button id="cancelInvoiceModal2">Cancel</button>
+                                <div class="form-row2">
+                                    <label>Balance Due</label>
+                                    <input type="number" id="balanceDue" readonly value="0.00">
                                 </div>
+                            </div>
+                            <div class="actions">
+                                <button id="saveInvoiceBtn">Save</button>
+                                <button id="cancelInvoiceModal2">Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            
+            </div>
 
 
-<!--================================================================================================================= -->
-<!--================================================================================================================= -->
+
+            <!--================================================================================================================= -->
+            <!--================================================================================================================= -->
 
 
             <!-- Add Customer Modal -->
@@ -362,7 +363,8 @@
                             <button type="button" id="cancelCustomer">Cancel</button>
                             <button type="button" id="saveCustomer">Save</button>
                             <!-- Placeholder for Save Changes button -->
-                            <button type="button" id="saveChanges" style="display: none;" class="save-btn">Save Changes</button>
+                            <button type="button" id="saveChanges" style="display: none;" class="save-btn">Save
+                                Changes</button>
 
 
                         </div>

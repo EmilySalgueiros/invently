@@ -286,7 +286,6 @@ async function saveOrder() {
     const orderToCompany = document.getElementById("orderToCompany").value;
     const totalAmount = document.getElementById("totalAmount").value;
     const balanceDue = document.getElementById("balanceDue").value;
-    const selectedCompany = companySelect.value;
 
     
 
@@ -295,7 +294,7 @@ async function saveOrder() {
     const status = balanceDue === "0" || balanceDue === 0 ? "Paid" : "Pending";
 
     // Validate required fields
-    if (!orderNumber || !selectedVendorId || !orderDate || !orderToCompany) {
+    if (!orderNumber || !selectedVendorId || !orderDate || !orderToCompany || !selectedVendorName) {
         alert("Please fill in all required fields.");
         return;
     }
@@ -437,6 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Order Edit
         if (target.classList.contains("edit-order-btn")) {
             const orderId = target.dataset.id; // Get the Firestore document ID
+
             console.log("Editing Order ID:", orderId); // Debugging
 
             try {
@@ -449,16 +449,26 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("orderNumber").value = order["Order#"];
                     document.getElementById("orderDate").value = order.Date;
                     document.getElementById("orderToCompany").value = order.OrderTo;
+                    //document.getElementById("companySelect").value = order.vendorId;
+                   // document.getElementById("orderToCompany").value = order.companyName;
 
                     // Set the company dropdown
-                    const companySelect = document.getElementById("companySelect");
-                    companySelect.innerHTML = ""; // Clear existing options
+                   // const companySelect = document.getElementById("companySelect");
+                   await populateCompanyDropdown(order.vendorId); // Pass the vendor ID to pre-select the company
+                   // companySelect.innerHTML = ""; // Clear existing options
 
                     // Populate the dropdown and ensure the correct company is selected
-                    await populateCompanyDropdown(order.companyName);
+            
+
+                      // Set the selected company details in the modal
+
+
+                    // Pre-fill the "Order To" field with the company's name
+                    document.getElementById("companySelect").value = order.vendorId;
+                    document.getElementById("orderToCompany").value = order.companyName;
+
 
                     // Set the selected company
-                    companySelect.value = order.companyName;
 
                     // Populate order items
                     const orderItemsBody = document.getElementById("orderItemsBody");

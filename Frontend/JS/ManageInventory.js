@@ -907,11 +907,62 @@ scanButton.addEventListener('click', async () => {
         video.srcObject = mediaStream;
         video.play();
         console.log('Camera started successfully.');
+
+        // Use ZXing library to handle the scanning process
+        const codeReader = new ZXing.BrowserBarcodeReader();
+        console.log("Starting barcode reader...");
+
+         // Decode from the video stream
+         codeReader.decodeFromVideoDevice(null, "video", (result, err) => {
+            if (result) {
+                // Successfully scanned barcode
+                const scannedSKU = result.text; // Extract the SKU
+                console.log("Scanned SKU:", scannedSKU);
+                showAddProductModal(scannedSKU);
+
+                // Clear the result after a few seconds to allow continuous scanning
+                setTimeout(() => {
+                    document.getElementById("result").textContent = "Ready to scan...";
+                }, 2000);
+
+            } else if (err && !(err instanceof ZXing.NotFoundException)) {
+                console.error(err); // Log any error except "not found"
+            }
+        });
+
     } catch (err) {
         console.error('Error accessing the camera:', err);
         alert('Unable to access the camera. Please check your permissions.');
     }
 });
+
+function showAddProductModal(scannedSKU) {
+    // Clear editing state
+    editingProductId = null;
+
+    const nextItemCode = getNextAvailableItemCode();
+
+    // Pre-fill form fields
+    document.getElementById("editItemCode").value = nextItemCode;
+    document.getElementById("editSKU").value = scannedSKU; // Set the scanned SKU
+    document.getElementById("editDescription").value = "";
+    document.getElementById("editQuantity").value = "";
+    document.getElementById("editThreshold").value = "";
+    document.getElementById("editCategory").value = "";
+    document.getElementById("editLocation").value = "";
+    document.getElementById("editPrice").value = "";
+    document.getElementById("editCurrency").value = "";
+
+    // Show "Add Save" button, hide "Save Changes" button
+    editSaveBtn.style.display = "none";
+    saveProductBtn.style.display = "block";
+
+    fetchLocations();
+
+    // Show the modal
+    const editModal = document.getElementById("editInventoryModal");
+    editModal.style.display = "flex"; // Display the modal
+}
 
 // Stop the camera when the Stop Scanning button is clicked
 stopScanButton.addEventListener('click', () => {

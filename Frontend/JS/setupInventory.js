@@ -139,7 +139,6 @@ function createInventoryCard(inventoryId, inventoryName) {
     inventoryCard.className = 'inventory-card';
     inventoryCard.innerHTML = `
         <h3>${inventoryName}</h3>
-        <p>Click to view dashboard</p>
     `;
     inventoryCard.addEventListener('click', () => {
         window.location.href = `../HTML/dashboard.html?inventoryId=${inventoryId}`;
